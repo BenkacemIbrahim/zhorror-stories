@@ -9,10 +9,646 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="../assets/js/config/story-reader.js"></script>
+    <!-- @include component-styles -->
+    <link rel="stylesheet" href="../assets/css/components/header.css">
+    <link rel="stylesheet" href="../assets/css/components/footer.css">
+    <!-- @endinclude -->
     <link rel="stylesheet" href="../assets/css/pages/story-reader.css">
 </head>
 
-<body>
+<body class="has-fixed-header">
+    <!-- @include header -->
+    <!-- Content Blur Overlay - NEW -->
+    <div class="content-blur-overlay" id="contentBlurOverlay"></div>
+
+    <header class="fixed-header bg-dark">
+        <div class="w-full h-[130px] px-4">
+            <div class="flex justify-between items-center h-full">
+                <div class="flex items-center h-full">
+                    <!-- Replace the hamburger icon with our animated version -->
+                    <div class="mr-4 text-white focus:outline-none block" id="mobileMenuToggle">
+                        <div class="hamburger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="logo-container mr-16">
+                        <a href="#" class="block relative">
+                            <img src="../assets/images/logo-z-horror.png" alt="Z Horror Logo" class="logo-image">
+                        </a>
+                    </div>
+                    <nav class="hidden lg:flex items-center h-full">
+                        <div class="nav-item">
+                            <button
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 flex items-center text-2xl"
+                                id="browseToggle">
+                                تصفح
+                                <i class="fas fa-caret-down mr-2 text-sm transition-transform duration-300"></i>
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <button
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 flex items-center text-2xl"
+                                id="communityToggle">
+                                مجتمع
+                                <i class="fas fa-caret-down mr-2 text-sm transition-transform duration-300"></i>
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#"
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 text-2xl">
+                                مشهور
+                            </a>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#"
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 text-2xl">
+                                جديد
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+                <div class="flex items-center h-full">
+                    <div class="flex items-center h-full">
+                        <div class="icon-wrapper cursor-pointer" id="searchToggle">
+                            <i class="fas fa-search text-white text-2xl"></i>
+                        </div>
+                        <div class="icon-wrapper cursor-pointer" id="profileToggle">
+                            <i class="fa-solid fa-user text-white text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modified Search Bar with Better Button Placement -->
+        <div class="search-bar" id="searchBar">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="search-container relative">
+                    <div class="flex items-center gap-4">
+                        <!-- Search Input with Buttons Outside -->
+                        <div class="flex-1 relative">
+                            <input type="text" id="searchInput" placeholder="ابحث عن قصص، ألعاب، أخبار..."
+                                class="search-input w-full bg-dark/50 border-2 border-gray-700 rounded-lg py-4 px-5 text-white text-lg focus:outline-none transition-all duration-300">
+                        </div>
+
+                        <!-- Search Button -->
+                        <button id="searchButton"
+                            class="search-btn bg-accent hover:bg-accent-hover text-white px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+                            <i class="fas fa-search text-lg"></i>
+                            <span>بحث</span>
+                        </button>
+
+                        <!-- Close Button -->
+                        <button
+                            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition-colors duration-300 flex items-center gap-2 whitespace-nowrap"
+                            id="closeSearch">
+                            <i class="fas fa-times text-lg"></i>
+                            <span>اغلاق</span>
+                        </button>
+                    </div>
+
+                    <!-- Search Filters -->
+                    <div class="mt-4 flex flex-wrap gap-2 items-center">
+                        <span class="text-base text-gray-400">تصفية:</span>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="all">الكل</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="stories">قصص</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="games">ألعاب</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="news">أخبار</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="characters">شخصيات</button>
+                    </div>
+
+                    <!-- Search Suggestions -->
+                    <div class="search-suggestions mt-4" id="searchSuggestions">
+                        <!-- Search History -->
+                        <div class="mb-4">
+                            <h3 class="text-accent font-bold text-lg mb-2 search-category">البحث الأخير</h3>
+                            <div class="grid grid-cols-1 gap-2" id="searchHistory">
+                                <div
+                                    class="search-history-item flex items-center justify-between bg-dark/30 px-4 py-3 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-history text-gray-500 ml-3"></i>
+                                        <span class="text-white">قصص رعب قصيرة</span>
+                                    </div>
+                                    <button class="search-history-remove text-gray-500 hover:text-accent">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div
+                                    class="search-history-item flex items-center justify-between bg-dark/30 px-4 py-3 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-history text-gray-500 ml-3"></i>
+                                        <span class="text-white">أفضل ألعاب الرعب 2025</span>
+                                    </div>
+                                    <button class="search-history-remove text-gray-500 hover:text-accent">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Popular Searches -->
+                        <div class="mb-4">
+                            <h3 class="text-accent font-bold text-lg mb-2 search-category">بحث شائع</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">مصاصو
+                                    الدماء</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">قصص
+                                    رعب</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">جن</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">أشباح</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">قاتل
+                                    متسلسل</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">ألعاب
+                                    رعب</a>
+                            </div>
+                        </div>
+
+                        <!-- Live Suggestions -->
+                        <div id="liveSuggestions" class="mb-4 hidden">
+                            <h3 class="text-accent font-bold text-lg mb-2 search-category">اقتراحات</h3>
+                            <div class="grid grid-cols-1 gap-2">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Search Results -->
+                        <div id="searchResults" class="mt-6 hidden">
+                            <h3 class="text-accent font-bold text-xl mb-4 search-category">نتائج البحث</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="resultsContainer">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="searchLoading" class="hidden mt-6">
+                            <div class="flex flex-col gap-4">
+                                <div class="search-loading h-20 bg-dark/30 rounded-lg"></div>
+                                <div class="search-loading h-20 bg-dark/30 rounded-lg"></div>
+                                <div class="search-loading h-20 bg-dark/30 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Browse Mega Menu -->
+        <div class="mega-menu" id="browseMegaMenu">
+            <div class="w-full px-4">
+                <div class="mega-menu-container">
+                    <div class="mega-menu-grid">
+                        <!-- Categories Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">الأقسام الرئيسية</h3>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-fire"></i>
+                                <span>قصص رعب مشهورة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-star"></i>
+                                <span>أحدث القصص</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-trophy"></i>
+                                <span>قصص مميزة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-users"></i>
+                                <span>مجتمع Z Horror</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>أحداث قادمة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-headphones"></i>
+                                <span>قصص صوتية</span>
+                            </a>
+                        </div>
+
+                        <!-- Horror Types Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">أنواع الرعب</h3>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-ghost"></i>
+                                <span>أشباح وأرواح</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-skull"></i>
+                                <span>رعب نفسي</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-book-dead"></i>
+                                <span>رعب خارق للطبيعة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-biohazard"></i>
+                                <span>زومبي وأوبئة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-moon"></i>
+                                <span>مصاصو الدماء</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-mask"></i>
+                                <span>قتلة متسلسلون</span>
+                            </a>
+                        </div>
+
+                        <!-- Collections Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">مجموعات مميزة</h3>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-globe-asia"></i>
+                                <span>قصص رعب عربية</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-globe"></i>
+                                <span>قصص رعب عالمية</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-history"></i>
+                                <span>قصص تاريخية</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-mountain"></i>
+                                <span>أساطير وخرافات</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-video"></i>
+                                <span>قصص مقتبسة من أفلام</span>
+                            </a>
+
+                            <div class="mega-menu-divider"></div>
+                            <div class="mega-menu-tag-container">
+                                <a href="#" class="mega-menu-tag">جن</a>
+                                <a href="#" class="mega-menu-tag">شياطين</a>
+                                <a href="#" class="mega-menu-tag">أشباح</a>
+                                <a href="#" class="mega-menu-tag">مستذئبون</a>
+                                <a href="#" class="mega-menu-tag">سحر</a>
+                                <a href="#" class="mega-menu-tag">طقوس</a>
+                            </div>
+                        </div>
+
+                        <!-- Featured Content Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">محتوى مميز</h3>
+                            <div class="mega-menu-featured">
+                                <div class="mega-menu-badge">جديد</div>
+                                <img src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg"
+                                    alt="محتوى مميز" class="mega-menu-featured-img">
+                                <div class="mega-menu-featured-overlay">
+                                    <h4 class="mega-menu-featured-title">المملكة المفقودة: رحلة إلى عالم الظلام</h4>
+                                    <p class="mega-menu-featured-desc">في أعماق الغابة المظلمة، اكتشف "سامر" بوابة غامضة
+                                        تقوده إلى عالم مواز...</p>
+                                    <a href="#" class="mega-menu-featured-link">
+                                        <span>قراءة المزيد</span>
+                                        <i class="fas fa-arrow-left"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mega-menu-footer">
+                                <a href="#" class="mega-menu-view-all">
+                                    <span>عرض كل المحتوى</span>
+                                    <i class="fas fa-arrow-left"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Menu - New dropdown menu replacing News -->
+        <div class="community-menu" id="communityMenu">
+            <div class="community-menu-header">
+                <h3 class="community-menu-title">
+                    <i class="fas fa-users"></i>
+                    <span>مجتمع Z Horror</span>
+                </h3>
+            </div>
+            <div class="py-2">
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-comments"></i>
+                    <span>منتديات المجتمع</span>
+                </a>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-pen-fancy"></i>
+                    <span>مشاركة قصتك</span>
+                    <span class="community-badge">جديد</span>
+                </a>
+                <div class="community-menu-divider"></div>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-user-friends"></i>
+                    <span>مجموعات الكتابة</span>
+                </a>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>مسابقات الكتابة</span>
+                </a>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>فعاليات المجتمع</span>
+                </a>
+                <div class="community-menu-divider"></div>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>الدعم والمساعدة</span>
+                </a>
+            </div>
+            <div class="community-menu-footer">
+                <a href="#" class="community-menu-all">
+                    <span>استكشاف المجتمع</span>
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Fixed: Mobile Menu Overlay positioned below the header -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden hidden" id="mobileMenuOverlay">
+        <!-- Modified: Mobile Menu with full height from header to bottom -->
+        <div class="menu-mobile h-full w-3/4 max-w-xs bg-dark border-r border-accent/20" id="mobileMenu">
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center">
+                <h3 class="text-white text-xl font-bold">القائمة</h3>
+                <button id="closeMobileMenu" class="text-white hover:text-accent transition-all duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto">
+                <a href="#"
+                    class="block px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg mb-1 transition-all duration-300 text-lg">مشهور</a>
+                <a href="#"
+                    class="block px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg mb-1 transition-all duration-300 text-lg">جديد</a>
+                <div class="mb-1">
+                    <button
+                        class="w-full flex justify-between items-center px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg transition-all duration-300 text-lg"
+                        data-submenu-id="animeTypes">
+                        <span>أنواع</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-300"
+                            id="animeTypesIcon"></i>
+                    </button>
+                    <div class="submenu bg-darker/50 rounded-lg mt-1 mr-4 overflow-hidden" id="animeTypes">
+                        <div class="p-2 grid grid-cols-2 gap-1">
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">أكشن</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مغامرات</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">كوميدي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">دراما</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">موسيقي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">رومانسي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">خيال
+                                علمي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">سينين</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">شوجو</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">شونن</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">خارق
+                                للطبيعة</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">إثارة</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">خيال</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-1">
+                    <button
+                        class="w-full flex justify-between items-center px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg transition-all duration-300 text-lg"
+                        data-submenu-id="communityMenuMobile">
+                        <span>مجتمع</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-300"
+                            id="communityMenuIcon"></i>
+                    </button>
+                    <div class="submenu bg-darker/50 rounded-lg mt-1 mr-4 overflow-hidden" id="communityMenuMobile">
+                        <div class="p-2">
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">منتديات</a>
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مشاركة
+                                قصتك</a>
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مجموعات
+                                الكتابة</a>
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مسابقات</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-800 mt-4">
+                <!-- Updated Premium Button to match the user menu style -->
+                <div class="relative overflow-hidden rounded-xl mb-4">
+                    <div class="absolute inset-0 bg-gradient-radial from-accent/30 to-transparent opacity-50"></div>
+                    <button
+                        class="premium-button w-full py-5 px-5 rounded-xl relative overflow-hidden group text-xl font-bold shadow-lg shadow-accent/20">
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="relative">
+                                <i class="fas fa-crown text-yellow-300 text-3xl animate-float"></i>
+                            </div>
+                            <span>تجربة النسخة المدفوعة</span>
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-300/70 to-transparent">
+                        </div>
+                    </button>
+                </div>
+                <div class="flex justify-center gap-4 mt-4">
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-twitter text-2xl"></i></a>
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-facebook text-2xl"></i></a>
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-instagram text-2xl"></i></a>
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-discord text-2xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-menu fixed hidden" id="profileMenu">
+        <div class="profile-menu-header p-5 border-b border-gray-800/50 flex justify-between items-center relative">
+            <div class="blood-drip"></div>
+            <div class="blood-drip"></div>
+            <div class="blood-drip"></div>
+            <h3 class="text-white font-bold text-2xl flex items-center">
+                <i class="fas fa-user-circle text-accent mr-3 text-3xl"></i>
+                <span class="animate-glow">الحساب الشخصي</span>
+            </h3>
+            <button id="closeProfileMenu"
+                class="text-white hover:text-accent transition-all duration-300 transform hover:rotate-90 hover:scale-110 focus:outline-none">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <div class="p-5 space-y-6">
+            <div class="noise-bg"></div>
+            <div class="profile-section" data-delay="100">
+                <div
+                    class="menu-item bg-gradient-to-r from-dark to-darker hover:from-dark/80 hover:to-darker/80 text-white text-right p-5 rounded-xl mb-3 transition-all duration-300 border border-gray-800/50 hover:border-accent/30 shadow-lg hover:shadow-accent/10 group">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <div class="font-bold text-xl mb-1 group-hover:text-accent transition-colors duration-300">
+                                إنشاء حساب</div>
+                            <p class="text-gray-400 text-base">انضم مجانًا إلينا واستمتع بتجربة كاملة</p>
+                        </div>
+                        <div
+                            class="ml-4 bg-accent/10 p-3 rounded-full text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                            <i class="fas fa-user-plus text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="menu-item bg-gradient-to-r from-dark to-darker hover:from-dark/80 hover:to-darker/80 text-white text-right p-5 rounded-xl mb-3 transition-all duration-300 border border-gray-800/50 hover:border-accent/30 shadow-lg hover:shadow-accent/10 group">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <div class="font-bold text-xl mb-1 group-hover:text-accent transition-colors duration-300">
+                                تسجيل دخول</div>
+                            <p class="text-gray-400 text-base">منضم إلينا بالفعل، مرحبًا بك</p>
+                        </div>
+                        <div
+                            class="ml-4 bg-accent/10 p-3 rounded-full text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                            <i class="fas fa-sign-in-alt text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="menu-item bg-gradient-to-r from-dark to-darker hover:from-dark/80 hover:to-darker/80 text-white text-right p-5 rounded-xl mb-4 transition-all duration-300 border border-gray-800/50 hover:border-accent/30 shadow-lg hover:shadow-accent/10 group">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <div class="font-bold text-xl mb-1 group-hover:text-accent transition-colors duration-300">
+                                بطاقة الهدية</div>
+                            <p class="text-gray-400 text-base">اصرف بطاقة هديتك الآن</p>
+                        </div>
+                        <div
+                            class="ml-4 bg-accent/10 p-3 rounded-full text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                            <i class="fas fa-gift text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="200">
+                <div class="relative overflow-hidden rounded-xl mb-6">
+                    <div class="absolute inset-0 bg-gradient-radial from-accent/30 to-transparent opacity-50"></div>
+                    <button
+                        class="premium-button w-full py-5 px-5 rounded-xl relative overflow-hidden group text-xl font-bold shadow-lg shadow-accent/20">
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="relative">
+                                <i class="fas fa-crown text-yellow-300 text-3xl animate-float"></i>
+                            </div>
+                            <span>تجربة النسخة المدفوعة</span>
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-300/70 to-transparent">
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="400">
+                <div class="mb-2 flex items-center">
+                    <h4 class="text-accent font-bold text-xl">روابط سريعة</h4>
+                    <div class="flex-1 h-px bg-gradient-to-l from-accent/30 to-transparent ml-3"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-heart text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">المفضلة</span>
+                    </a>
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-list text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">قائمة المشاهدة</span>
+                    </a>
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-history text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">التاريخ</span>
+                    </a>
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-cog text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">الإعدادات</span>
+                    </a>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="500">
+                <div class="mb-2 flex items-center">
+                    <h4 class="text-accent font-bold text-xl">تابعنا</h4>
+                    <div class="flex-1 h-px bg-gradient-to-l from-accent/30 to-transparent ml-3"></div>
+                </div>
+                <div class="flex justify-center gap-6 mt-4">
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-facebook text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-discord text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="600">
+                <div
+                    class="bg-gradient-to-r from-dark/80 to-darker/80 rounded-xl p-5 border border-gray-800/50 shadow-lg mb-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-white font-bold text-lg mb-1">تطبيق Z Horror</h4>
+                            <p class="text-gray-400 text-sm">حمل التطبيق للجوال</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="#" class="bg-dark/50 hover:bg-dark p-2 rounded-lg transition-all duration-300">
+                                <i class="fab fa-google-play text-white text-xl"></i>
+                            </a>
+                            <a href="#" class="bg-dark/50 hover:bg-dark p-2 rounded-lg transition-all duration-300">
+                                <i class="fab fa-apple text-white text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-section text-center text-gray-500 text-sm mt-8 pb-6" data-delay="700">
+                Zoldyck v2.5.0 © 2025
+            </div>
+        </div>
+    </div>
+    <!-- @endinclude -->
     <!-- Progress Bar -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
@@ -569,7 +1205,158 @@
         </button>
     </div>
 
+    <!-- @include footer -->
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-dark relative overflow-hidden pt-16 pb-8">
+        <!-- Noise Background -->
+        <div class="noise-bg"></div>
+
+        <!-- Blood Drips -->
+        <div class="blood-drip" style="left: 10%; animation-delay: 0.5s;"></div>
+        <div class="blood-drip" style="left: 30%; animation-delay: 1.2s;"></div>
+        <div class="blood-drip" style="left: 50%; animation-delay: 2s;"></div>
+        <div class="blood-drip" style="left: 70%; animation-delay: 0.8s;"></div>
+        <div class="blood-drip" style="left: 90%; animation-delay: 1.5s;"></div>
+
+        <div class="container mx-auto px-4">
+            <!-- Footer Top Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 footer-grid">
+                <!-- Column 1: About -->
+                <div>
+                    <a href="#" class="block mb-6 footer-logo">
+                        <img src="../assets/images/logo-z-horror.png" alt="Z Horror Logo" class="h-16 w-auto">
+                    </a>
+                    <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                        منصة Z Horror هي وجهتك الأولى لقصص الرعب والغموض، نقدم محتوى مميز من إبداع كتاب محترفين وهواة من
+                        جميع أنحاء العالم العربي.
+                    </p>
+                    <div class="flex space-x-4 space-x-reverse mt-6">
+                        <a href="#" class="social-icon text-white hover:text-accent p-2">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="social-icon text-white hover:text-accent p-2">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="social-icon text-white hover:text-accent p-2">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="social-icon text-white hover:text-accent p-2">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                        <a href="#" class="social-icon text-white hover:text-accent p-2">
+                            <i class="fab fa-discord text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div>
+                    <h3 class="text-white text-xl font-bold mb-6 footer-title">روابط سريعة</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">الصفحة الرئيسية</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">أحدث القصص</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">الأكثر شعبية</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">مصاصو الدماء</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">شياطين وجن</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">خيال وفانتازيا</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">سحرة ومشعوذين</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">ألعاب رعب</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Support -->
+                <div>
+                    <h3 class="text-white text-xl font-bold mb-6 footer-title">الدعم والمساعدة</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">مركز المساعدة</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">الأسئلة الشائعة</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">شروط الاستخدام</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">سياسة الخصوصية</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">حقوق النشر</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">الإبلاغ عن محتوى</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">اتصل بنا</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Account & Premium -->
+                <div>
+                    <!-- Account Section -->
+                    <h3 class="text-white text-xl font-bold mb-6 footer-title">الحساب</h3>
+                    <ul class="space-y-1 mb-6">
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">إنشاء حساب</a></li>
+                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">تسجيل الدّخول</a></li>
+                    </ul>
+
+                    <!-- Premium Subscription -->
+                    <div class="bg-darker/50 rounded-xl p-4 border border-accent/20 shadow-lg shadow-accent/5">
+                        <h4 class="text-white font-bold text-lg mb-3 flex items-center">
+                            <i class="fas fa-crown text-yellow-400 ml-2"></i>
+                            <span>اشترك في النسخة المميزة</span>
+                        </h4>
+                        <p class="text-gray-400 text-sm mb-4">
+                            احصل على مزايا حصرية وقصص إضافية مع اشتراك Z Horror المميز
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center">
+                                <i class="fas fa-ad text-xl mb-2"></i>
+                                <p class="text-white text-xs">بدون إعلانات</p>
+                            </div>
+                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center">
+                                <i class="fas fa-book text-xl mb-2"></i>
+                                <p class="text-white text-xs">محتوى حصري</p>
+                            </div>
+                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center">
+                                <i class="fas fa-download text-xl mb-2"></i>
+                                <p class="text-white text-xs">تحميل القصص</p>
+                            </div>
+                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center relative">
+                                <span class="premium-badge">جديد</span>
+                                <i class="fas fa-headphones text-xl mb-2"></i>
+                                <p class="text-white text-xs">قصص صوتية</p>
+                            </div>
+                        </div>
+                        <button
+                            class="premium-btn w-full py-3 px-4 rounded-lg text-white font-bold flex items-center justify-center">
+                            <i class="fas fa-crown text-yellow-400 ml-2 animate-float"></i>
+                            <span>اشترك الآن</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Divider -->
+            <div class="footer-divider"></div>
+
+            <!-- Footer Bottom -->
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-500 text-sm">
+                        &copy; 2025 Zoldyck studio. جميع الحقوق محفوظة
+                    </p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#" class="text-gray-400 text-sm footer-bottom-link">سياسة الخصوصية</a>
+                    <a href="#" class="text-gray-400 text-sm footer-bottom-link">شروط الاستخدام</a>
+                    <a href="#" class="text-gray-400 text-sm footer-bottom-link">ملفات تعريف الارتباط</a>
+                    <a href="#" class="text-gray-400 text-sm footer-bottom-link">حقوق النشر</a>
+                    <a href="#" class="text-gray-400 text-sm footer-bottom-link">استفسارات إعلانية</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @endinclude -->
+
     <script src="../assets/js/pages/story-reader.js"></script>
+
+    <!-- @include component-scripts -->
+    <script src="../assets/js/components/header.js"></script>
+    <script src="../assets/js/components/footer.js"></script>
+    <!-- @endinclude -->
 </body>
 
 </html>
