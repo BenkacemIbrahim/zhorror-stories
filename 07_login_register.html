@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | Z Horror</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                        'accent-hover': '#d10007',
+                        'dark': '#121212',
+                        'darker': '#0a0a0a',
+                        'card': 'rgba(30, 30, 30, 0.6)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'blood-drip': 'bloodDrip 3s ease-in-out infinite',
+                        'slide-down': 'slideDown 0.3s ease-out forwards',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(244, 0, 9, 0.5)' },
+                            '100%': { textShadow: '0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5)' },
+                        },
+                        bloodDrip: {
+                            '0%': { height: '0', opacity: 0 },
+                            '30%': { height: '30px', opacity: 1 },
+                            '60%': { height: '10px', opacity: 0.7 },
+                            '100%': { height: '0', opacity: 0 }
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F40009;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3333;
+        }
+
+        .blood-drip {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .blood-drip-page {
+            position: fixed;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        .blood-drip-page:nth-child(1) {
+            left: 10%;
+            animation-delay: 0.7s;
+        }
+
+        .blood-drip-page:nth-child(2) {
+            left: 25%;
+            animation-delay: 1.9s;
+        }
+
+        .blood-drip-page:nth-child(3) {
+            left: 45%;
+            animation-delay: 0.3s;
+        }
+
+        .blood-drip-page:nth-child(4) {
+            left: 65%;
+            animation-delay: 1.2s;
+        }
+
+        .blood-drip-page:nth-child(5) {
+            left: 85%;
+            animation-delay: 2.1s;
+        }
+
+        .blood-drip:nth-child(1) {
+            left: 30%;
+            animation-delay: 0.5s;
+        }
+
+        .blood-drip:nth-child(2) {
+            left: 70%;
+            animation-delay: 1.5s;
+        }
+
+        .blood-drip:nth-child(3) {
+            left: 50%;
+            animation-delay: 2.5s;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: radial-gradient(circle at 50% 50%, rgba(244, 0, 9, 0.3) 0%, transparent 80%);
+        }
+
+        .noise-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in-container {
+            right: 0;
+            z-index: 2;
+            opacity: 1;
+        }
+
+        .sign-up-container {
+            right: 0;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            right: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .overlay {
+            background: linear-gradient(to left, #F40009, #8B0000);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            right: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(20%);
+        }
+
+        .overlay-right {
+            left: 0;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(-100%);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(-100%);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(-50%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(-20%);
+        }
+
+        .back-to-home {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 201;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            font-size: 1.125rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .back-to-home:hover {
+            transform: translateX(-50%) translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .input-field {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            padding-right: 2.5rem;
+            background-color: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: rgba(244, 0, 9, 0.5);
+            box-shadow: 0 0 0 2px rgba(244, 0, 9, 0.2);
+        }
+
+        .input-field i:not(.password-toggle) {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 1rem;
+            color: #999;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .input-field input:focus+i:not(.password-toggle) {
+            color: #F40009;
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: #F40009;
+        }
+
+        .form-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #F40009;
+        }
+
+        .social-icon {
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: #F40009;
+            border-color: #F40009;
+        }
+
+        .form-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .form-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        .form-button:active {
+            transform: translateY(1px);
+        }
+
+        .forgot-password {
+            position: relative;
+            display: inline-block;
+        }
+
+        .forgot-password::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background-color: #F40009;
+            transition: width 0.3s ease;
+        }
+
+        .forgot-password:hover::after {
+            width: 100%;
+        }
+
+        .overlay-button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .overlay-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-field.error input {
+            border-color: #F40009;
+            box-shadow: 0 0 0 1px rgba(244, 0, 9, 0.2);
+        }
+
+        .input-field.error i:not(.password-toggle) {
+            color: #F40009;
+        }
+
+        .password-requirements {
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: auto !important;
+                min-height: 600px;
+                margin: 1rem;
+                width: calc(100% - 2rem) !important;
+                max-width: 100% !important;
+            }
+
+            .sign-in-container,
+            .sign-up-container {
+                width: 100%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                transform: none;
+            }
+
+            .sign-up-container {
+                display: none;
+            }
+
+            .container.right-panel-active .sign-in-container {
+                display: none;
+                transform: none;
+            }
+
+            .container.right-panel-active .sign-up-container {
+                display: block;
+                opacity: 1;
+                transform: none;
+            }
+
+            .overlay-container {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: block !important;
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .back-to-home {
+                position: fixed;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.5rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            form {
+                padding: 1.5rem !important;
+            }
+
+            h1 {
+                font-size: 1.75rem !important;
+            }
+
+            .social-icon {
+                width: 2.5rem !important;
+                height: 2.5rem !important;
+            }
+
+            .input-field input {
+                padding: 0.75rem 1rem !important;
+                padding-right: 2.5rem !important;
+                font-size: 1rem !important;
+            }
+
+            .form-button {
+                padding: 0.75rem 1.5rem !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 0.5rem;
+                width: calc(100% - 1rem) !important;
+                min-height: 550px;
+            }
+
+            form {
+                padding: 1rem !important;
+            }
+
+            h1 {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            span.text-lg {
+                font-size: 0.9rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            .social-icon {
+                width: 2rem !important;
+                height: 2rem !important;
+                margin: 0 0.25rem !important;
+            }
+
+            .flex.space-x-4 {
+                margin: 0.5rem 0 !important;
+            }
+
+            .w-full.space-y-4 {
+                margin-top: 0.5rem !important;
+                gap: 0.5rem !important;
+            }
+
+            .input-field input {
+                padding: 0.6rem 0.8rem !important;
+                padding-right: 2.5rem !important;
+                font-size: 0.9rem !important;
+            }
+
+            .form-button {
+                margin-top: 1rem !important;
+                padding: 0.6rem 1.2rem !important;
+                font-size: 0.9rem !important;
+            }
+
+            .back-to-home {
+                padding: 0.4rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(244, 0, 9, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(244, 0, 9, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(244, 0, 9, 0);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse-red 2s infinite;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(100);
+                opacity: 0;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 100%;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-toggle button {
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-toggle button::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background-color: #F40009;
+            transition: width 0.3s ease;
+        }
+
+        .mobile-toggle button:hover::after {
+            width: 100%;
+        }
+
+        .back-to-home-mobile {
+            display: none;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 201;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 9999px;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            background: transparent;
+            align-items: center;
+        }
+
+        .back-to-home-mobile:hover {
+            transform: translateX(-50%) translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .back-to-home-mobile {
+                display: flex;
+            }
+
+            .overlay-container .back-to-home {
+                display: none;
+            }
+        }
+
+        @keyframes bloodDrip {
+            0% {
+                height: 0;
+                opacity: 0;
+            }
+
+            30% {
+                height: 30px;
+                opacity: 1;
+            }
+
+            60% {
+                height: 10px;
+                opacity: 0.7;
+            }
+
+            100% {
+                height: 0;
+                opacity: 0;
+            }
+        }
+
+        .mobile-toggle button {
+            text-decoration: none !important;
+        }
+
+        .mobile-toggle button:hover {
+            text-decoration: none !important;
+        }
+
+        .error-message {
+            color: #F40009;
+            font-size: 0.875rem;
+            position: absolute;
+            bottom: -1.5rem;
+            right: 0;
+            display: none;
+            animation: fadeIn 0.3s ease-out forwards;
+            width: 100%;
+            text-align: right;
+            line-height: 1.2;
+            padding: 0.25rem 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+            transition: color 0.3s ease;
+            color: #F40009;
+        }
+
+        .requirement.valid {
+            color: #22c55e;
+        }
+
+        @media (max-width: 768px) {
+            .error-message {
+                font-size: 0.65rem;
+                bottom: -1.25rem;
+            }
+
+            .password-requirements p {
+                font-size: 0.65rem;
+            }
+
+            .input-field {
+                margin-bottom: 1.75rem;
+            }
+
+            form {
+                padding: 1.5rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-message {
+                font-size: 0.6rem;
+                bottom: -1.2rem;
+            }
+
+            .password-requirements p {
+                font-size: 0.6rem;
+            }
+
+            .input-field {
+                margin-bottom: 1.5rem;
+            }
+
+            .w-full.space-y-6 {
+                margin-top: 0.5rem !important;
+                gap: 1rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+    <div class="blood-drip-page"></div>
+    <div class="blood-drip-page"></div>
+    <div class="blood-drip-page"></div>
+    <div class="blood-drip-page"></div>
+    <div class="blood-drip-page"></div>
+
+    <div class="animated-bg"></div>
+
+    <main class="flex-grow flex items-center justify-center py-10 px-4">
+        <div class="container relative w-full max-w-6xl h-[700px] overflow-hidden rounded-xl bg-dark shadow-2xl shadow-accent/20"
+            id="container">
+            <div class="noise-bg"></div>
+
+            <div class="blood-drop"></div>
+            <div class="blood-drop"></div>
+            <div class="blood-drop"></div>
+            <div class="blood-drop"></div>
+
+            <div class="form-container sign-up-container bg-dark/90 backdrop-blur-sm">
+                <form action="#" class="flex flex-col items-center justify-center p-10 h-full" id="signupForm"
+                    novalidate>
+                    <a href="#" class="back-to-home-mobile">
+                        <i class="fas fa-home ml-2"></i>
+                        <span>الرئيسية</span>
+                    </a>
+                    <div class="blood-drip"></div>
+                    <div class="blood-drip"></div>
+                    <div class="blood-drip"></div>
+                    <h1 class="text-4xl font-bold mb-4 text-white animate-glow form-title">إنشاء حساب</h1>
+                    <div class="flex space-x-4 space-x-reverse my-4">
+                        <a href="#"
+                            class="social-icon w-12 h-12 rounded-full flex items-center justify-center border border-gray-700 text-gray-400 hover:text-accent hover:border-accent transition-all duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#"
+                            class="social-icon w-12 h-12 rounded-full flex items-center justify-center border border-gray-700 text-gray-400 hover:text-accent hover:border-accent transition-all duration-300">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#"
+                            class="social-icon w-12 h-12 rounded-full flex items-center justify-center border border-gray-700 text-gray-400 hover:text-accent hover:border-accent transition-all duration-300">
+                            <i class="fab fa-reddit-alien"></i>
+                        </a>
+                    </div>
+                    <span class="text-lg text-gray-400 mb-4">أو استخدم بريدك الإلكتروني للتسجيل</span>
+                    <div class="w-full space-y-6">
+                        <div class="relative input-field">
+                            <div class="input-wrapper">
+                                <input type="text" placeholder="الاسم" name="name" required
+                                    class="w-full bg-dark/50 border border-gray-700 rounded-lg text-white" />
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="error-message">يرجى إدخال الاسم</div>
+                        </div>
+                        <div class="relative input-field">
+                            <div class="input-wrapper">
+                                <input type="email" placeholder="البريد الإلكتروني" name="email" required
+                                    class="w-full bg-dark/50 border border-gray-700 rounded-lg text-white" />
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="error-message">يرجى إدخال بريد إلكتروني صحيح (مثال: <a
+                                    href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                    data-cfemail="d7f2eff6fae7fbf2d7f3f8faf6fef9b9f4f8fa">[email&#160;protected]</a>)
+                            </div>
+                        </div>
+                        <div class="relative input-field">
+                            <div class="input-wrapper">
+                                <input type="password" placeholder="كلمة المرور" id="signupPassword" name="password"
+                                    required class="w-full bg-dark/50 border border-gray-700 rounded-lg text-white" />
+                                <i class="fas fa-lock"></i>
+                                <i class="fas fa-eye password-toggle hidden" id="signupPasswordToggle"></i>
+                            </div>
+                            <div class="error-message">كلمة المرور مطلوبة</div>
+                            <div class="password-requirements mt-2 text-sm">
+                                <p class="requirement transition-colors duration-300" id="lengthReq">
+                                    يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل
+                                </p>
+                                <p class="requirement transition-colors duration-300" id="specialReq">
+                                    يجب أن تحتوي على رمز خاص واحد على الأقل (@#$%^&*)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit"
+                        class="form-button mt-6 bg-accent hover:bg-accent-hover text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 hover:shadow-lg hover:shadow-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/50">
+                        إنشاء حساب
+                    </button>
+                    <div class="mobile-toggle hidden mt-6">
+                        <p class="text-lg text-gray-400">لديك حساب بالفعل؟ <button type="button" id="mobileSignIn"
+                                class="text-accent font-bold hover:underline">تسجيل الدخول</button></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-container sign-in-container bg-dark/90 backdrop-blur-sm">
+                <form action="#" class="flex flex-col items-center justify-center p-10 h-full" id="signinForm"
+                    novalidate>
+                    <a href="#" class="back-to-home-mobile">
+                        <i class="fas fa-home ml-2"></i>
+                        <span>الرئيسية</span>
+                    </a>
+                    <div class="blood-drip"></div>
+                    <div class="blood-drip"></div>
+                    <div class="blood-drip"></div>
+                    <h1 class="text-4xl font-bold mb-4 text-white animate-glow form-title">تسجيل الدخول</h1>
+                    <div class="flex space-x-4 space-x-reverse my-4">
+                        <a href="#"
+                            class="social-icon w-12 h-12 rounded-full flex items-center justify-center border border-gray-700 text-gray-400 hover:text-accent hover:border-accent transition-all duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#"
+                            class="social-icon w-12 h-12 rounded-full flex items-center justify-center border border-gray-700 text-gray-400 hover:text-accent hover:border-accent transition-all duration-300">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#"
+                            class="social-icon w-12 h-12 rounded-full flex items-center justify-center border border-gray-700 text-gray-400 hover:text-accent hover:border-accent transition-all duration-300">
+                            <i class="fab fa-reddit-alien"></i>
+                        </a>
+                    </div>
+                    <span class="text-lg text-gray-400 mb-4">أو استخدم حسابك</span>
+                    <div class="w-full space-y-6">
+                        <div class="relative input-field">
+                            <div class="input-wrapper">
+                                <input type="email" placeholder="البريد الإلكتروني" name="email" required
+                                    class="w-full bg-dark/50 border border-gray-700 rounded-lg text-white" />
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="error-message">يرجى إدخال بريد إلكتروني صحيح (مثال: <a
+                                    href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                    data-cfemail="214459404c514d4461454e4c40484f0f424e4c">[email&#160;protected]</a>)
+                            </div>
+                        </div>
+                        <div class="relative input-field">
+                            <div class="input-wrapper">
+                                <input type="password" placeholder="كلمة المرور" id="signinPassword" name="password"
+                                    required class="w-full bg-dark/50 border border-gray-700 rounded-lg text-white" />
+                                <i class="fas fa-lock"></i>
+                                <i class="fas fa-eye password-toggle hidden" id="signinPasswordToggle"></i>
+                            </div>
+                            <div class="error-message">كلمة المرور مطلوبة</div>
+                        </div>
+                    </div>
+                    <a href="#"
+                        class="forgot-password text-lg text-gray-400 hover:text-accent mt-4 transition-colors duration-300">نسيت
+                        كلمة المرور؟</a>
+                    <button type="submit"
+                        class="form-button mt-6 bg-accent hover:bg-accent-hover text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 hover:shadow-lg hover:shadow-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/50">
+                        تسجيل الدخول
+                    </button>
+                    <div class="mobile-toggle hidden mt-6">
+                        <p class="text-lg text-gray-400">ليس لديك حساب؟ <button type="button" id="mobileSignUp"
+                                class="text-accent font-bold hover:underline">إنشاء حساب</button></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="overlay-container">
+                <a href="#"
+                    class="back-to-home bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full transition-all duration-300 flex items-center justify-center border border-white/30 shadow-lg">
+                    <i class="fas fa-home ml-2"></i>
+                    <span>الرئيسية</span>
+                </a>
+
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1 class="text-4xl font-bold mb-4">مرحباً بعودتك!</h1>
+                        <p class="mb-6 text-xl">للبقاء على اتصال معنا، يرجى تسجيل الدخول بمعلوماتك الشخصية</p>
+                        <button
+                            class="overlay-button bg-transparent border border-white text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 hover:bg-white/10 hover:shadow-lg hover:-translate-y-1 focus:outline-none"
+                            id="signIn">
+                            تسجيل الدخول
+                        </button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1 class="text-4xl font-bold mb-4">مرحباً بك!</h1>
+                        <p class="mb-6 text-xl">أدخل بياناتك الشخصية وابدأ رحلتك معنا في عالم القصص المرعبة</p>
+                        <button
+                            class="overlay-button bg-transparent border border-white text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 hover:bg-white/10 hover:shadow-lg hover:-translate-y-1 focus:outline-none"
+                            id="signUp">
+                            إنشاء حساب
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="w-full text-center py-4 text-gray-400 text-sm">
+        <p>© 2025 Zoldyck studio. جميع الحقوق محفوظة</p>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('container');
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const mobileSignUpButton = document.getElementById('mobileSignUp');
+            const mobileSignInButton = document.getElementById('mobileSignIn');
+            const signUpContainer = document.querySelector('.sign-up-container');
+            const signInContainer = document.querySelector('.sign-in-container');
+            const backToHomeButton = document.querySelector('.back-to-home');
+            const signinPassword = document.getElementById('signinPassword');
+            const signupPassword = document.getElementById('signupPassword');
+            const signinPasswordToggle = document.getElementById('signinPasswordToggle');
+            const signupPasswordToggle = document.getElementById('signupPasswordToggle');
+            const signinForm = document.getElementById('signinForm');
+            const signupForm = document.getElementById('signupForm');
+            const lengthRequirement = document.getElementById('lengthReq');
+            const specialRequirement = document.getElementById('specialReq');
+
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            signupPassword.addEventListener('input', function () {
+                const password = this.value;
+
+                // Check length requirement
+                if (password.length >= 8) {
+                    lengthRequirement.classList.remove('text-red-500');
+                    lengthRequirement.classList.add('valid', 'text-green-500');
+                } else {
+                    lengthRequirement.classList.add('text-red-500');
+                    lengthRequirement.classList.remove('valid', 'text-green-500');
+                }
+
+                // Check special character requirement
+                const hasSpecialChar = /[@#$%^&*]/.test(password);
+                if (hasSpecialChar) {
+                    specialRequirement.classList.remove('text-red-500');
+                    specialRequirement.classList.add('valid', 'text-green-500');
+                } else {
+                    specialRequirement.classList.add('text-red-500');
+                    specialRequirement.classList.remove('valid', 'text-green-500');
+                }
+            });
+
+            function resetFormFields() {
+                document.querySelectorAll('.sign-in-container input, .sign-up-container input').forEach(input => {
+                    input.value = '';
+                    const event = new Event('input', { bubbles: true });
+                    input.dispatchEvent(event);
+                });
+                clearAllErrors();
+            }
+
+            function clearAllErrors() {
+                document.querySelectorAll('.input-field').forEach(field => {
+                    field.classList.remove('error');
+                    const errorMsg = field.querySelector('.error-message');
+                    if (errorMsg) {
+                        errorMsg.style.display = 'none';
+                    }
+                });
+            }
+
+            function showError(input, message) {
+                const inputField = input.closest('.input-field');
+                inputField.classList.add('error');
+                const errorElement = inputField.querySelector('.error-message');
+                if (errorElement) {
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                }
+                input.focus();
+            }
+
+            function validateEmail(email) {
+                return emailRegex.test(email);
+            }
+
+            function validateForm(form) {
+                clearAllErrors();
+
+                const inputs = form.querySelectorAll('input[required]');
+                let isValid = true;
+                let firstEmptyInput = null;
+
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        if (!firstEmptyInput) {
+                            firstEmptyInput = input;
+                        }
+                    }
+                });
+
+                if (firstEmptyInput) {
+                    let errorMessage = firstEmptyInput.getAttribute('placeholder') + ' مطلوب';
+                    if (firstEmptyInput.type === 'password') {
+                        errorMessage = 'كلمة المرور مطلوبة';
+                    }
+                    showError(firstEmptyInput, errorMessage);
+                    return false;
+                }
+
+                const emailInput = form.querySelector('input[type="email"]');
+                if (emailInput && !validateEmail(emailInput.value.trim())) {
+                    showError(emailInput, 'يرجى إدخال بريد إلكتروني صحيح (مثال: example@domain.com)');
+                    return false;
+                }
+
+                return isValid;
+            }
+
+            const animatedBg = document.querySelector('.animated-bg');
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                animatedBg.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(244, 0, 9, 0.3) 0%, transparent 80%)`;
+            });
+
+            function checkMobileView() {
+                if (window.innerWidth <= 768) {
+                    document.querySelectorAll('.mobile-toggle').forEach(toggle => {
+                        toggle.style.display = 'block';
+                    });
+
+                    if (container.classList.contains('right-panel-active')) {
+                        signInContainer.style.display = 'none';
+                        signUpContainer.style.display = 'block';
+                    } else {
+                        signInContainer.style.display = 'block';
+                        signUpContainer.style.display = 'none';
+                    }
+
+                    if (backToHomeButton) {
+                        backToHomeButton.style.position = 'fixed';
+                    }
+                } else {
+                    document.querySelectorAll('.mobile-toggle').forEach(toggle => {
+                        toggle.style.display = 'none';
+                    });
+
+                    signInContainer.style.display = 'block';
+                    signUpContainer.style.display = 'block';
+
+                    if (backToHomeButton) {
+                        backToHomeButton.style.position = 'absolute';
+                    }
+                }
+            }
+
+            checkMobileView();
+
+            signUpButton.addEventListener('click', () => {
+                container.classList.add('right-panel-active');
+                checkMobileView();
+                resetFormFields();
+            });
+
+            signInButton.addEventListener('click', () => {
+                container.classList.remove('right-panel-active');
+                checkMobileView();
+                resetFormFields();
+            });
+
+            if (mobileSignUpButton) {
+                mobileSignUpButton.addEventListener('click', () => {
+                    container.classList.add('right-panel-active');
+                    signInContainer.style.display = 'none';
+                    signUpContainer.style.display = 'block';
+                    resetFormFields();
+                });
+            }
+
+            if (mobileSignInButton) {
+                mobileSignInButton.addEventListener('click', () => {
+                    container.classList.remove('right-panel-active');
+                    signUpContainer.style.display = 'none';
+                    signInContainer.style.display = 'block';
+                    resetFormFields();
+                });
+            }
+
+            window.addEventListener('resize', checkMobileView);
+
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    if (this.type !== 'submit') {
+                        e.preventDefault();
+                    }
+                    const x = e.clientX - e.target.getBoundingClientRect().left;
+                    const y = e.clientY - e.target.getBoundingClientRect().top;
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+
+            const inputFields = document.querySelectorAll('input');
+            inputFields.forEach(input => {
+                input.addEventListener('focus', function () {
+                    this.parentElement.classList.add('focused');
+                    const icon = this.parentElement.querySelector('i:not(.password-toggle)');
+                    if (icon) icon.classList.add('text-accent');
+                });
+
+                input.addEventListener('blur', function () {
+                    this.parentElement.classList.remove('focused');
+                    const icon = this.parentElement.querySelector('i:not(.password-toggle)');
+                    if (icon && !this.value) icon.classList.remove('text-accent');
+
+                    if (this.type === 'email' && this.value.trim() !== '') {
+                        if (!validateEmail(this.value.trim())) {
+                            showError(this, 'يرجى إدخال بريد إلكتروني صحيح (مثال: example@domain.com)');
+                        } else {
+                            this.closest('.input-field').classList.remove('error');
+                            const errorMsg = this.closest('.input-field').querySelector('.error-message');
+                            if (errorMsg) {
+                                errorMsg.style.display = 'none';
+                            }
+                        }
+                    }
+                });
+
+                if (input.type === 'email') {
+                    input.addEventListener('input', function () {
+                        if (this.value.trim() !== '') {
+                            if (!validateEmail(this.value.trim())) {
+                                showError(this, 'يرجى إدخال بريد إلكتروني صحيح (مثال: example@domain.com)');
+                            } else {
+                                this.closest('.input-field').classList.remove('error');
+                                const errorMsg = this.closest('.input-field').querySelector('.error-message');
+                                if (errorMsg) {
+                                    errorMsg.style.display = 'none';
+                                }
+                            }
+                        }
+                    });
+                }
+
+                if (input.type === 'password') {
+                    input.addEventListener('input', function () {
+                        const toggle = this.parentElement.querySelector('.password-toggle');
+                        if (this.value.length > 0) {
+                            toggle.classList.remove('hidden');
+                        } else {
+                            toggle.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+
+            function setupPasswordToggle(passwordInput, toggleIcon) {
+                toggleIcon.addEventListener('click', function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            setupPasswordToggle(signinPassword, signinPasswordToggle);
+            setupPasswordToggle(signupPassword, signupPasswordToggle);
+
+            signinForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (validateForm(this)) {
+                    console.log('Login form submitted successfully');
+                }
+            });
+
+            signupForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (validateForm(this)) {
+                    console.log('Signup form submitted successfully');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

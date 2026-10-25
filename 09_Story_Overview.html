@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظرة عامة على القصة | Z Horror</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                        'accent-hover': '#d10007',
+                        'dark': '#121212',
+                        'darker': '#0a0a0a',
+                        'card': 'rgba(30, 30, 30, 0.6)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'blood-drip': 'bloodDrip 3s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(244, 0, 9, 0.5)' },
+                            '100%': { textShadow: '0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5)' },
+                        },
+                        bloodDrip: {
+                            '0%': { height: '0', opacity: 0 },
+                            '30%': { height: '30px', opacity: 1 },
+                            '60%': { height: '10px', opacity: 0.7 },
+                            '100%': { height: '0', opacity: 0 }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F40009;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3333;
+        }
+
+        /* Blood Drips */
+        .blood-drip {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        /* Noise Background */
+        .noise-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Section Title */
+        .section-title {
+            position: relative;
+            font-weight: 700;
+            color: #fff;
+            padding-right: 35px;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            background-color: #F40009;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 70px;
+            height: 3px;
+            background-color: #F40009;
+        }
+
+        /* Red Line */
+        .red-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #F40009, transparent);
+            margin: 1.5rem 0;
+            border: none;
+        }
+
+        /* Story Cover */
+        .story-cover {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 0, 9, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .story-cover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(244, 0, 9, 0.4);
+        }
+
+        .story-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .story-cover:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Story Stats */
+        .story-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(30, 30, 30, 0.5);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .story-stat:hover {
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .story-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .story-stat-label {
+            font-size: 0.875rem;
+            color: #aaa;
+        }
+
+        .story-stat i {
+            color: #F40009;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Chapter Card */
+        .chapter-card {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chapter-card:hover {
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .chapter-number {
+            font-size: 0.875rem;
+            color: #F40009;
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        /* Read Button */
+        .read-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F40009, #8B0000);
+            transition: all 0.3s ease;
+        }
+
+        .read-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .read-button:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(10%, 10%);
+        }
+
+        .read-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        .read-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Writer Profile */
+        .writer-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(30, 30, 30, 0.5);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .writer-profile:hover {
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .writer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #F40009;
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .writer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .writer-info {
+            flex: 1;
+        }
+
+        .writer-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .writer-title {
+            font-size: 0.875rem;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+        }
+
+        .writer-bio {
+            font-size: 0.875rem;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .follow-button {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 2px solid #F40009;
+            border-radius: 0.5rem;
+            color: #F40009;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .follow-button:hover {
+            background: #F40009;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+        }
+
+        /* Category Tags */
+        .category-tag {
+            background-color: rgba(244, 0, 9, 0.1);
+            color: white;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            display: inline-block;
+            margin-left: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-tag:hover {
+            background-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.2);
+        }
+
+        /* Similar Stories */
+        .similar-story {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .similar-story:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(244, 0, 9, 0.3);
+        }
+
+        .similar-story-image {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .similar-story-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .similar-story:hover .similar-story-image img {
+            transform: scale(1.1);
+        }
+
+        .similar-story-content {
+            padding: 1rem;
+        }
+
+        .similar-story-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .similar-story-desc {
+            font-size: 0.875rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .similar-story-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        /* Reviews Section */
+        .review {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .review:hover {
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #F40009;
+        }
+
+        .review-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .review-user-info h4 {
+            font-weight: bold;
+            color: white;
+            margin: 0;
+        }
+
+        .review-user-info span {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .review-rating i {
+            color: #F40009;
+        }
+
+        .review-content {
+            color: #ddd;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .review-date {
+            font-size: 0.75rem;
+            color: #aaa;
+            text-align: left;
+        }
+
+        /* Add Review Form */
+        .add-review-form {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-review-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .rating-star {
+            font-size: 1.5rem;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rating-star:hover,
+        .rating-star.active {
+            color: #F40009;
+            transform: scale(1.2);
+        }
+
+        .review-textarea {
+            width: 100%;
+            height: 120px;
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            resize: none;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .review-textarea:focus {
+            outline: none;
+            border-color: #F40009;
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .submit-review {
+            padding: 0.75rem 2rem;
+            background: #F40009;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: bold;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-review:hover {
+            background: #d10007;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        @keyframes bloodDrip {
+            0% {
+                height: 0;
+                opacity: 0;
+            }
+
+            30% {
+                height: 30px;
+                opacity: 1;
+            }
+
+            60% {
+                height: 10px;
+                opacity: 0.7;
+            }
+
+            100% {
+                height: 0;
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .story-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .similar-stories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .story-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .similar-stories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .writer-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .writer-info {
+                text-align: center;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Blood Drips -->
+    <div class="blood-drip" style="left: 10%; animation-delay: 0.5s;"></div>
+    <div class="blood-drip" style="left: 30%; animation-delay: 1.2s;"></div>
+    <div class="blood-drip" style="left: 50%; animation-delay: 2s;"></div>
+    <div class="blood-drip" style="left: 70%; animation-delay: 0.8s;"></div>
+    <div class="blood-drip" style="left: 90%; animation-delay: 1.5s;"></div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto py-10 px-4">
+        <!-- Story Overview Section -->
+        <div class="bg-dark/80 rounded-xl p-6 shadow-xl relative mb-10">
+            <!-- Noise Background -->
+            <div class="noise-bg"></div>
+
+            <!-- Story Header -->
+            <div class="flex flex-col md:flex-row gap-8 mb-8">
+                <!-- Story Cover -->
+                <div class="w-full md:w-1/3 lg:w-1/4">
+                    <div class="story-cover aspect-[2/3]">
+                        <img src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg"
+                            alt="غلاف القصة">
+                    </div>
+                </div>
+
+                <!-- Story Details -->
+                <div class="w-full md:w-2/3 lg:w-3/4">
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="category-tag">خيال</span>
+                        <span class="category-tag">رعب</span>
+                        <span class="category-tag">مغامرة</span>
+                        <span class="category-tag">غموض</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-3 text-white">المملكة المفقودة: رحلة إلى عالم الظلام
+                    </h1>
+                    <div class="flex items-center gap-2 mb-4 text-gray-400">
+                        <span>بواسطة</span>
+                        <a href="#" class="text-white hover:text-accent transition-colors">أحمد الشريف</a>
+                        <span class="mx-2">•</span>
+                        <span>تم النشر في 15 مارس 2025</span>
+                    </div>
+
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        في أعماق الغابة المظلمة، اكتشف "سامر" بوابة غامضة تقوده إلى عالم مواز حيث تحكمه قوى خارقة
+                        للطبيعة. هناك، يجد نفسه في قلب صراع قديم بين النور والظلام. سيواجه مخلوقات غريبة، ويكتشف أسرارًا
+                        مخفية، ويتعلم حقيقة قدراته الخاصة التي لم يكن يعلم بوجودها. هل سيتمكن من العودة إلى عالمه، أم
+                        سيبقى محاصرًا في المملكة المفقودة إلى الأبد؟
+                    </p>
+
+                    <!-- Story Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 story-stats">
+                        <div class="story-stat">
+                            <i class="fas fa-book-open"></i>
+                            <div class="story-stat-value">1,245</div>
+                            <div class="story-stat-label">قراءة</div>
+                        </div>
+                        <div class="story-stat">
+                            <i class="fas fa-heart"></i>
+                            <div class="story-stat-value">328</div>
+                            <div class="story-stat-label">إعجاب</div>
+                        </div>
+                        <div class="story-stat">
+                            <i class="fas fa-comment"></i>
+                            <div class="story-stat-value">42</div>
+                            <div class="story-stat-label">تعليق</div>
+                        </div>
+                        <div class="story-stat">
+                            <i class="fas fa-clock"></i>
+                            <div class="story-stat-value">8</div>
+                            <div class="story-stat-label">فصول</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-4">
+                        <button class="read-button py-3 px-8 rounded-lg text-white font-bold flex items-center gap-2">
+                            <i class="fas fa-book-open"></i>
+                            <span>قراءة القصة</span>
+                        </button>
+                        <button
+                            class="bg-transparent border-2 border-white/30 hover:border-white text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 flex items-center gap-2">
+                            <i class="fas fa-bookmark"></i>
+                            <span>حفظ للقراءة لاحقًا</span>
+                        </button>
+                        <button
+                            class="bg-transparent border-2 border-white/30 hover:border-white text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 flex items-center gap-2">
+                            <i class="fas fa-share-alt"></i>
+                            <span>مشاركة</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writer Profile -->
+            <div class="writer-profile mb-8">
+                <div class="writer-avatar">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
+                        alt="صورة الكاتب">
+                </div>
+                <div class="writer-info">
+                    <h3 class="writer-name"><a href="/profile/ahmad-alsharif"
+                            class="hover:text-accent transition-colors">أحمد الشريف</a></h3>
+                    <div class="writer-title">كاتب رعب وخيال</div>
+                    <p class="writer-bio">كاتب متخصص في قصص الرعب والخيال العلمي، نشر أكثر من 50 قصة وثلاث روايات. حاصل
+                        على جائزة أفضل كاتب شاب لعام 2024.</p>
+                </div>
+                <button class="follow-button">متابعة</button>
+            </div>
+
+            <!-- Table of Contents Section -->
+            <div class="mb-10">
+                <h2 class="section-title text-2xl mb-4">جدول المحتويات</h2>
+                <div class="red-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 chapters-grid">
+                    <!-- Chapter 1 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 1</div>
+                        <h3 class="chapter-title">البوابة الغامضة</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 245 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 15 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 2 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 2</div>
+                        <h3 class="chapter-title">المملكة المفقودة</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 210 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 18 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 3 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 3</div>
+                        <h3 class="chapter-title">ليليث الحارسة</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 189 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 20 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 4 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 4</div>
+                        <h3 class="chapter-title">أسرار القصر الأسود</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 175 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 17 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 5 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 5</div>
+                        <h3 class="chapter-title">الكائنات المتحجرة</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 162 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 16 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 6 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 6</div>
+                        <h3 class="chapter-title">البحيرات السوداء</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 150 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 19 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 7 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 7</div>
+                        <h3 class="chapter-title">قوة سامر الخفية</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 138 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 21 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                    <!-- Chapter 8 -->
+                    <div class="chapter-card">
+                        <div class="chapter-number">الفصل 8</div>
+                        <h3 class="chapter-title">المواجهة الأخيرة</h3>
+                        <div class="chapter-info">
+                            <span><i class="fas fa-eye text-accent ml-1"></i> 125 مشاهدة</span>
+                            <span><i class="fas fa-clock text-accent ml-1"></i> 23 دقيقة للقراءة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="mb-10">
+                <h2 class="section-title text-2xl mb-4">آراء القراء</h2>
+                <div class="red-line"></div>
+
+                <!-- Add Review Form -->
+                <div class="add-review-form mb-6">
+                    <h3 class="add-review-title">أضف رأيك</h3>
+                    <div class="rating-stars mb-4">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                    <textarea class="review-textarea" placeholder="اكتب رأيك هنا..."></textarea>
+                    <button class="submit-review">إرسال</button>
+                </div>
+
+                <!-- Reviews List -->
+                <div class="reviews-list">
+                    <!-- Review 1 -->
+                    <div class="review">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <div class="review-avatar">
+                                    <img src="https://i.pinimg.com/736x/9d/e5/d2/9de5d2ab40011b354914c778341e3bff.jpg"
+                                        alt="صورة المستخدم">
+                                </div>
+                                <div class="review-user-info">
+                                    <h4>أحمد محمد</h4>
+                                    <span>قارئ متميز</span>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <p>قصة رائعة! أسلوب الكتابة جذاب جدًا والأحداث مشوقة. شخصية سامر مكتوبة بشكل جيد، وعالم
+                                المملكة المفقودة مبني بتفاصيل مذهلة. أنصح بشدة بقراءة هذه القصة لكل محبي الرعب والخيال.
+                            </p>
+                        </div>
+                        <div class="review-date">منذ 3 أيام</div>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="review">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <div class="review-avatar">
+                                    <img src="https://i.pinimg.com/736x/82/a4/38/82a43831e35854f2297bc3ea6d2d9410.jpg"
+                                        alt="صورة المستخدم">
+                                </div>
+                                <div class="review-user-info">
+                                    <h4>سارة أحمد</h4>
+                                    <span>كاتبة</span>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <p>وصف المشاهد رائع جدًا، استطعت تخيل كل تفاصيل المملكة المفقودة. شخصية ليليث غامضة ومثيرة
+                                للاهتمام، أتساءل ما هو دورها الحقيقي في القصة. أعتقد أن بعض الفصول كانت أبطأ من اللازم،
+                                لكن بشكل عام القصة ممتازة.</p>
+                        </div>
+                        <div class="review-date">منذ يومين</div>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="review">
+                        <div class="review-header">
+                            <div class="review-user">
+                                <div class="review-avatar">
+                                    <img src="https://i.pinimg.com/736x/4b/51/80/4b5180f5b481015c4212114ff75d7f6d.jpg"
+                                        alt="صورة المستخدم">
+                                </div>
+                                <div class="review-user-info">
+                                    <h4>محمد علي</h4>
+                                    <span>قارئ جديد</span>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <p>بداية مشوقة للقصة! أحببت كيف تم بناء الأجواء المرعبة والغامضة. هل سيتمكن سامر من العودة
+                                إلى عالمه؟ أم سيبقى محاصرًا في المملكة المفقودة؟ متحمس لمعرفة نهاية القصة!</p>
+                        </div>
+                        <div class="review-date">منذ يوم</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Similar Stories Section -->
+            <div>
+                <h2 class="section-title text-2xl mb-4">قصص مشابهة قد تعجبك</h2>
+                <div class="red-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 similar-stories-grid">
+                    <!-- Similar Story 1 -->
+                    <div class="similar-story">
+                        <div class="similar-story-image">
+                            <img src="https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+                                alt="قصة موصى بها">
+                        </div>
+                        <div class="similar-story-content">
+                            <h4 class="similar-story-title">أسرار الغابة المسكونة</h4>
+                            <p class="similar-story-desc">مجموعة من الأصدقاء يقررون استكشاف غابة يقال إنها مسكونة،
+                                ليجدوا أنفسهم في مواجهة قوى خارقة للطبيعة.</p>
+                            <div class="similar-story-meta">
+                                <div>
+                                    <i class="fas fa-user-tie text-accent ml-1"></i>
+                                    <span>محمد خالد</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-eye text-accent ml-1"></i>
+                                    <span>980</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Similar Story 2 -->
+                    <div class="similar-story">
+                        <div class="similar-story-image">
+                            <img src="https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+                                alt="قصة موصى بها">
+                        </div>
+                        <div class="similar-story-content">
+                            <h4 class="similar-story-title">الوجه الآخر للقمر</h4>
+                            <p class="similar-story-desc">رائد فضاء يكتشف حقيقة مرعبة على الجانب المظلم من القمر، حقيقة
+                                ظلت مخفية عن البشرية لآلاف السنين.</p>
+                            <div class="similar-story-meta">
+                                <div>
+                                    <i class="fas fa-user-tie text-accent ml-1"></i>
+                                    <span>سارة أحمد</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-eye text-accent ml-1"></i>
+                                    <span>845</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Similar Story 3 -->
+                    <div class="similar-story">
+                        <div class="similar-story-image">
+                            <img src="https://i.ytimg.com/vi/Lva7R8F2Cho/maxresdefault.jpg" alt="قصة موصى بها">
+                        </div>
+                        <div class="similar-story-content">
+                            <h4 class="similar-story-title">صدى الماضي</h4>
+                            <p class="similar-story-desc">امرأة تنتقل للعيش في منزل قديم، لتكتشف أن جدرانه تحمل ذكريات
+                                مرعبة وأرواحًا لا تزال عالقة فيه.</p>
+                            <div class="similar-story-meta">
+                                <div>
+                                    <i class="fas fa-user-tie text-accent ml-1"></i>
+                                    <span>خالد محمود</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-eye text-accent ml-1"></i>
+                                    <span>720</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Rating System
+        const ratingStars = document.querySelectorAll('.rating-star');
+        let selectedRating = 0;
+
+        ratingStars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseout', function () {
+                if (selectedRating > 0) {
+                    highlightStars(selectedRating);
+                } else {
+                    resetStars();
+                }
+            });
+
+            star.addEventListener('click', function () {
+                const rating = this.getAttribute('data-rating');
+                selectedRating = rating;
+
+                // Remove active class from all stars
+                ratingStars.forEach(s => s.classList.remove('active'));
+
+                // Add active class to selected stars
+                highlightStars(rating, true);
+
+                // You can send the rating to the server here
+                console.log(`User rated: ${rating}/5`);
+            });
+        });
+
+        function highlightStars(rating, setActive = false) {
+            ratingStars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.style.color = '#F40009';
+                    if (setActive) {
+                        star.classList.add('active');
+                    }
+                } else {
+                    star.style.color = '#555';
+                    if (setActive) {
+                        star.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        function resetStars() {
+            ratingStars.forEach(star => {
+                star.style.color = '#555';
+                star.classList.remove('active');
+            });
+            selectedRating = 0;
+        }
+
+        // Add Review Form
+        const reviewForm = document.querySelector('.add-review-form');
+        const reviewTextarea = document.querySelector('.review-textarea');
+        const submitReviewBtn = document.querySelector('.submit-review');
+        const reviewsList = document.querySelector('.reviews-list');
+
+        submitReviewBtn.addEventListener('click', function () {
+            const reviewText = reviewTextarea.value.trim();
+
+            if (reviewText && selectedRating > 0) {
+                // Create new review
+                addNewReview(reviewText, selectedRating);
+
+                // Reset form
+                reviewTextarea.value = '';
+                resetStars();
+
+                // Show success message
+                alert('تم إضافة رأيك بنجاح!');
+            } else {
+                // Show error message
+                alert('الرجاء تقييم القصة وكتابة رأيك قبل الإرسال');
+            }
+        });
+
+        function addNewReview(reviewText, rating) {
+            // Create review element
+            const reviewElement = document.createElement('div');
+            reviewElement.className = 'review animate-fade-in';
+
+            // Get current date
+            const now = new Date();
+
+            // Create stars HTML based on rating
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    starsHTML += '<i class="far fa-star"></i>';
+                }
+            }
+
+            // Set review HTML
+            reviewElement.innerHTML = `
+            <div class="review-header">
+                <div class="review-user">
+                    <div class="review-avatar">
+                        <img src="https://i.pinimg.com/736x/5a/e5/8f/5ae58f5236a0a1d695a34c9af5d4c1a0.jpg" alt="صورة المستخدم">
+                    </div>
+                    <div class="review-user-info">
+                        <h4>أنت</h4>
+                        <span>قارئ</span>
+                    </div>
+                </div>
+                <div class="review-rating">
+                    ${starsHTML}
+                </div>
+            </div>
+            <div class="review-content">
+                <p>${reviewText}</p>
+            </div>
+            <div class="review-date">الآن</div>
+        `;
+
+            // Add to reviews list at the top
+            reviewsList.insertBefore(reviewElement, reviewsList.firstChild);
+        }
+
+        // Follow Button
+        const followButton = document.querySelector('.follow-button');
+
+        followButton.addEventListener('click', function () {
+            this.classList.toggle('following');
+
+            if (this.classList.contains('following')) {
+                this.textContent = 'تمت المتابعة';
+                this.style.background = '#F40009';
+                this.style.color = 'white';
+            } else {
+                this.textContent = 'متابعة';
+                this.style.background = 'transparent';
+                this.style.color = '#F40009';
+            }
+        });
+
+        // Chapter Cards
+        const chapterCards = document.querySelectorAll('.chapter-card');
+
+        chapterCards.forEach(card => {
+            card.addEventListener('click', function () {
+                const chapterNumber = this.querySelector('.chapter-number').textContent;
+                const chapterTitle = this.querySelector('.chapter-title').textContent;
+
+                alert(`الانتقال إلى ${chapterNumber}: ${chapterTitle}`);
+                // Here you would navigate to the chapter page
+            });
+        });
+
+        // Similar Stories
+        const similarStories = document.querySelectorAll('.similar-story');
+
+        similarStories.forEach(story => {
+            story.addEventListener('click', function () {
+                const storyTitle = this.querySelector('.similar-story-title').textContent;
+
+                alert(`الانتقال إلى قصة: ${storyTitle}`);
+                // Here you would navigate to the story page
+            });
+        });
+    </script>
+</body>
+
+</html>

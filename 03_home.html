@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الصفحة الرئيسية | عالم القصص</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'accent': '#F40009',
+            'dark': '#121212',
+            'darker': '#0a0a0a',
+            'card': 'rgba(30, 30, 30, 0.6)',
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #F40009;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff3333;
+    }
+
+    /* Section Title Styles */
+    .section-title {
+      position: relative;
+      font-weight: 700;
+      color: #fff;
+      padding-right: 35px;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .section-title::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 25px;
+      height: 25px;
+      background-color: #F40009;
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.8;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -5px;
+      width: 70px;
+      height: 3px;
+      background-color: #F40009;
+    }
+
+    /* Red Line */
+    .red-line {
+      width: 70%;
+      height: 2px;
+      margin-right: 30px;
+      background-color: #F40009;
+      margin-bottom: 15px;
+      border: none;
+    }
+
+    /* Card Hover Effects */
+    .story-card {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .story-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+      z-index: 1;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .story-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(244, 0, 9, 0.3);
+    }
+
+    .story-card:hover::before {
+      opacity: 0.9;
+    }
+
+    .story-card:hover .card-content {
+      transform: translateY(-10px);
+    }
+
+    .story-card:hover .read-more {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .read-more {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    /* Slider Styles */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 1.5rem 0;
+      direction: rtl;
+      background-color: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 2rem;
+      border-radius: 0.5rem;
+    }
+
+    .slider {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 1rem 0;
+      scroll-behavior: smooth;
+    }
+
+    .slider::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Featured Section */
+    .featured-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .featured-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+      padding: 2rem;
+      z-index: 2;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: linear-gradient(135deg, #F40009, #ff5757);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      font-weight: bold;
+      z-index: 3;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transform: rotate(-5deg);
+    }
+
+    /* Category Pills */
+    .category-pill {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-right: 0.5rem;
+      background: linear-gradient(135deg, #F40009, #ff5757);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .category-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(244, 0, 9, 0.4);
+    }
+
+    /* Animated Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+      background: radial-gradient(circle at 50% 50%, rgba(244, 0, 9, 0.3) 0%, transparent 80%);
+    }
+
+    /* Genre Label */
+    .genre-label {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: linear-gradient(135deg, #8B0000, #DC143C, #FF6347);
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 5px;
+      border-radius: 4px;
+      z-index: 2;
+    }
+
+    /* Card Styles from Original */
+    .card {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1rem;
+      width: 500px;
+      height: 100%;
+      background-color: transparent;
+      overflow: hidden;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      padding: 1rem;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(244, 0, 9, 0.2);
+    }
+
+    .card img {
+      width: 150px;
+      min-width: 150px;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 8px;
+      position: relative;
+      z-index: 1;
+      background-color: #333;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+    }
+
+    .card .image-container {
+      position: relative;
+      width: 150px;
+      height: 230px;
+      flex-shrink: 0;
+    }
+
+    .card-contentss {
+      margin-top: 0;
+      width: 100%;
+      padding: 1rem;
+      padding-top: 0px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-contentss {
+      transform: translateY(-5px);
+    }
+
+    .card-titlee {
+      font-size: 18px;
+      color: #F40009;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: right;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      padding: 0 0.5rem;
+    }
+
+    /* MODIFIED: Added more space between icon and text in card details */
+    .card-details {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      /* Increased from 0.5rem to 0.75rem */
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      padding-right: 0.5rem;
+    }
+
+    .card-details i {
+      color: #F40009;
+      min-width: 16px;
+      /* Added min-width to ensure consistent spacing */
+    }
+
+    .card-summary {
+      font-size: 0.85rem;
+      color: #ccc;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+      padding: 0 0.5rem;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    /* Recent Stories Section */
+    .recent-stories {
+      margin-bottom: 2rem;
+    }
+
+    /* Last Uploaded Section */
+    .last-uploaded {
+      margin-bottom: 2rem;
+    }
+
+    /* Your Favorites Section */
+    .your-favorites {
+      margin-bottom: 2rem;
+    }
+
+    /* MODIFIED: Added more space between icons and text in all sections */
+    .flex.items-center.gap-1 {
+      gap: 0.5rem !important;
+      /* Increased from 0.25rem to 0.5rem */
+    }
+
+    .flex.items-center.gap-2 {
+      gap: 0.75rem !important;
+      /* Increased from 0.5rem to 0.75rem */
+    }
+
+    .flex.items-center.gap-3 {
+      gap: 1rem !important;
+      /* Increased from 0.75rem to 1rem */
+    }
+
+    .flex.items-center.gap-4 {
+      gap: 1.25rem !important;
+      /* Increased from 1rem to 1.25rem */
+    }
+
+    /* MODIFIED: Added specific spacing for icons in story cards */
+    .story-card .flex.items-center {
+      gap: 0.75rem !important;
+    }
+
+    .story-card i {
+      min-width: 16px;
+      /* Added min-width to ensure consistent spacing */
+    }
+
+    /* NEW: Enhanced Scroll Buttons for Sliders */
+    .scroll-buttons {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 10;
+      transform: translateY(-50%);
+    }
+
+    .scroll-buttons button {
+      position: relative;
+      border: none;
+      cursor: pointer;
+      pointer-events: all;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .scroll-buttons button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='none' stroke='%23ff0000' stroke-width='3' d='M20,50 L80,50 M80,50 L60,30 M80,50 L60,70'/%3E%3C/svg%3E") no-repeat center;
+      background-size: 0;
+      transform: rotate(180deg);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .scroll-buttons button.scroll-left::before {
+      transform: rotate(0);
+    }
+
+    .scroll-buttons button i {
+      position: relative;
+      z-index: 2;
+      color: #ff0000;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+    .scroll-buttons button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 0, 0, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .scroll-buttons button:hover::after {
+      width: 150%;
+      height: 150%;
+    }
+
+    .scroll-buttons button:hover i {
+      color: #ffffff;
+      transform: scale(1.2);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+
+    .scroll-buttons button:hover::before {
+      background-size: 100%;
+      opacity: 1;
+    }
+
+    .scroll-buttons button:active i {
+      transform: scale(0.9);
+    }
+
+    .scroll-buttons button.scroll-right {
+      animation: floatRight 3s ease-in-out infinite;
+    }
+
+    .scroll-buttons button.scroll-left {
+      animation: floatLeft 3s ease-in-out infinite;
+    }
+
+    @keyframes floatRight {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+    }
+
+    @keyframes floatLeft {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(-5px);
+      }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 1.25rem;
+        padding-right: 30px;
+      }
+
+      .section-title::before {
+        width: 20px;
+        height: 20px;
+      }
+
+      .featured-overlay {
+        padding: 1rem;
+      }
+
+      .card {
+        width: 450px;
+      }
+
+      .card img {
+        width: 150px;
+        min-width: 130px;
+        height: 200px;
+      }
+
+      .card-details {
+        font-size: 0.8rem;
+      }
+
+      .card-titlee {
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
+      }
+
+      .card-summary {
+        font-size: 0.8rem;
+        color: #aaa;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        padding: 0 0.5rem;
+      }
+
+      .scroll-buttons button {
+        width: 40px;
+        height: 40px;
+      }
+
+      .scroll-buttons button i {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .section-title {
+        font-size: 1.1rem;
+        padding-right: 25px;
+      }
+
+      .section-title::before {
+        width: 18px;
+        height: 18px;
+      }
+
+      .featured-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .card {
+        flex-direction: row-reverse;
+        align-items: flex-start;
+        text-align: center;
+        width: 450px;
+      }
+
+      .card-titlee {
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
+      }
+
+      .card img {
+        width: 150px;
+        height: 200px;
+        min-width: 130px;
+      }
+
+      .card-summary {
+        font-size: 0.75rem;
+      }
+
+      .card-details {
+        font-size: 0.8rem;
+      }
+
+      .card-contentss {
+        text-align: right;
+        width: 80%;
+      }
+
+      .scroll-buttons button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .scroll-buttons button i {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+
+  <!-- Main Content Container -->
+  <main class="container mx-auto px-0 py-8">
+    <!-- Featured Story Section -->
+    <section class="featured-container h-96 mb-12">
+      <div class="featured-badge">قصة مميزة</div>
+      <img src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg" alt="قصة مميزة"
+        class="w-full h-full object-cover">
+      <div class="featured-overlay">
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span class="category-pill">خيال</span>
+          <span class="category-pill">رعب</span>
+          <span class="category-pill">مغامرة</span>
+        </div>
+        <h2 class="text-3xl font-bold mb-2 text-white">المملكة المفقودة: رحلة إلى عالم الظلام</h2>
+        <p class="text-gray-300 mb-4 line-clamp-2 md:line-clamp-3">في أعماق الغابة المظلمة، اكتشف "سامر" بوابة غامضة
+          تقوده إلى عالم مواز حيث تحكمه قوى خارقة للطبيعة. هناك، يجد نفسه في قلب صراع قديم بين النور والظلام...</p>
+        <div class="flex items-center gap-4">
+          <button
+            class="bg-accent hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 flex items-center gap-2">
+            <i class="fas fa-book-open"></i>
+            <span>قراءة القصة</span>
+          </button>
+          <button
+            class="bg-transparent border-2 border-white/30 hover:border-white text-white font-bold py-2 px-6 rounded-full transition-all duration-300 flex items-center gap-2">
+            <i class="fas fa-bookmark"></i>
+            <span>حفظ للقراءة لاحقاً</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Stories Section -->
+    <section class="recent-stories mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">آخر القصص</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">استكشف أحدث القصص المضافة إلى مكتبتنا، مع تحديثات يومية من أفضل الكتّاب</p>
+
+      <div class="slider-container">
+        <!-- NEW: Added scroll buttons -->
+        <div class="scroll-buttons">
+          <button class="scroll-right" data-slider="recent-stories-slider"><i class="fas fa-chevron-right"></i></button>
+          <button class="scroll-left" data-slider="recent-stories-slider"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="slider" id="recent-stories-slider">
+          <!-- Story Card 1 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/01/be/71/01be71961e36abe0ca2bd92e20f6fa92.jpg" alt="شيطان الدم دراكولا"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">مصاص دماء</div>
+              <h3 class="text-xl font-bold text-white mb-1">شيطان الدم دراكولا</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="text-gray-300 text-sm line-clamp-2 mb-3">في ليلة مقمرة، كان "سامر" يسير في أزقة المدينة القديمة،
+                حيث انتشرت الظلال بين الأزقة الضيقة...</p>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>قراءة المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Story Card 2 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/6a/ce/f8/6acef8beb19dbe4f6fbb4a2178d12686.jpg" alt="الشيطان في الظلام"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">مصاص دماء</div>
+              <h3 class="text-xl font-bold text-white mb-1">الشيطان في الظلام</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة lishia</span>
+              </div>
+              <p class="text-gray-300 text-sm line-clamp-2 mb-3">في إحدى القرى المنعزلة، يكتشف "سامي" سرًا مظلمًا عن أحد
+                أفراد العائلة التي يعتقد أنها ماتت منذ عقود...</p>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>قراءة المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Story Card 3 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/96/47/a3/9647a3db2727682088108b5154e4325c.jpg" alt="خادمة مصاصي الدماء"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">مصاص دماء</div>
+              <h3 class="text-xl font-bold text-white mb-1">خادمة مصاصي الدماء</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة toji</span>
+              </div>
+              <p class="text-gray-300 text-sm line-clamp-2 mb-3">في ليلة مظلمة، يلتقي "عادل" بشابة غريبة تظهر له في
+                الأحلام، ليكتشف لاحقًا أنها مصاصة دماء قديمة...</p>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>قراءة المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Story Card 4 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/3f/b7/49/3fb74916922152ef2d7b655642f4f765.jpg" alt="عيناه الحمراء"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">مصاص دماء</div>
+              <h3 class="text-xl font-bold text-white mb-1">عيناه الحمراء</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة lishia</span>
+              </div>
+              <p class="text-gray-300 text-sm line-clamp-2 mb-3">تتغير حياة "فاطمة" عندما تقع في حب شخص غريب الأطوار،
+                لتكتشف أنه ليس مجرد رجل عادي، بل مصاص دماء...</p>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>قراءة المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Story Card 5 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/f0/23/1b/f0231b11b4369fd0e37cda1ae07ddf90.jpg" alt="قلب في قبضة الظلام"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">مصاص دماء</div>
+              <h3 class="text-xl font-bold text-white mb-1">قلب في قبضة الظلام</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="text-gray-300 text-sm line-clamp-2 mb-3">يكتشف "جمال" أنه ليس وحده في الليل، فهناك كائنات متعطشة
+                للدماء في الظلام تحيط بالمدينة...</p>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>قراءة المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Last Uploaded Section -->
+    <section class="last-uploaded mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">آخر التحميلات</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">تصفح أحدث القصص التي تم تحميلها على منصتنا، مع تحديثات مستمرة</p>
+
+      <!-- Grid Layout for Last Uploaded -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Upload Card 1 -->
+        <div class="story-card rounded-lg overflow-hidden bg-card backdrop-blur-sm h-64 relative">
+          <img src="https://i.pinimg.com/736x/6c/71/0a/6c710a07c79327327e0d0a0275889870.jpg" alt="الهمسات في الظلام"
+            class="w-full h-full object-cover">
+          <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+            <div class="flex justify-between items-start mb-2">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded">رعب</div>
+              <div class="bg-black/50 text-white text-xs px-2 py-1 rounded flex items-center">
+                <i class="fas fa-clock"></i>
+                <span>منذ 2 ساعة</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">الهمسات في الظلام</h3>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center text-gray-300 text-sm">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-gray-300 text-sm flex items-center">
+                  <i class="fas fa-eye"></i>
+                  <span>245</span>
+                </span>
+                <span class="text-gray-300 text-sm flex items-center">
+                  <i class="fas fa-heart"></i>
+                  <span>42</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload Card 2 -->
+        <div class="story-card rounded-lg overflow-hidden bg-card backdrop-blur-sm h-64 relative">
+          <img src="https://i.pinimg.com/736x/e2/af/ea/e2afeab6e54bdb3d155afc6cb2de04a3.jpg" alt="جنية اليابان"
+            class="w-full h-full object-cover">
+          <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+            <div class="flex justify-between items-start mb-2">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded">رعب</div>
+              <div class="bg-black/50 text-white text-xs px-2 py-1 rounded flex items-center">
+                <i class="fas fa-clock"></i>
+                <span>منذ 5 ساعات</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">جنية اليابان</h3>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center text-gray-300 text-sm">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-gray-300 text-sm flex items-center">
+                  <i class="fas fa-eye"></i>
+                  <span>189</span>
+                </span>
+                <span class="text-gray-300 text-sm flex items-center">
+                  <i class="fas fa-heart"></i>
+                  <span>36</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload Card 3 -->
+        <div class="story-card rounded-lg overflow-hidden bg-card backdrop-blur-sm h-64 relative">
+          <img src="https://i.pinimg.com/736x/0f/82/d9/0f82d98f2cfb9ac1227af5865ccbc82d.jpg" alt="لعنة المقبر"
+            class="w-full h-full object-cover">
+          <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+            <div class="flex justify-between items-start mb-2">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded">جن</div>
+              <div class="bg-black/50 text-white text-xs px-2 py-1 rounded flex items-center">
+                <i class="fas fa-clock"></i>
+                <span>منذ 8 ساعات</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">لعنة المقبر</h3>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center text-gray-300 text-sm">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-gray-300 text-sm flex items-center">
+                  <i class="fas fa-eye"></i>
+                  <span>312</span>
+                </span>
+                <span class="text-gray-300 text-sm flex items-center">
+                  <i class="fas fa-heart"></i>
+                  <span>58</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Your Favorites Section -->
+    <section class="your-favorites mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">المفضلة لديك</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">قصصك المفضلة في مكان واحد، استمتع بالوصول السريع إلى القصص التي أحببتها</p>
+
+      <div class="slider-container">
+        <!-- NEW: Added scroll buttons -->
+        <div class="scroll-buttons">
+          <button class="scroll-right" data-slider="favorites-slider"><i class="fas fa-chevron-right"></i></button>
+          <button class="scroll-left" data-slider="favorites-slider"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="slider" id="favorites-slider">
+          <!-- Favorite Card 1 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/bc/8b/f1/bc8bf1e6490e7bd84530dc75f3906831.jpg" alt="البوابة السرية"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">خيال</div>
+              <h3 class="text-xl font-bold text-white mb-1">البوابة السرية</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center">
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <span class="text-white">4.8</span>
+                </div>
+                <div class="text-gray-300 text-sm">
+                  <i class="fas fa-bookmark text-accent"></i>
+                  <span>تمت الإضافة منذ 3 أيام</span>
+                </div>
+              </div>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>متابعة القراءة</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Favorite Card 2 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/bd/bf/87/bdbf87e0f55d078a17e980fa34f595e0.jpg" alt="المخلوق الذي جاء"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">فانتازيا</div>
+              <h3 class="text-xl font-bold text-white mb-1">المخلوق الذي جاء</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center">
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <span class="text-white">4.5</span>
+                </div>
+                <div class="text-gray-300 text-sm">
+                  <i class="fas fa-bookmark text-accent"></i>
+                  <span>تمت الإضافة منذ 5 أيام</span>
+                </div>
+              </div>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>متابعة القراءة</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Favorite Card 3 -->
+          <div class="story-card flex-shrink-0 w-72 h-96 rounded-lg overflow-hidden">
+            <img src="https://i.pinimg.com/736x/aa/ee/69/aaee69219c6616439ca2d3bc5cc6a0f9.jpg" alt="الحارس الأخير للزمن"
+              class="w-full h-full object-cover">
+            <div class="card-content absolute bottom-0 left-0 right-0 p-4">
+              <div class="bg-accent text-white text-xs font-bold px-2 py-1 rounded inline-block mb-2">خيال</div>
+              <h3 class="text-xl font-bold text-white mb-1">الحارس الأخير للزمن</h3>
+              <div class="flex items-center text-gray-300 text-sm mb-2">
+                <i class="fas fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center">
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <span class="text-white">4.9</span>
+                </div>
+                <div class="text-gray-300 text-sm">
+                  <i class="fas fa-bookmark text-accent"></i>
+                  <span>تمت الإضافة منذ يوم</span>
+                </div>
+              </div>
+              <a href="#"
+                class="read-more text-accent hover:text-white transition-colors duration-300 flex items-center gap-1 text-sm font-bold">
+                <span>متابعة القراءة</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- مصاصو الدماء Section (Original) -->
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">مصاصو الدماء</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">مصاصو الدماء كائنات خالدة تتغذى على الدماء، تتسم بالجمال الغامض والقوة الخارقة،
+        ويطاردها شبح اللعنة الأبدية</p>
+
+      <div class="slider-container">
+        <!-- NEW: Added scroll buttons -->
+        <div class="scroll-buttons">
+          <button class="scroll-right" data-slider="vampires-slider"><i class="fas fa-chevron-right"></i></button>
+          <button class="scroll-left" data-slider="vampires-slider"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="slider" id="vampires-slider">
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">شيطان الدم دراكولا</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">
+                في ليلة مقمرة، كان "سامر" يسير في أزقة المدينة القديمة، حيث انتشرت الظلال بين الأزقة الضيقة. شعر
+                بقشعريرة
+                غريبة تسري في جسده، لكنه تجاهلها واستمر في طريقه.
+                عندما مر بجانب قصر مهجور، سمع همسات خافتة تنادي باسمه. توقف قلبه للحظة، لكنه دُفع بدافع الفضول ليقترب
+                أكثر.
+                دفع الباب الخشبي الصدئ، فصدر عنه صرير مزعج.
+              </p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/01/be/71/01be71961e36abe0ca2bd92e20f6fa92.jpg" alt="المملكة المفقودة">
+              <div class="genre-label">مصاص دماء</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">الشيطان في الظلام </h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة lishia</span>
+              </div>
+              <p class="card-summary">في إحدى القرى المنعزلة، يكتشف "سامي" سرًا مظلمًا عن أحد أفراد العائلة التي يعتقد
+                أنها
+                ماتت منذ عقود. لكن الحقيقة أسوأ بكثير مما تخيله.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/6a/ce/f8/6acef8beb19dbe4f6fbb4a2178d12686.jpg" alt="ظلال تهمس">
+              <div class="genre-label">مصاص دماء</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">خادمة مصاصي الدماء ...مثيرة </h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة toji</span>
+              </div>
+              <p class="card-summary"> في ليلة مظلمة، يلتقي "عادل" بشابة غريبة تظهر له في الأحلام، ليكتشف لاحقًا أنها
+                مصاصة
+                دماء قديمة تبحث عن ضحايا جدد.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/96/47/a3/9647a3db2727682088108b5154e4325c.jpg" alt="سجرات الزمن">
+              <div class="genre-label">مصاص دماء</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">عيناه الحمراء</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة lishia</span>
+              </div>
+              <p class="card-summary">تتغير حياة "فاطمة" عندما تقع في حب شخص غريب الأطوار، لتكتشف أنه ليس مجرد رجل عادي،
+                بل
+                مصاص دماء يختبئ بين الظلال.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/3f/b7/49/3fb74916922152ef2d7b655642f4f765.jpg" alt="ظلال تهمس">
+              <div class="genre-label">مصاص دماء</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- شياطين وجن Section (Original) -->
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">شياطين وجن</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">كائنات غير مرئية في العديد من الثقافات، يقال إنها قادرة على التأثير في البشر
+        وأحداث حياتهم، وهم يختلفون في طبيعتهم وقدراتهم</p>
+
+      <div class="slider-container">
+        <!-- NEW: Added scroll buttons -->
+        <div class="scroll-buttons">
+          <button class="scroll-right" data-slider="demons-slider"><i class="fas fa-chevron-right"></i></button>
+          <button class="scroll-left" data-slider="demons-slider"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="slider" id="demons-slider">
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee"> الهمسات في الظلام</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">اقترب بحذر من البوابة الحديدية للمقبرة، لكن الهواء كان ثقيلًا وكأن هناك شيئًا يضغط
+                على
+                صدره. تردد لحظة، لكنه سرعان ما دفع نفسه للمضي قدماً. كلما اقترب أكثر، زادت الهمسات حتى أصبحت واضحة،
+                وكأنها
+                تنادي باسمه. </p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/6c/71/0a/6c710a07c79327327e0d0a0275889870.jpg "
+                alt="المملكة المفقودة">
+              <div class="genre-label">رعب</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">جنية اليابان</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">
+                في قرية يابانية قديمة، كان هناك تقليد غريب: لا يجب على أي شخص النظر في المرآة بعد منتصف الليل، وإلا
+                سيزورهم
+                "بَاكِه-مونو"، روح الكوابيس.
+
+                "هيروشي"، شاب مغرور، لم يصدق هذه الخرافات. في إحدى الليالي، بعد احتساء الكثير من الساكي، قرر تحدي </p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/e2/af/ea/e2afeab6e54bdb3d155afc6cb2de04a3.jpg" alt="ظلال تهمس">
+              <div class="genre-label">رعب</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">لعنة المقبر</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">في قريةٍ نائيةٍ في إحدى صحاري الجزيرة العربية، كانت هناك مقبرة قديمة يقال إنها
+                مسكونة
+                بأرواح لا تهدأ. كان أهل القرية يحذرون الغرباء من الاقتراب منها، خاصةً بعد غروب الشمس، حيث يُقال إن أصوات
+                الهمسات والبكاء تتعالى من بين القبور.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/0f/82/d9/0f82d98f2cfb9ac1227af5865ccbc82d.jpg" alt="سجرات الزمن">
+              <div class="genre-label">جن</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- خيال و فانتازيا Section (Original) -->
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">خيال و فانتازيا</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">في عوالم غامضة تتلاشى فيها حدود الواقع، تنسج القصص الخيالية عوالم مليئة بالغموض
+      </p>
+
+      <div class="slider-container">
+        <!-- NEW: Added scroll buttons -->
+        <div class="scroll-buttons">
+          <button class="scroll-right" data-slider="fantasy-slider"><i class="fas fa-chevron-right"></i></button>
+          <button class="scroll-left" data-slider="fantasy-slider"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="slider" id="fantasy-slider">
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee">البوابة السرية</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary"> عندما يعثر "سامي" على باب حجري غامض في حديقة منزله، يكتشف أنه مدخل لعالم آخر حيث
+                تحكمه مخلوقات خيالية لا ترحم الغرباء.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/bc/8b/f1/bc8bf1e6490e7bd84530dc75f3906831.jpg" alt="سجرات الزمن">
+              <div class="genre-label">خيال</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee"> المخلوق الذي جاء </h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">"نورا" تبدأ برؤية كائن غريب في أحلامها، لكنه ليس مجرد خيال، لأنه يبدأ بالظهور في
+                الواقع، جالبًا معه أسرارًا لا يجب أن تعرفها. </p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/bd/bf/87/bdbf87e0f55d078a17e980fa34f595e0.jpg" alt="سجرات الزمن">
+              <div class="genre-label">فانتازيا</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee"> الحارس الأخير للزمن </h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">يكتشف "ياسين" أنه الوريث الأخير لساعة سحرية قادرة على التحكم بالزمن، لكنه يدرك أن
+                استخدامها يأتي بثمن باهظ قد يغير مصيره للأبد. </p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/aa/ee/69/aaee69219c6616439ca2d3bc5cc6a0f9.jpg" alt="سجرات الزمن">
+              <div class="genre-label">خيال</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- سحرة و مشعودين Section (Original) -->
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="section-title text-2xl">سحرة و مشعودين</h2>
+        <a href="#" class="text-accent hover:text-red-400 transition-colors duration-300 flex items-center gap-1">
+          <span>عرض الكل</span>
+          <i class="fas fa-arrow-left text-sm"></i>
+        </a>
+      </div>
+      <hr class="red-line">
+      <p class="text-gray-300 pr-8 mb-4">يُعتقد أنهم يمتلكون قوى خارقة تمكنهم من التأثير في الأحداث الطبيعية والظواهر،
+        سواء من خلال التعويذات أو الطقوس السحرية</p>
+
+      <div class="slider-container">
+        <!-- NEW: Added scroll buttons -->
+        <div class="scroll-buttons">
+          <button class="scroll-right" data-slider="wizards-slider"><i class="fas fa-chevron-right"></i></button>
+          <button class="scroll-left" data-slider="wizards-slider"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="slider" id="wizards-slider">
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee"> الخاتم المسحور</h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary"> يجد "سليم" خاتمًا قديمًا في متجر تحف، وعندما يرتديه، يمنحه قوى سحرية هائلة، لكنه
+                يكتشف أن كل استخدام له يقربه خطوة من لعنة أبدية.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/a4/07/57/a407570ece4760b79e1cef7ed513af6d.jpg" alt="سجرات الزمن">
+              <div class="genre-label">سحرة</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee"> الغرفة رقم 13 </h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">عندما يستأجر "نادر" غرفة في فندق قديم، يُحذر من دخول الغرفة رقم 13، لكنه لا يستطيع
+                مقاومة الفضول، ليجد نفسه عالقًا في دوامة سحرية لا نهاية لها. </p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/95/08/93/950893ffe1d2d8705bc10c68089c0e51.jpg" alt="سجرات الزمن">
+              <div class="genre-label">سحرة</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-contentss">
+              <h2 class="card-titlee"> التعويذة المحرمة </h2>
+              <div class="card-details">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>بواسطة admin</span>
+              </div>
+              <p class="card-summary">يجد "حسن" ورقة قديمة تحمل تعويذة سحرية، وعندما يقرأها بصوت عالٍ، يطلق قوى لا
+                يستطيع
+                السيطرة عليها، ليبدأ سباق مع الزمن لإبطال اللعنة.</p>
+            </div>
+            <div class="image-container">
+              <img src="https://i.pinimg.com/736x/64/ae/76/64ae76d98c59920b9419335e999b74a4.jpg" alt="سجرات الزمن">
+              <div class="genre-label">سحرة</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Add hover sound effect (subtle)
+    document.querySelectorAll('.story-card, .card').forEach(card => {
+      card.addEventListener('mouseenter', function () {
+        // Create a subtle hover sound (empty for now, can be implemented if needed)
+      });
+    });
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('button, .btn').forEach(button => {
+      button.addEventListener('click', function (e) {
+        const x = e.clientX - e.target.getBoundingClientRect().left;
+        const y = e.clientY - e.target.getBoundingClientRect().top;
+
+        const ripple = document.createElement('span');
+        ripple.style.position = 'absolute';
+        ripple.style.width = '1px';
+        ripple.style.height = '1px';
+        ripple.style.borderRadius = '50%';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.style.animation = 'ripple 0.6s linear';
+
+        this.style.position = 'relative';
+        this.style.overflow = 'hidden';
+        this.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    // Add keyframe animation for ripple effect
+    if (!document.querySelector('#ripple-animation')) {
+      const style = document.createElement('style');
+      style.id = 'ripple-animation';
+      style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(100);
+                        opacity: 0;
+                    }
+                }
+            `;
+      document.head.appendChild(style);
+    }
+
+    // Animated background effect
+    const animatedBg = document.querySelector('.animated-bg');
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+
+      animatedBg.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(244, 0, 9, 0.3) 0%, transparent 80%)`;
+    });
+
+    // NEW: Scroll functionality for all sliders
+    document.querySelectorAll('.scroll-right').forEach(button => {
+      button.addEventListener('click', function () {
+        const sliderId = this.getAttribute('data-slider');
+        const slider = document.getElementById(sliderId);
+        slider.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.scroll-left').forEach(button => {
+      button.addEventListener('click', function () {
+        const sliderId = this.getAttribute('data-slider');
+        const slider = document.getElementById(sliderId);
+        slider.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,2618 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قراءة القصة | Z Horror</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                        'accent-hover': '#d10007',
+                        'dark': '#121212',
+                        'darker': '#0a0a0a',
+                        'card': 'rgba(30, 30, 30, 0.6)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'blood-drip': 'bloodDrip 3s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.8s ease-out forwards',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(244, 0, 9, 0.5)' },
+                            '100%': { textShadow: '0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5)' },
+                        },
+                        bloodDrip: {
+                            '0%': { height: '0', opacity: 0 },
+                            '30%': { height: '30px', opacity: 1 },
+                            '60%': { height: '10px', opacity: 0.7 },
+                            '100%': { height: '0', opacity: 0 }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(50px)', opacity: 0 },
+                            '100%': { transform: 'translateX(0)', opacity: 1 },
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-50px)', opacity: 0 },
+                            '100%': { transform: 'translateX(0)', opacity: 1 },
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F40009;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3333;
+        }
+
+        /* Blood Drips */
+        .blood-drip {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        /* Noise Background */
+        .noise-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Story Content Styles */
+        .story-content {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        /* Removed the animation that was hiding the paragraphs */
+        .story-content p {
+            margin-bottom: 1.5rem;
+            opacity: 1;
+            /* Changed from 0 to 1 to make text visible */
+        }
+
+        /* First Letter Drop Cap */
+        .story-content p:first-of-type::first-letter {
+            float: right;
+            font-size: 4rem;
+            line-height: 0.8;
+            margin-left: 0.5rem;
+            margin-top: 0.5rem;
+            color: #F40009;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(244, 0, 9, 0.5);
+        }
+
+        /* Chapter Title */
+        .chapter-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            color: #fff;
+            padding-right: 35px;
+        }
+
+        .chapter-title::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            background-color: #F40009;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .chapter-title::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 70px;
+            height: 3px;
+            background-color: #F40009;
+        }
+
+        /* Story Container */
+        .story-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            background-color: rgba(18, 18, 18, 0.95);
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Story Header */
+        .story-header {
+            margin-bottom: 3rem;
+            position: relative;
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        /* Story Title */
+        .story-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 0 0 10px rgba(244, 0, 9, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        /* Story Meta */
+        .story-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .story-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-meta-item i {
+            color: #F40009;
+        }
+
+        /* Story Categories */
+        .story-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-tag {
+            background-color: rgba(244, 0, 9, 0.1);
+            color: white;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .category-tag:hover {
+            background-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.2);
+        }
+
+        /* Story Cover */
+        .story-cover {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        .story-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .story-cover:hover img {
+            transform: scale(1.05);
+        }
+
+        .story-cover::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, rgba(18, 18, 18, 0.9), transparent);
+            pointer-events: none;
+        }
+
+        /* Reading Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #F40009;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* Reading Controls */
+        .reading-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .control-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(18, 18, 18, 0.8);
+            border: 2px solid rgba(244, 0, 9, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        .control-button:hover {
+            background: rgba(244, 0, 9, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        .control-button i {
+            font-size: 1.25rem;
+        }
+
+        /* Font Size Controls */
+        .font-size-controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            border: 2px solid rgba(244, 0, 9, 0.5);
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        .font-size-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .font-size-button:hover {
+            background: rgba(244, 0, 9, 0.3);
+            transform: scale(1.1);
+        }
+
+        .font-size-button i {
+            font-size: 1.25rem;
+        }
+
+        /* Chapter Navigation */
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(244, 0, 9, 0.2);
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        .chapter-nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(244, 0, 9, 0.1);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        .chapter-nav-button:hover {
+            background: rgba(244, 0, 9, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.2);
+        }
+
+        .chapter-nav-button i {
+            font-size: 1.25rem;
+            color: #F40009;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(244, 0, 9, 0.2);
+            opacity: 1;
+            /* Changed from animation to static opacity */
+        }
+
+        .comments-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comments-title i {
+            color: #F40009;
+        }
+
+        .comment {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .comment:hover {
+            background: rgba(30, 30, 30, 0.8);
+            border-color: rgba(244, 0, 9, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .comment-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #F40009;
+        }
+
+        .comment-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .comment-user-info h4 {
+            font-weight: bold;
+            color: white;
+            margin: 0;
+        }
+
+        .comment-user-info span {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .comment-content {
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #aaa;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .comment-action:hover {
+            color: #F40009;
+        }
+
+        .comment-action i {
+            font-size: 1rem;
+        }
+
+        /* Add Comment Form */
+        .add-comment {
+            margin-top: 2rem;
+        }
+
+        .add-comment-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            height: 120px;
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            resize: none;
+            transition: all 0.3s ease;
+        }
+
+        .comment-textarea:focus {
+            outline: none;
+            border-color: #F40009;
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .comment-submit {
+            align-self: flex-end;
+            padding: 0.75rem 2rem;
+            background: #F40009;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: bold;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comment-submit:hover {
+            background: #d10007;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(244, 0, 9, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #F40009;
+            transform: translate(-50%, -5px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.5);
+        }
+
+        .back-to-top i {
+            font-size: 1.25rem;
+        }
+
+        /* Writer Profile Styles */
+        .writer-profile {
+            position: fixed;
+            top: 50px;
+            /* Reduced from 120px to move it higher */
+            right: 30px;
+            width: 280px;
+            background: rgba(18, 18, 18, 0.9);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 90;
+            backdrop-filter: blur(5px);
+        }
+
+        .writer-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .writer-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #F40009;
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .writer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .writer-info {
+            flex: 1;
+        }
+
+        .writer-label {
+            font-size: 0.8rem;
+            color: #F40009;
+            margin-bottom: 0.25rem;
+            font-weight: bold;
+        }
+
+        .writer-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .writer-name a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .writer-name a:hover {
+            color: #F40009;
+            text-decoration: underline;
+        }
+
+        .writer-title {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .writer-bio {
+            font-size: 0.9rem;
+            color: #ddd;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .writer-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .writer-stat {
+            text-align: center;
+        }
+
+        .writer-stat-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .writer-stat-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .follow-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #F40009;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: bold;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .follow-button:hover {
+            background: #d10007;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        .writer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(30, 30, 30, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            background: #F40009;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+        }
+
+        /* Recommendations Section */
+        .recommendations-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .recommendations-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recommendations-title i {
+            color: #F40009;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .recommendation-card {
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.1);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(244, 0, 9, 0.3);
+        }
+
+        .recommendation-image {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .recommendation-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .recommendation-card:hover .recommendation-image img {
+            transform: scale(1.1);
+        }
+
+        .recommendation-content {
+            padding: 1rem;
+        }
+
+        .recommendation-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .recommendation-desc {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .recommendation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recommendation-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .recommendation-tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(244, 0, 9, 0.1);
+            border-radius: 1rem;
+            color: #ccc;
+        }
+
+        .recommendation-time {
+            font-size: 0.8rem;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .recommendation-time i {
+            color: #F40009;
+            font-size: 0.7rem;
+        }
+
+        /* Chapter Menu Styles */
+        .chapter-menu-container {
+            position: sticky;
+            top: 4px;
+            /* Space for the progress bar */
+            z-index: 999;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0;
+        }
+
+        .chapter-menu-toggle {
+            background: rgba(18, 18, 18, 0.9);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .chapter-menu-toggle:hover {
+            background: rgba(244, 0, 9, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .chapter-menu-toggle i {
+            color: #F40009;
+        }
+
+        .chapter-menu {
+            position: absolute;
+            top: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            width: 300px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            /* Removed the right:0 property to keep menu in original position */
+        }
+
+        .chapter-menu.open {
+            max-height: 400px;
+            padding: 1rem;
+            overflow-y: auto;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(244, 0, 9, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chapter-item:last-child {
+            border-bottom: none;
+        }
+
+        .chapter-item:hover {
+            background: rgba(244, 0, 9, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .chapter-item.active {
+            background: rgba(244, 0, 9, 0.2);
+            border-right: 3px solid #F40009;
+            font-weight: bold;
+        }
+
+        .chapter-item i {
+            color: #F40009;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chapter-item:hover i,
+        .chapter-item.active i {
+            opacity: 1;
+        }
+
+        .chapter-number {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-right: auto;
+        }
+
+        /* Rating Section Styles */
+        .rating-section {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .rating-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rating-star {
+            font-size: 2rem;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rating-star:hover,
+        .rating-star.active {
+            color: #F40009;
+            transform: scale(1.2);
+        }
+
+        .rating-feedback {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #aaa;
+            height: 1.5rem;
+        }
+
+        /* Reply Form Styles - MODIFIED */
+        .reply-form {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(244, 0, 9, 0.2);
+            /* Add margin-bottom for more space */
+            margin-bottom: 2rem;
+        }
+
+        .reply-form.active {
+            display: block;
+        }
+
+        .reply-textarea {
+            width: 100%;
+            height: 80px;
+            background: rgba(30, 30, 30, 0.5);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            resize: none;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+
+        .reply-textarea:focus {
+            outline: none;
+            border-color: #F40009;
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        /* Added a container for buttons with spacing */
+        .clearfix {
+            display: flex;
+            justify-content: flex-start;
+            /* Added more space between buttons */
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(244, 0, 9, 0.1);
+            clear: both;
+        }
+
+        .reply-submit {
+            padding: 0.5rem 1.5rem;
+            background: #F40009;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: bold;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reply-submit:hover {
+            background: #d10007;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .reply-cancel {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            color: #ccc;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reply-cancel:hover {
+            background: rgba(244, 0, 9, 0.1);
+            color: white;
+        }
+
+        /* Comment Replies - MODIFIED */
+        .comment-replies {
+            margin-top: 1.5rem;
+            /* Increased from 1rem */
+            padding-top: 1.5rem;
+            /* Increased from 1rem */
+            border-top: 1px dashed rgba(244, 0, 9, 0.2);
+        }
+
+        .reply {
+            background: rgba(18, 18, 18, 0.5);
+            border-right: 3px solid #F40009;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .reply-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reply-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid #F40009;
+        }
+
+        .reply-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .reply-user-name {
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .reply-date {
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-left: 0.5rem;
+            /* Adds extra space between the date and the menu icon */
+        }
+
+        .reply-content {
+            color: #ddd;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Reply actions */
+        .reply-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .reply-action {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #aaa;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .reply-action:hover {
+            color: #F40009;
+        }
+
+        .reply-action i {
+            font-size: 0.9rem;
+        }
+
+        /* Comment menu - REVERTED to original position */
+        .comment-menu-toggle {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .comment-menu-toggle:hover {
+            color: #F40009;
+        }
+
+        .comment-menu {
+            position: absolute;
+            top: 2.5rem;
+            left: -9rem;
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            width: 150px;
+            padding: 0.5rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            display: none;
+        }
+
+        .comment-menu.active {
+            display: block;
+        }
+
+        .comment-menu-item {
+            padding: 0.5rem 1rem;
+            color: #ddd;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-menu-item:hover {
+            background: rgba(244, 0, 9, 0.1);
+            color: #F40009;
+        }
+
+        .comment-menu-item i {
+            font-size: 0.9rem;
+            width: 1.2rem;
+            text-align: center;
+        }
+
+        /* Reply menu - REVERTED to original position */
+        .reply-menu-toggle {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .reply-menu-toggle:hover {
+            color: #F40009;
+        }
+
+        .reply-menu {
+            position: absolute;
+            top: 2.5rem;
+            left: -9rem;
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            width: 150px;
+            padding: 0.5rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            display: none;
+        }
+
+        .reply-menu.active {
+            display: block;
+        }
+
+        .reply-menu-item {
+            padding: 0.5rem 1rem;
+            color: #ddd;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reply-menu-item:hover {
+            background: rgba(244, 0, 9, 0.1);
+            color: #F40009;
+        }
+
+        .reply-menu-item i {
+            font-size: 0.9rem;
+            width: 1.2rem;
+            text-align: center;
+        }
+
+        @media (max-width: 1200px) {
+            .writer-profile {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .recommendations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .story-container {
+                padding: 1.5rem;
+            }
+
+            .story-title {
+                font-size: 2rem;
+            }
+
+            .story-cover {
+                height: 300px;
+            }
+
+            .story-content {
+                font-size: 1rem;
+            }
+
+            .reading-controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .font-size-controls {
+                bottom: 1rem;
+                left: 1rem;
+            }
+
+            .control-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .font-size-button {
+                width: 35px;
+                height: 35px;
+            }
+
+            .chapter-nav-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .chapter-menu {
+                width: 90%;
+                left: 5%;
+                right: 5%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-container {
+                padding: 1rem;
+            }
+
+            .story-title {
+                font-size: 1.75rem;
+            }
+
+            .story-cover {
+                height: 200px;
+            }
+
+            .story-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .story-content {
+                font-size: 0.95rem;
+            }
+
+            .reading-controls {
+                bottom: 0.5rem;
+                right: 0.5rem;
+            }
+
+            .font-size-controls {
+                bottom: 0.5rem;
+                left: 0.5rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .control-button {
+                width: 35px;
+                height: 35px;
+            }
+
+            .font-size-button {
+                width: 30px;
+                height: 30px;
+            }
+
+            .chapter-nav-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .comment-user {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .comment-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @keyframes bloodDrip {
+            0% {
+                height: 0;
+                opacity: 0;
+            }
+
+            30% {
+                height: 30px;
+                opacity: 1;
+            }
+
+            60% {
+                height: 10px;
+                opacity: 0.7;
+            }
+
+            100% {
+                height: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Chapter Menu -->
+    <div class="chapter-menu-container">
+        <button class="chapter-menu-toggle" id="chapterMenuToggle">
+            <i class="fas fa-list-ul"></i>
+            <span>الفصول</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="chapter-menu" id="chapterMenu">
+            <ul class="chapter-list" id="chapterList">
+                <!-- Chapters will be populated by JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Writer Profile -->
+    <div class="writer-profile">
+        <div class="writer-profile-header">
+            <div class="writer-avatar">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
+                    alt="صورة الكاتب">
+            </div>
+            <div class="writer-info">
+                <div class="writer-label">بقلم</div>
+                <h3 class="writer-name"><a href="/profile/ahmad-alsharif">أحمد الشريف</a></h3>
+                <div class="writer-title">كاتب رعب وخيال</div>
+            </div>
+        </div>
+        <p class="writer-bio">كاتب متخصص في قصص الرعب والخيال العلمي، نشر أكثر من 50 قصة وثلاث روايات. حاصل على جائزة
+            أفضل كاتب شاب لعام 2024.</p>
+        <div class="writer-stats">
+            <div class="writer-stat">
+                <div class="writer-stat-value">78</div>
+                <div class="writer-stat-label">قصة</div>
+            </div>
+            <div class="writer-stat">
+                <div class="writer-stat-value">15K</div>
+                <div class="writer-stat-label">متابع</div>
+            </div>
+            <div class="writer-stat">
+                <div class="writer-stat-value">4.8</div>
+                <div class="writer-stat-label">تقييم</div>
+            </div>
+        </div>
+        <button class="follow-button" id="followBtn">
+            <i class="fas fa-user-plus"></i>
+            <span>متابعة</span>
+        </button>
+        <div class="writer-social">
+            <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-tumblr"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-pinterest-p"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Blood Drips -->
+    <div class="blood-drip" style="left: 10%; animation-delay: 0.5s;"></div>
+    <div class="blood-drip" style="left: 30%; animation-delay: 1.2s;"></div>
+    <div class="blood-drip" style="left: 50%; animation-delay: 2s;"></div>
+    <div class="blood-drip" style="left: 70%; animation-delay: 0.8s;"></div>
+    <div class="blood-drip" style="left: 90%; animation-delay: 1.5s;"></div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto py-10 px-4">
+        <div class="story-container">
+            <!-- Noise Background -->
+            <div class="noise-bg"></div>
+
+            <!-- Story Header -->
+            <div class="story-header">
+                <h1 class="story-title">المملكة المفقودة: رحلة إلى عالم الظلام</h1>
+                <div class="story-meta">
+                    <div class="story-meta-item">
+                        <i class="fas fa-user"></i>
+                        <span>بواسطة <a href="/profile/ahmad-alsharif"
+                                class="text-white hover:text-accent transition-colors">أحمد الشريف</a></span>
+                    </div>
+                    <div class="story-meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>نُشر في 15 مارس 2025</span>
+                    </div>
+                    <div class="story-meta-item">
+                        <i class="fas fa-eye"></i>
+                        <span>1,245 مشاهدة</span>
+                    </div>
+                    <div class="story-meta-item">
+                        <i class="fas fa-heart"></i>
+                        <span>328 إعجاب</span>
+                    </div>
+                    <div class="story-meta-item">
+                        <i class="fas fa-comment"></i>
+                        <span>42 تعليق</span>
+                    </div>
+                </div>
+                <div class="story-categories">
+                    <a href="#" class="category-tag">خيال</a>
+                    <a href="#" class="category-tag">رعب</a>
+                    <a href="#" class="category-tag">مغامرة</a>
+                    <a href="#" class="category-tag">غموض</a>
+                </div>
+            </div>
+
+            <!-- Story Cover -->
+            <div class="story-cover">
+                <img src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg" alt="صورة القصة">
+            </div>
+
+            <!-- Chapter Title -->
+            <h2 class="chapter-title text-2xl">الفصل الأول: البوابة الغامضة</h2>
+
+            <!-- Story Content -->
+            <div class="story-content">
+                <p>في أعماق الغابة المظلمة، اكتشف "سامر" بوابة غامضة تقوده إلى عالم مواز حيث تحكمه قوى خارقة للطبيعة.
+                    كان الهواء ثقيلًا والسماء ملبدة بغيوم سوداء تحجب ضوء القمر. أصوات غريبة تتردد بين الأشجار، وكأنها
+                    همسات كائنات خفية تراقبه من بعيد. شعر بقشعريرة تسري في جسده، لكن فضوله كان أقوى من خوفه.</p>
+
+                <p>توقف أمام البوابة الحجرية القديمة، متأملًا النقوش الغريبة التي تزينها. كانت تبدو وكأنها من عصر آخر،
+                    ربما من حضارة اندثرت منذ آلاف السنين. لمس بأصابعه الرموز المحفورة على الحجر، فبدأت تتوهج بلون أحمر
+                    قاني، وكأنها تنبض بالحياة. شعر بدفء غريب يسري من أطراف أصابعه إلى كامل جسده.</p>
+
+                <p>"هل أنت متأكد أنك تريد المضي قدمًا؟" سأل نفسه بصوت خافت، وهو يتردد للحظة. كان يعلم أن العودة من هذه
+                    النقطة قد تكون مستحيلة، لكن الفضول كان يدفعه للمضي قدمًا. أخذ نفسًا عميقًا، وخطا خطوة للأمام، ليجد
+                    نفسه يعبر البوابة إلى عالم آخر.</p>
+
+                <p>في اللحظة التي عبر فيها، تغير كل شيء من حوله. اختفت الغابة المألوفة، وحل محلها منظر مختلف تمامًا.
+                    سماء حمراء قاتمة، وأرض جرداء تتخللها بحيرات من سائل أسود لزج يشبه الدماء. أشجار متحجرة تنتصب هنا
+                    وهناك، وكأنها تماثيل لكائنات عملاقة تحولت إلى حجر.</p>
+
+                <p>شعر "سامر" بالندم للحظة، لكن لم يكن هناك طريق للعودة. البوابة التي عبرها اختفت تمامًا، وأصبح محاصرًا
+                    في هذا العالم الغريب. "أين أنا؟" تساءل بصوت مرتعش، وكأنه يتوقع إجابة من الفراغ المحيط به.</p>
+
+                <p>فجأة، سمع صوتًا خافتًا يناديه من بعيد. صوت أنثوي رقيق، لكنه يحمل نبرة غريبة لا يمكن تفسيرها. "سامر...
+                    سامر... اتبع صوتي..." كان الصوت يأتي من اتجاه تلة بعيدة، حيث يلوح قصر مهيب بأبراجه العالية وجدرانه
+                    السوداء.</p>
+
+                <p>بدأ "سامر" يسير باتجاه الصوت، متجاوزًا البحيرات السوداء والأشجار المتحجرة. كلما اقترب من القصر، ازداد
+                    شعوره بالخوف والترقب. كان هناك شيء غير طبيعي في هذا المكان، شيء يتحدى كل ما يعرفه عن العالم.</p>
+
+                <p>عندما وصل إلى بوابة القصر، وجدها مفتوحة على مصراعيها، وكأنها تنتظر قدومه. دخل إلى فناء واسع، تزينه
+                    تماثيل لمخلوقات غريبة، نصفها بشر ونصفها حيوانات مفترسة. كانت عيون التماثيل تتبعه أينما ذهب، وكأنها
+                    تراقب كل حركة يقوم بها.</p>
+
+                <p>في وسط الفناء، كانت هناك امرأة ترتدي ثوبًا أسود طويلًا، وشعرها الفضي ينسدل على كتفيها. عندما التفتت
+                    نحوه، رأى عينيها الحمراوين تتوهجان في الظلام. ابتسمت ابتسامة غامضة، وقالت: "أهلًا بك في المملكة
+                    المفقودة، يا سامر. كنت أنتظرك منذ زمن طويل."</p>
+
+                <p>شعر "سامر" بالدهشة والخوف في آن واحد. "كيف تعرفين اسمي؟ ومن أنت؟" سألها بصوت متردد. ضحكت المرأة ضحكة
+                    خافتة، ثم أجابت: "أنا 'ليليث'، حارسة هذه المملكة. وأعرف عنك أكثر مما تعرف عن نفسك."</p>
+
+                <p>اقتربت منه خطوة، وأضافت: "لقد اخترتك لسبب، يا سامر. أنت الوحيد القادر على إنقاذ هذه المملكة من الظلام
+                    الذي يلتهمها. لديك قوة لا تعرفها بعد، قوة ستغير مصير عالمين."</p>
+
+                <p>نظر "سامر" إليها بارتباك، غير مصدق لما يسمع. "أنا؟ كيف يمكنني إنقاذ مملكة لا أعرف عنها شيئًا؟ أنا
+                    مجرد شخص عادي!"</p>
+
+                <p>ابتسمت "ليليث" مرة أخرى، وقالت: "ستفهم كل شيء في الوقت المناسب. الآن، عليك أن تأتي معي. هناك الكثير
+                    لتتعلمه، والوقت ليس في صالحنا."</p>
+
+                <p>مدت يدها نحوه، منتظرة أن يأخذها. تردد "سامر" للحظة، ثم قرر أن يثق بها. أخذ يدها، وشعر بدفء غريب يسري
+                    في جسده. كانت هذه بداية رحلته في المملكة المفقودة، رحلة ستغير حياته إلى الأبد.</p>
+            </div>
+
+            <!-- Rating Section -->
+            <div class="rating-section">
+                <h3 class="rating-title">قيّم القصة</h3>
+                <div class="rating-stars" id="ratingStars">
+                    <i class="fas fa-star rating-star" data-rating="1"></i>
+                    <i class="fas fa-star rating-star" data-rating="2"></i>
+                    <i class="fas fa-star rating-star" data-rating="3"></i>
+                    <i class="fas fa-star rating-star" data-rating="4"></i>
+                    <i class="fas fa-star rating-star" data-rating="5"></i>
+                </div>
+                <div class="rating-feedback" id="ratingFeedback"></div>
+            </div>
+
+            <!-- Chapter Navigation -->
+            <div class="chapter-navigation">
+                <button class="chapter-nav-button prev">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>الفصل السابق</span>
+                </button>
+                <button class="chapter-nav-button next">
+                    <span>الفصل التالي</span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <h3 class="comments-title">
+                    <i class="fas fa-comments"></i>
+                    <span>التعليقات (<span id="commentCount">3</span>)</span>
+                </h3>
+
+                <!-- Comment 1 -->
+                <div class="comment" id="comment1">
+                    <div class="comment-menu-toggle">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </div>
+                    <div class="comment-menu" id="commentMenu1">
+                        <div class="comment-menu-item">
+                            <i class="fas fa-flag"></i>
+                            <span>إبلاغ</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-ban"></i>
+                            <span>حظر المستخدم</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-share-alt"></i>
+                            <span>مشاركة</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-copy"></i>
+                            <span>نسخ النص</span>
+                        </div>
+                    </div>
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <div class="comment-avatar">
+                                <img src="https://i.pinimg.com/736x/9d/e5/d2/9de5d2ab40011b354914c778341e3bff.jpg"
+                                    alt="صورة المستخدم">
+                            </div>
+                            <div class="comment-user-info">
+                                <h4>أحمد محمد</h4>
+                                <span>قارئ متميز</span>
+                            </div>
+                        </div>
+                        <div class="comment-date">منذ 3 أيام</div>
+                    </div>
+                    <div class="comment-content">
+                        <p>قصة رائعة! أسلوب الكتابة جذاب جدًا والأحداث مشوقة. أتطلع لقراءة الفصل القادم بفارغ الصبر.</p>
+                    </div>
+                    <div class="comment-actions">
+                        <div class="comment-action like-action">
+                            <i class="fas fa-heart"></i>
+                            <span>15 إعجاب</span>
+                        </div>
+                        <div class="comment-action reply-action" data-comment-id="1">
+                            <i class="fas fa-reply"></i>
+                            <span>رد</span>
+                        </div>
+                    </div>
+                    <div class="reply-form" id="replyForm1">
+                        <textarea class="reply-textarea" placeholder="اكتب ردك هنا..."></textarea>
+                        <div class="clearfix">
+                            <button class="reply-cancel">إلغاء</button>
+                            <button class="reply-submit" data-comment-id="1">إرسال</button>
+                        </div>
+                    </div>
+                    <div class="comment-replies" id="replies1">
+                        <!-- Example reply -->
+                        <div class="reply">
+                            <div class="reply-menu-toggle">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                            <div class="reply-menu">
+                                <div class="reply-menu-item">
+                                    <i class="fas fa-flag"></i>
+                                    <span>إبلاغ</span>
+                                </div>
+                                <div class="reply-menu-item">
+                                    <i class="fas fa-ban"></i>
+                                    <span>حظر المستخدم</span>
+                                </div>
+                                <div class="reply-menu-item">
+                                    <i class="fas fa-copy"></i>
+                                    <span>نسخ النص</span>
+                                </div>
+                            </div>
+                            <div class="reply-header">
+                                <div class="reply-user">
+                                    <div class="reply-avatar">
+                                        <img src="https://i.pinimg.com/736x/e5/91/dc/e591dc82326cc4a4b8d07f5cd35579a8.jpg"
+                                            alt="صورة المستخدم">
+                                    </div>
+                                    <div class="reply-user-name">أحمد الشريف</div>
+                                </div>
+                                <div class="reply-date">منذ يومين</div>
+                            </div>
+                            <div class="reply-content">
+                                <p>شكراً لك على تعليقك الجميل! سعيد أن القصة أعجبتك. الفصل القادم سيكون مليئاً
+                                    بالمفاجآت.</p>
+                            </div>
+                            <div class="reply-actions">
+                                <div class="reply-action like-action">
+                                    <i class="fas fa-heart"></i>
+                                    <span>7 إعجاب</span>
+                                </div>
+                                <div class="reply-action reply-to-reply" data-reply-id="1">
+                                    <i class="fas fa-reply"></i>
+                                    <span>رد</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment 2 -->
+                <div class="comment" id="comment2">
+                    <div class="comment-menu-toggle">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </div>
+                    <div class="comment-menu" id="commentMenu2">
+                        <div class="comment-menu-item">
+                            <i class="fas fa-flag"></i>
+                            <span>إبلاغ</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-ban"></i>
+                            <span>حظر المستخدم</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-share-alt"></i>
+                            <span>مشاركة</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-copy"></i>
+                            <span>نسخ النص</span>
+                        </div>
+                    </div>
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <div class="comment-avatar">
+                                <img src="https://i.pinimg.com/736x/82/a4/38/82a43831e35854f2297bc3ea6d2d9410.jpg"
+                                    alt="صورة المستخدم">
+                            </div>
+                            <div class="comment-user-info">
+                                <h4>سارة أحمد</h4>
+                                <span>كاتبة</span>
+                            </div>
+                        </div>
+                        <div class="comment-date">منذ يومين</div>
+                    </div>
+                    <div class="comment-content">
+                        <p>وصف المشاهد رائع جدًا، استطعت تخيل كل تفاصيل المملكة المفقودة. شخصية ليليث غامضة ومثيرة
+                            للاهتمام، أتساءل ما هو دورها الحقيقي في القصة.</p>
+                    </div>
+                    <div class="comment-actions">
+                        <div class="comment-action like-action">
+                            <i class="fas fa-heart"></i>
+                            <span>8 إعجاب</span>
+                        </div>
+                        <div class="comment-action reply-action" data-comment-id="2">
+                            <i class="fas fa-reply"></i>
+                            <span>رد</span>
+                        </div>
+                    </div>
+                    <div class="reply-form" id="replyForm2">
+                        <textarea class="reply-textarea" placeholder="اكتب ردك هنا..."></textarea>
+                        <div class="clearfix">
+                            <button class="reply-cancel">إلغاء</button>
+                            <button class="reply-submit" data-comment-id="2">إرسال</button>
+                        </div>
+                    </div>
+                    <div class="comment-replies" id="replies2">
+                        <!-- Replies will be added here -->
+                    </div>
+                </div>
+
+                <!-- Comment 3 -->
+                <div class="comment" id="comment3">
+                    <div class="comment-menu-toggle">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </div>
+                    <div class="comment-menu" id="commentMenu3">
+                        <div class="comment-menu-item">
+                            <i class="fas fa-flag"></i>
+                            <span>إبلاغ</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-ban"></i>
+                            <span>حظر المستخدم</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-share-alt"></i>
+                            <span>مشاركة</span>
+                        </div>
+                        <div class="comment-menu-item">
+                            <i class="fas fa-copy"></i>
+                            <span>نسخ النص</span>
+                        </div>
+                    </div>
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <div class="comment-avatar">
+                                <img src="https://i.pinimg.com/736x/4b/51/80/4b5180f5b481015c4212114ff75d7f6d.jpg"
+                                    alt="صورة المستخدم">
+                            </div>
+                            <div class="comment-user-info">
+                                <h4>محمد علي</h4>
+                                <span>قارئ جديد</span>
+                            </div>
+                        </div>
+                        <div class="comment-date">منذ يوم</div>
+                    </div>
+                    <div class="comment-content">
+                        <p>بداية مشوقة للقصة! أحببت كيف تم بناء الأجواء المرعبة والغامضة. هل سيتمكن سامر من العودة إلى
+                            عالمه؟ أم سيبقى محاصرًا في المملكة المفقودة؟</p>
+                    </div>
+                    <div class="comment-actions">
+                        <div class="comment-action like-action">
+                            <i class="fas fa-heart"></i>
+                            <span>5 إعجاب</span>
+                        </div>
+                        <div class="comment-action reply-action" data-comment-id="3">
+                            <i class="fas fa-reply"></i>
+                            <span>رد</span>
+                        </div>
+                    </div>
+                    <div class="reply-form" id="replyForm3">
+                        <textarea class="reply-textarea" placeholder="اكتب ردك هنا..."></textarea>
+                        <div class="clearfix">
+                            <button class="reply-cancel">إلغاء</button>
+                            <button class="reply-submit" data-comment-id="3">إرسال</button>
+                        </div>
+                    </div>
+                    <div class="comment-replies" id="replies3">
+                        <!-- Replies will be added here -->
+                    </div>
+                </div>
+
+                <!-- Add Comment Form -->
+                <div class="add-comment">
+                    <h4 class="add-comment-title">أضف تعليقًا</h4>
+                    <form class="comment-form" id="commentForm">
+                        <textarea class="comment-textarea" id="newCommentText"
+                            placeholder="اكتب تعليقك هنا..."></textarea>
+                        <button type="submit" class="comment-submit">إرسال</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div class="recommendations-section">
+                <h3 class="recommendations-title">
+                    <i class="fas fa-book"></i>
+                    <span>قصص مشابهة قد تعجبك</span>
+                </h3>
+                <div class="recommendations-grid">
+                    <!-- Recommendation 1 -->
+                    <div class="recommendation-card">
+                        <div class="recommendation-image">
+                            <img src="https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+                                alt="قصة موصى بها">
+                        </div>
+                        <div class="recommendation-content">
+                            <h4 class="recommendation-title">أسرار الغابة المسكونة</h4>
+                            <p class="recommendation-desc">مجموعة من الأصدقاء يقررون استكشاف غابة يقال إنها مسكونة،
+                                ليجدوا أنفسهم في مواجهة قوى خارقة للطبيعة.</p>
+                            <div class="recommendation-meta">
+                                <div class="recommendation-tags">
+                                    <span class="recommendation-tag">رعب</span>
+                                    <span class="recommendation-tag">مغامرة</span>
+                                </div>
+                                <div class="recommendation-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>15 دقيقة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Recommendation 2 -->
+                    <div class="recommendation-card">
+                        <div class="recommendation-image">
+                            <img src="https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+                                alt="قصة موصى بها">
+                        </div>
+                        <div class="recommendation-content">
+                            <h4 class="recommendation-title">الوجه الآخر للقمر</h4>
+                            <p class="recommendation-desc">رائد فضاء يكتشف حقيقة مرعبة على الجانب المظلم من القمر، حقيقة
+                                ظلت مخفية عن البشرية لآلاف السنين.</p>
+                            <div class="recommendation-meta">
+                                <div class="recommendation-tags">
+                                    <span class="recommendation-tag">خيال علمي</span>
+                                    <span class="recommendation-tag">رعب</span>
+                                </div>
+                                <div class="recommendation-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>20 دقيقة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Recommendation 3 -->
+                    <div class="recommendation-card">
+                        <div class="recommendation-image">
+                            <img src="https://i.ytimg.com/vi/Lva7R8F2Cho/maxresdefault.jpg"
+                                alt="قصة موصى بها">
+                        </div>
+                        <div class="recommendation-content">
+                            <h4 class="recommendation-title">صدى الماضي</h4>
+                            <p class="recommendation-desc">امرأة تنتقل للعيش في منزل قديم، لتكتشف أن جدرانه تحمل ذكريات
+                                مرعبة وأرواحًا لا تزال عالقة فيه.</p>
+                            <div class="recommendation-meta">
+                                <div class="recommendation-tags">
+                                    <span class="recommendation-tag">رعب نفسي</span>
+                                    <span class="recommendation-tag">غموض</span>
+                                </div>
+                                <div class="recommendation-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>12 دقيقة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reading Controls -->
+    <div class="reading-controls">
+        <button class="control-button" id="bookmarkBtn" title="حفظ للقراءة لاحقًا">
+            <i class="fas fa-bookmark"></i>
+        </button>
+        <button class="control-button" id="shareBtn" title="مشاركة">
+            <i class="fas fa-share-alt"></i>
+        </button>
+        <button class="control-button" id="likeBtn" title="إعجاب">
+            <i class="fas fa-heart"></i>
+        </button>
+        <button class="control-button" id="commentBtn" title="تعليق">
+            <i class="fas fa-comment"></i>
+        </button>
+    </div>
+
+    <!-- Font Size Controls -->
+    <div class="font-size-controls">
+        <button class="font-size-button" id="decreaseFontBtn" title="تصغير الخط">
+            <i class="fas fa-minus"></i>
+        </button>
+        <button class="font-size-button" id="resetFontBtn" title="حجم الخط الافتراضي">
+            <i class="fas fa-font"></i>
+        </button>
+        <button class="font-size-button" id="increaseFontBtn" title="تكبير الخط">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" title="العودة للأعلى">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Progress Bar
+        window.addEventListener('scroll', function () {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Font Size Controls
+        const storyContent = document.querySelector('.story-content');
+        const increaseFontBtn = document.getElementById('increaseFontBtn');
+        const decreaseFontBtn = document.getElementById('decreaseFontBtn');
+        const resetFontBtn = document.getElementById('resetFontBtn');
+
+        let currentFontSize = 1.125; // Default font size in rem
+
+        increaseFontBtn.addEventListener('click', function () {
+            if (currentFontSize < 1.5) {
+                currentFontSize += 0.0625;
+                storyContent.style.fontSize = currentFontSize + 'rem';
+            }
+        });
+
+        decreaseFontBtn.addEventListener('click', function () {
+            if (currentFontSize > 0.875) {
+                currentFontSize -= 0.0625;
+                storyContent.style.fontSize = currentFontSize + 'rem';
+            }
+        });
+
+        resetFontBtn.addEventListener('click', function () {
+            currentFontSize = 1.125;
+            storyContent.style.fontSize = currentFontSize + 'rem';
+        });
+
+        // Reading Controls
+        const bookmarkBtn = document.getElementById('bookmarkBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const likeBtn = document.getElementById('likeBtn');
+        const commentBtn = document.getElementById('commentBtn');
+
+        bookmarkBtn.addEventListener('click', function () {
+            this.classList.toggle('active');
+            if (this.classList.contains('active')) {
+                this.style.color = '#F40009';
+                alert('تم حفظ القصة للقراءة لاحقًا');
+            } else {
+                this.style.color = 'white';
+                alert('تم إلغاء حفظ القصة');
+            }
+        });
+
+        shareBtn.addEventListener('click', function () {
+            alert('مشاركة القصة');
+        });
+
+        likeBtn.addEventListener('click', function () {
+            this.classList.toggle('active');
+            if (this.classList.contains('active')) {
+                this.style.color = '#F40009';
+                alert('تم الإعجاب بالقصة');
+            } else {
+                this.style.color = 'white';
+                alert('تم إلغاء الإعجاب');
+            }
+        });
+
+        commentBtn.addEventListener('click', function () {
+            document.querySelector('.add-comment').scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('.comment-textarea').focus();
+        });
+
+        // Chapter Navigation
+        const prevChapterBtn = document.querySelector('.chapter-nav-button.prev');
+        const nextChapterBtn = document.querySelector('.chapter-nav-button.next');
+
+        prevChapterBtn.addEventListener('click', function () {
+            alert('الانتقال إلى الفصل السابق');
+        });
+
+        nextChapterBtn.addEventListener('click', function () {
+            alert('الانتقال إلى الفصل التالي');
+        });
+
+        // Comment Form
+        const commentForm = document.getElementById('commentForm');
+        const newCommentText = document.getElementById('newCommentText');
+        const commentCount = document.getElementById('commentCount');
+
+        commentForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const commentText = newCommentText.value;
+
+            if (commentText.trim() !== '') {
+                // Create new comment
+                const newComment = createComment({
+                    id: Date.now(),
+                    user: {
+                        name: 'أنت',
+                        avatar: 'https://i.pinimg.com/736x/5a/e5/8f/5ae58f5236a0a1d695a34c9af5d4c1a0.jpg',
+                        title: 'قارئ'
+                    },
+                    date: 'الآن',
+                    content: commentText,
+                    likes: 0
+                });
+
+                // Add to comments section
+                const commentsSection = document.querySelector('.comments-section');
+                commentsSection.insertBefore(newComment, document.querySelector('.add-comment'));
+
+                // Update comment count
+                const currentCount = parseInt(commentCount.textContent);
+                commentCount.textContent = currentCount + 1;
+
+                // Clear form
+                newCommentText.value = '';
+
+                // Scroll to new comment
+                newComment.scrollIntoView({ behavior: 'smooth' });
+
+                // Add event listeners to the new comment
+                setupCommentEventListeners(newComment);
+            } else {
+                alert('الرجاء كتابة تعليق قبل الإرسال');
+            }
+        });
+
+        // Create comment element
+        function createComment(comment) {
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment';
+            commentElement.id = 'comment' + comment.id;
+
+            commentElement.innerHTML = `
+                <div class="comment-menu-toggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+                <div class="comment-menu" id="commentMenu${comment.id}">
+                    <div class="comment-menu-item">
+                        <i class="fas fa-flag"></i>
+                        <span>إبلاغ</span>
+                    </div>
+                    <div class="comment-menu-item">
+                        <i class="fas fa-ban"></i>
+                        <span>حظر المستخدم</span>
+                    </div>
+                    <div class="comment-menu-item">
+                        <i class="fas fa-share-alt"></i>
+                        <span>مشاركة</span>
+                    </div>
+                    <div class="comment-menu-item">
+                        <i class="fas fa-copy"></i>
+                        <span>نسخ النص</span>
+                    </div>
+                </div>
+                <div class="comment-header">
+                    <div class="comment-user">
+                        <div class="comment-avatar">
+                            <img src="${comment.user.avatar}" alt="صورة المستخدم">
+                        </div>
+                        <div class="comment-user-info">
+                            <h4>${comment.user.name}</h4>
+                            <span>${comment.user.title}</span>
+                        </div>
+                    </div>
+                    <div class="comment-date">${comment.date}</div>
+                </div>
+                <div class="comment-content">
+                    <p>${comment.content}</p>
+                </div>
+                <div class="comment-actions">
+                    <div class="comment-action like-action">
+                        <i class="fas fa-heart"></i>
+                        <span>${comment.likes} إعجاب</span>
+                    </div>
+                    <div class="comment-action reply-action" data-comment-id="${comment.id}">
+                        <i class="fas fa-reply"></i>
+                        <span>رد</span>
+                    </div>
+                </div>
+                <div class="reply-form" id="replyForm${comment.id}">
+                    <textarea class="reply-textarea" placeholder="اكتب ردك هنا..."></textarea>
+                    <div class="clearfix">
+                        <button class="reply-cancel">إلغاء</button>
+                        <button class="reply-submit" data-comment-id="${comment.id}">إرسال</button>
+                    </div>
+                </div>
+                <div class="comment-replies" id="replies${comment.id}">
+                    <!-- Replies will be added here -->
+                </div>
+            `;
+
+            return commentElement;
+        }
+
+        // Setup event listeners for comments
+        function setupCommentEventListeners(commentElement) {
+            // Like action
+            const likeAction = commentElement.querySelector('.like-action');
+            likeAction.addEventListener('click', function () {
+                const likesSpan = this.querySelector('span');
+                const currentLikes = parseInt(likesSpan.textContent);
+                likesSpan.textContent = (currentLikes + 1) + ' إعجاب';
+                this.style.color = '#F40009';
+            });
+
+            // Reply action
+            const replyAction = commentElement.querySelector('.reply-action');
+            const commentId = replyAction.getAttribute('data-comment-id');
+            const replyForm = document.getElementById('replyForm' + commentId);
+
+            replyAction.addEventListener('click', function () {
+                // Close all other reply forms
+                document.querySelectorAll('.reply-form.active').forEach(form => {
+                    if (form.id !== 'replyForm' + commentId) {
+                        form.classList.remove('active');
+                    }
+                });
+
+                // Toggle this reply form
+                replyForm.classList.toggle('active');
+                if (replyForm.classList.contains('active')) {
+                    replyForm.querySelector('textarea').focus();
+                }
+            });
+
+            // Cancel reply
+            const cancelReply = replyForm.querySelector('.reply-cancel');
+            cancelReply.addEventListener('click', function () {
+                replyForm.classList.remove('active');
+                replyForm.querySelector('textarea').value = '';
+            });
+
+            // Submit reply
+            const submitReply = replyForm.querySelector('.reply-submit');
+            submitReply.addEventListener('click', function () {
+                const replyText = replyForm.querySelector('textarea').value;
+                if (replyText.trim() !== '') {
+                    addReply(commentId, replyText);
+                    replyForm.classList.remove('active');
+                    replyForm.querySelector('textarea').value = '';
+                } else {
+                    alert('الرجاء كتابة رد قبل الإرسال');
+                }
+            });
+
+            // Comment menu toggle
+            const menuToggle = commentElement.querySelector('.comment-menu-toggle');
+            const commentMenu = commentElement.querySelector('.comment-menu');
+
+            menuToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                // Close all other menus
+                document.querySelectorAll('.comment-menu.active, .reply-menu.active').forEach(menu => {
+                    if (menu !== commentMenu) {
+                        menu.classList.remove('active');
+                    }
+                });
+
+                // Toggle this menu
+                commentMenu.classList.toggle('active');
+            });
+        }
+
+        // Add reply to comment
+        function addReply(commentId, replyText) {
+            const repliesContainer = document.getElementById('replies' + commentId);
+
+            const replyElement = document.createElement('div');
+            replyElement.className = 'reply';
+
+            replyElement.innerHTML = `
+                <div class="reply-menu-toggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+                <div class="reply-menu">
+                    <div class="reply-menu-item">
+                        <i class="fas fa-flag"></i>
+                        <span>إبلاغ</span>
+                    </div>
+                    <div class="reply-menu-item">
+                        <i class="fas fa-ban"></i>
+                        <span>حظر المستخدم</span>
+                    </div>
+                    <div class="reply-menu-item">
+                        <i class="fas fa-copy"></i>
+                        <span>نسخ النص</span>
+                    </div>
+                </div>
+                <div class="reply-header">
+                    <div class="reply-user">
+                        <div class="reply-avatar">
+                            <img src="https://i.pinimg.com/736x/5a/e5/8f/5ae58f5236a0a1d695a34c9af5d4c1a0.jpg" alt="صورة المستخدم">
+                        </div>
+                        <div class="reply-user-name">أنت</div>
+                    </div>
+                    <div class="reply-date">الآن</div>
+                </div>
+                <div class="reply-content">
+                    <p>${replyText}</p>
+                </div>
+                <div class="reply-actions">
+                    <div class="reply-action like-action">
+                        <i class="fas fa-heart"></i>
+                        <span>0 إعجاب</span>
+                    </div>
+                    <div class="reply-action reply-to-reply">
+                        <i class="fas fa-reply"></i>
+                        <span>رد</span>
+                    </div>
+                </div>
+            `;
+
+            repliesContainer.appendChild(replyElement);
+
+            // Add event listeners to the new reply
+            setupReplyEventListeners(replyElement);
+        }
+
+        // Setup event listeners for replies
+        function setupReplyEventListeners(replyElement) {
+            // Like action for replies
+            const likeAction = replyElement.querySelector('.like-action');
+            likeAction.addEventListener('click', function () {
+                const likesSpan = this.querySelector('span');
+                const currentLikes = parseInt(likesSpan.textContent);
+                likesSpan.textContent = (currentLikes + 1) + ' إعجاب';
+                this.style.color = '#F40009';
+            });
+
+            // Reply menu toggle
+            const menuToggle = replyElement.querySelector('.reply-menu-toggle');
+            const replyMenu = replyElement.querySelector('.reply-menu');
+
+            menuToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                // Close all other menus
+                document.querySelectorAll('.comment-menu.active, .reply-menu.active').forEach(menu => {
+                    if (menu !== replyMenu) {
+                        menu.classList.remove('active');
+                    }
+                });
+
+                // Toggle this menu
+                replyMenu.classList.toggle('active');
+            });
+        }
+
+        // Initialize existing comments
+        document.querySelectorAll('.comment').forEach(comment => {
+            setupCommentEventListeners(comment);
+        });
+
+        // Initialize existing replies
+        document.querySelectorAll('.reply').forEach(reply => {
+            setupReplyEventListeners(reply);
+        });
+
+        // Close menus when clicking outside
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.comment-menu.active, .reply-menu.active').forEach(menu => {
+                menu.classList.remove('active');
+            });
+        });
+
+        // Rating System
+        const ratingStars = document.querySelectorAll('.rating-star');
+        const ratingFeedback = document.getElementById('ratingFeedback');
+        const feedbackMessages = [
+            'سيء',
+            'ضعيف',
+            'متوسط',
+            'جيد',
+            'ممتاز'
+        ];
+
+        ratingStars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+                ratingFeedback.textContent = feedbackMessages[rating - 1];
+            });
+
+            star.addEventListener('mouseout', function () {
+                const activeRating = document.querySelector('.rating-star.active');
+                if (activeRating) {
+                    const rating = activeRating.getAttribute('data-rating');
+                    highlightStars(rating);
+                    ratingFeedback.textContent = feedbackMessages[rating - 1];
+                } else {
+                    resetStars();
+                    ratingFeedback.textContent = '';
+                }
+            });
+
+            star.addEventListener('click', function () {
+                const rating = this.getAttribute('data-rating');
+
+                // Remove active class from all stars
+                ratingStars.forEach(s => s.classList.remove('active'));
+
+                // Add active class to selected stars
+                highlightStars(rating, true);
+
+                // Show thank you message
+                ratingFeedback.textContent = `شكراً لتقييمك! (${rating}/5)`;
+
+                // You can send the rating to the server here
+                console.log(`User rated: ${rating}/5`);
+            });
+        });
+
+        function highlightStars(rating, setActive = false) {
+            ratingStars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.style.color = '#F40009';
+                    if (setActive) {
+                        star.classList.add('active');
+                    }
+                } else {
+                    star.style.color = '#555';
+                    if (setActive) {
+                        star.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        function resetStars() {
+            ratingStars.forEach(star => {
+                star.style.color = '#555';
+            });
+        }
+
+        // Chapter Menu Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            // Chapter data - you can replace this with your actual chapters
+            const chapters = [
+                { id: 1, title: 'البوابة الغامضة', isActive: true },
+                { id: 2, title: 'المملكة المفقودة' },
+                { id: 3, title: 'ليليث الحارسة' },
+                { id: 4, title: 'أسرار القصر الأسود' },
+                { id: 5, title: 'الكائنات المتحجرة' },
+                { id: 6, title: 'البحيرات السوداء' },
+                { id: 7, title: 'قوة سامر الخفية' },
+                { id: 8, title: 'المواجهة الأخيرة' }
+            ];
+
+            // Populate chapter list
+            const chapterList = document.getElementById('chapterList');
+            chapters.forEach(chapter => {
+                const li = document.createElement('li');
+                li.className = `chapter-item ${chapter.isActive ? 'active' : ''}`;
+                li.innerHTML = `
+                    <i class="fas fa-bookmark"></i>
+                    <span>${chapter.title}</span>
+                    <span class="chapter-number">الفصل ${chapter.id}</span>
+                `;
+                li.addEventListener('click', function () {
+                    // Navigate to chapter (replace with your actual navigation logic)
+                    alert(`الانتقال إلى الفصل ${chapter.id}: ${chapter.title}`);
+
+                    // Update active chapter
+                    document.querySelectorAll('.chapter-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    // Close menu after selection
+                    toggleChapterMenu(false);
+
+                    // Update chapter title in the page
+                    document.querySelector('.chapter-title').textContent = `الفصل ${chapter.id}: ${chapter.title}`;
+                });
+                chapterList.appendChild(li);
+            });
+
+            // Toggle chapter menu
+            const chapterMenuToggle = document.getElementById('chapterMenuToggle');
+            const chapterMenu = document.getElementById('chapterMenu');
+            let menuOpen = false;
+
+            function toggleChapterMenu(force) {
+                if (force !== undefined) {
+                    menuOpen = force;
+                } else {
+                    menuOpen = !menuOpen;
+                }
+
+                // Update menu visibility
+                if (menuOpen) {
+                    chapterMenu.classList.add('open');
+                } else {
+                    chapterMenu.classList.remove('open');
+                }
+
+                // Update toggle icon
+                const icon = chapterMenuToggle.querySelector('.fas.fa-chevron-down, .fas.fa-chevron-up');
+                if (menuOpen) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            }
+
+            chapterMenuToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleChapterMenu();
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!chapterMenuToggle.contains(event.target) &&
+                    !chapterMenu.contains(event.target)) {
+                    toggleChapterMenu(false);
+                }
+            });
+
+            // Close menu when scrolling
+            let scrollTimeout;
+            window.addEventListener('scroll', function () {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function () {
+                    toggleChapterMenu(false);
+                }, 150);
+            });
+        });
+
+        // Writer Profile Follow Button
+        const followBtn = document.getElementById('followBtn');
+
+        followBtn.addEventListener('click', function () {
+            this.classList.toggle('active');
+            if (this.classList.contains('active')) {
+                this.innerHTML = '<i class="fas fa-user-check"></i><span>تمت المتابعة</span>';
+                this.style.background = '#333';
+                alert('تمت متابعة الكاتب أحمد الشريف');
+            } else {
+                this.innerHTML = '<i class="fas fa-user-plus"></i><span>متابعة</span>';
+                this.style.background = '#F40009';
+                alert('تم إلغاء متابعة الكاتب');
+            }
+        });
+
+        // Recommendation Cards
+        const recommendationCards = document.querySelectorAll('.recommendation-card');
+
+        recommendationCards.forEach(card => {
+            card.addEventListener('click', function () {
+                alert('الانتقال إلى صفحة القصة: ' + this.querySelector('.recommendation-title').textContent);
+            });
+        });
+    </script>
+</body>
+
+</html>

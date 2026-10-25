@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z Horror - Enhanced Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                        'accent-hover': '#d10007',
+                        'dark': '#121212',
+                        'darker': '#0a0a0a',
+                        'card': 'rgba(30, 30, 30, 0.6)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'drip': 'drip 2s ease-in-out infinite',
+                        'slide-down': 'slideDown 0.3s ease-out forwards',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                        'logo-pulse': 'logoPulse 4s ease-in-out infinite alternate',
+                        'slide-in-right': 'slideInRight 0.5s ease-out forwards',
+                        'slide-in-left': 'slideInLeft 0.5s ease-out forwards',
+                        'scale-in': 'scaleIn 0.3s ease-out forwards',
+                        'blood-drip': 'bloodDrip 3s ease-in-out infinite',
+                        'hover-glow': 'hoverGlow 1.5s ease-in-out infinite alternate',
+                        'typing': 'typing 1.5s steps(20, end) infinite alternate',
+                        'blink-caret': 'blinkCaret 0.75s step-end infinite',
+                        'search-pulse': 'searchPulse 2s ease-in-out infinite',
+                        'result-appear': 'resultAppear 0.4s ease-out forwards',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(244, 0, 9, 0.5)' },
+                            '100%': { textShadow: '0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5)' },
+                        },
+                        drip: {
+                            '0%': { height: '0px', opacity: 0 },
+                            '50%': { height: '15px', opacity: 1 },
+                            '100%': { height: '0px', opacity: 0 }
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        logoPulse: {
+                            '0%': { filter: 'drop-shadow(0 0 2px rgba(244, 0, 9, 0.5))' },
+                            '50%': { filter: 'drop-shadow(0 0 10px rgba(244, 0, 9, 0.8))' },
+                            '100%': { filter: 'drop-shadow(0 0 15px rgba(244, 0, 9, 0.9))' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)', opacity: 0 },
+                            '100%': { transform: 'translateX(0)', opacity: 1 },
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-100%)', opacity: 0 },
+                            '100%': { transform: 'translateX(0)', opacity: 1 },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: 0 },
+                            '100%': { transform: 'scale(1)', opacity: 1 },
+                        },
+                        bloodDrip: {
+                            '0%': { height: '0', opacity: 0 },
+                            '30%': { height: '30px', opacity: 1 },
+                            '60%': { height: '10px', opacity: 0.7 },
+                            '100%': { height: '0', opacity: 0 }
+                        },
+                        hoverGlow: {
+                            '0%': { boxShadow: '0 0 5px rgba(244, 0, 9, 0.3)' },
+                            '100%': { boxShadow: '0 0 15px rgba(244, 0, 9, 0.7), 0 0 20px rgba(244, 0, 9, 0.4)' }
+                        },
+                        typing: {
+                            '0%': { width: '0' },
+                            '100%': { width: '100%' }
+                        },
+                        blinkCaret: {
+                            '0%, 100%': { borderColor: 'transparent' },
+                            '50%': { borderColor: '#F40009' }
+                        },
+                        searchPulse: {
+                            '0%': { transform: 'scale(1)', opacity: 0.7 },
+                            '50%': { transform: 'scale(1.05)', opacity: 1 },
+                            '100%': { transform: 'scale(1)', opacity: 0.7 }
+                        },
+                        resultAppear: {
+                            '0%': { transform: 'translateY(10px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 }
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: #1e1f24;
+            overflow-x: hidden;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .content-padding {
+                padding-bottom: 20px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F40009;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3333;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 5px rgba(244, 0, 9, 0.5);
+            }
+
+            100% {
+                text-shadow: 0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5);
+            }
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes logoPulse {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(244, 0, 9, 0.5));
+                transform: scale(1);
+            }
+
+            50% {
+                filter: drop-shadow(0 0 10px rgba(244, 0, 9, 0.8));
+                transform: scale(1.03);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 15px rgba(244, 0, 9, 0.9));
+                transform: scale(1);
+            }
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            animation: logoPulse 4s ease-in-out infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 20px rgba(244, 0, 9, 1));
+        }
+
+        .logo-image {
+            height: 100px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .logo-image {
+                height: 80px;
+            }
+        }
+
+        .nav-item {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+        }
+
+        .nav-item button,
+        .nav-item a {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item button i,
+        .nav-item a i {
+            margin-left: 12px;
+        }
+
+        .icon-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0 25px;
+        }
+
+        .icon-wrapper:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+        }
+
+        .icon-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: rgba(244, 0, 9, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .icon-wrapper:hover::after {
+            width: 100%;
+            height: 100%;
+        }
+
+        .dropdown-menu {
+            transform-origin: top center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 0, 9, 0.3);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Community Menu Styles */
+        .community-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 250px;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            z-index: 100;
+            transform-origin: top right;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 0, 9, 0.3);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .community-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .community-menu-header {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(244, 0, 9, 0.2);
+            background: linear-gradient(to right, rgba(244, 0, 9, 0.1), transparent);
+        }
+
+        .community-menu-title {
+            color: #F40009;
+            font-weight: bold;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .community-menu-title i {
+            margin-left: 0.75rem;
+        }
+
+        .community-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .community-menu-item:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+            transform: translateX(-5px);
+            color: #F40009;
+        }
+
+        .community-menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 3px;
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+        }
+
+        .community-menu-item:hover::before {
+            background-color: #F40009;
+        }
+
+        .community-menu-item i {
+            margin-left: 0.75rem;
+            color: #F40009;
+            transition: transform 0.3s ease;
+        }
+
+        .community-menu-item:hover i {
+            transform: translateX(-5px);
+        }
+
+        .community-menu-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(244, 0, 9, 0.3), transparent);
+            margin: 0.5rem 0;
+        }
+
+        .community-menu-footer {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid rgba(244, 0, 9, 0.1);
+            background: linear-gradient(to right, transparent, rgba(244, 0, 9, 0.05));
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .community-menu-all {
+            color: #F40009;
+            font-size: 0.875rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .community-menu-all:hover {
+            color: white;
+        }
+
+        .community-menu-all i {
+            margin-right: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .community-menu-all:hover i {
+            transform: translateX(-5px);
+        }
+
+        .community-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background-color: #F40009;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+        }
+
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            /* Reduced from 2rem */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 0, 9, 0.3);
+            border-bottom: 2px solid #F40009;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .mega-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .mega-menu a i {
+            margin-left: 12px;
+        }
+
+        .menu-mobile {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu-mobile.active {
+            transform: translateX(0);
+        }
+
+        .menu-mobile a i,
+        .menu-mobile button i {
+            margin-left: 12px;
+        }
+
+        /* Fixed: Position the profile menu below the header */
+        .profile-menu {
+            position: fixed;
+            top: 122px;
+            /* Match the header height */
+            left: 0;
+            height: calc(100% - 122px);
+            /* Subtract header height from total height */
+            width: 100%;
+            max-width: 24rem;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(244, 0, 9, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 50;
+            overflow-y: auto;
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-menu.active {
+            transform: translateX(0);
+        }
+
+        .profile-menu-header {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-menu-header h3 i {
+            margin-left: 16px;
+        }
+
+        .profile-menu-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(244, 0, 9, 0.7), transparent);
+        }
+
+        .menu-item {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item .ml-4 {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 3px;
+            height: 0;
+            background-color: #F40009;
+            transition: height 0.3s ease;
+        }
+
+        .menu-item:hover::before {
+            height: 100%;
+        }
+
+        .menu-item:hover {
+            transform: translateX(-5px);
+        }
+
+        .premium-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F40009, #8B0000);
+            transition: all 0.3s ease;
+        }
+
+        .premium-button i {
+            margin-left: 12px;
+        }
+
+        .premium-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .premium-button:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(10%, 10%);
+        }
+
+        .premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        .premium-button:active {
+            transform: translateY(1px);
+        }
+
+        .blood-drip {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 0;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .blood-drip:nth-child(1) {
+            left: 30%;
+            animation-delay: 0.5s;
+        }
+
+        .blood-drip:nth-child(2) {
+            left: 70%;
+            animation-delay: 1.5s;
+        }
+
+        .blood-drip:nth-child(3) {
+            left: 50%;
+            animation-delay: 2.5s;
+        }
+
+        .quick-link {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link i {
+            margin-left: 16px;
+        }
+
+        .quick-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background-color: #F40009;
+            transition: width 0.3s ease;
+        }
+
+        .quick-link:hover::after {
+            width: 100%;
+            right: auto;
+            left: 0;
+        }
+
+        .quick-link:hover {
+            transform: translateX(-5px);
+            color: #F40009;
+        }
+
+        .profile-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .profile-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .noise-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .social-icon {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: rgba(244, 0, 9, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .social-icon:hover::before {
+            width: 120%;
+            height: 120%;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: #F40009;
+        }
+
+        @keyframes bloodDrip {
+            0% {
+                height: 0;
+                opacity: 0;
+            }
+
+            30% {
+                height: 30px;
+                opacity: 1;
+            }
+
+            60% {
+                height: 10px;
+                opacity: 0.7;
+            }
+
+            100% {
+                height: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes hoverGlow {
+            0% {
+                box-shadow: 0 0 5px rgba(244, 0, 9, 0.3);
+            }
+
+            100% {
+                box-shadow: 0 0 15px rgba(244, 0, 9, 0.7), 0 0 20px rgba(244, 0, 9, 0.4);
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        .submenu a i {
+            margin-left: 12px;
+        }
+
+        .search-bar {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            z-index: 50;
+            transform: translateY(-10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-bottom: 2px solid #F40009;
+            /* FIXED: Added max-height and overflow-y to enable scrolling */
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .search-bar.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Enhanced Search Styles */
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(244, 0, 9, 0.3);
+            box-shadow: 0 0 0 rgba(244, 0, 9, 0.5);
+        }
+
+        .search-input:focus {
+            border-color: rgba(244, 0, 9, 0.3);
+            box-shadow: 0 0 0 rgba(244, 0, 9, 0.5);
+        }
+
+        .search-input:focus {
+            border-color: rgba(244, 0, 9, 0.8);
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .search-icon {
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus+.search-actions .search-icon {
+            transform: scale(1.1);
+            color: #F40009;
+        }
+
+        .search-suggestions {
+            /* FIXED: Removed max-height limit and changed to auto */
+            max-height: none;
+            overflow: visible;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-suggestions.active {
+            /* FIXED: Removed max-height restriction to allow full content visibility */
+            max-height: none;
+        }
+
+        .suggestion-item {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 3px;
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+        }
+
+        .suggestion-item:hover::before {
+            background-color: #F40009;
+        }
+
+        .suggestion-item:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .search-category {
+            position: relative;
+        }
+
+        .search-category::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, #F40009, transparent);
+        }
+
+        .search-result {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .search-result.active {
+            animation: resultAppear 0.4s ease-out forwards;
+            animation-delay: calc(var(--delay) * 0.1s);
+        }
+
+        .search-tag {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(244, 0, 9, 0.1);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .search-tag:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .search-tag:hover {
+            color: #F40009;
+            border-color: #F40009;
+        }
+
+        .search-filter {
+            transition: all 0.2s ease;
+        }
+
+        .search-filter:hover {
+            background-color: rgba(244, 0, 9, 0.2);
+        }
+
+        .search-filter.active {
+            background-color: #F40009;
+            color: white;
+        }
+
+        .search-history-item {
+            transition: all 0.2s ease;
+        }
+
+        .search-history-item:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+        }
+
+        .search-history-item:hover .search-history-remove {
+            opacity: 1;
+        }
+
+        .search-history-remove {
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .search-history-remove:hover {
+            color: #F40009;
+            transform: scale(1.2);
+        }
+
+        .search-loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(244, 0, 9, 0.1),
+                    transparent);
+            animation: shimmer 2s linear infinite;
+            transform: translateX(-100%);
+        }
+
+        .search-btn {
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: rgba(244, 0, 9, 0.2);
+            transform: scale(1.05);
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #F40009;
+            width: 0;
+            animation: typing 3.5s steps(40, end) forwards, blinkCaret 0.75s step-end infinite;
+        }
+
+        .dark-mode .search-bar {
+            background-color: rgba(10, 10, 10, 0.95);
+        }
+
+        .dark-mode .search-input {
+            background-color: rgba(20, 20, 20, 0.8);
+            color: #ffffff;
+        }
+
+        .dark-mode .suggestion-item:hover {
+            background-color: rgba(244, 0, 9, 0.15);
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blinkCaret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: #F40009
+            }
+        }
+
+        @keyframes resultAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .mega-menu {
+                padding: 1rem;
+            }
+        }
+
+        /* Modified: Show hamburger menu on tablet screens too */
+        @media (max-width: 1024px) {
+            .mega-menu {
+                display: none !important;
+            }
+
+            .profile-menu {
+                max-width: 100%;
+            }
+
+            /* Show hamburger menu on tablet screens */
+            #mobileMenuToggle {
+                display: block !important;
+            }
+
+            /* Hide desktop navigation on tablet */
+            .lg\:flex {
+                display: none !important;
+            }
+        }
+
+        .content-padding {
+            padding-top: 122px;
+        }
+
+        /* Enhanced Browse Menu Styles */
+        .mega-menu-container {
+            position: relative;
+        }
+
+        .mega-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            /* Reduced from 2rem */
+            width: 100%;
+        }
+
+        .mega-menu-column {
+            position: relative;
+        }
+
+        .mega-menu-title {
+            position: relative;
+            color: #F40009;
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(244, 0, 9, 0.3);
+        }
+
+        .mega-menu-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            right: 0;
+            width: 30%;
+            height: 2px;
+            background-color: #F40009;
+        }
+
+        .mega-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mega-menu-link:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+            transform: translateX(-5px);
+            color: #F40009;
+        }
+
+        .mega-menu-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 3px;
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+        }
+
+        .mega-menu-link:hover::before {
+            background-color: #F40009;
+        }
+
+        .mega-menu-link i {
+            margin-left: 0.75rem;
+            font-size: 1.125rem;
+            color: #F40009;
+            transition: transform 0.3s ease;
+        }
+
+        .mega-menu-link:hover i {
+            transform: translateX(-5px);
+        }
+
+        .mega-menu-featured {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .mega-menu-featured:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 10px rgba(244, 0, 9, 0.3);
+            border-color: rgba(244, 0, 9, 0.4);
+        }
+
+        .mega-menu-featured-img {
+            height: 160px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .mega-menu-featured:hover .mega-menu-featured-img {
+            transform: scale(1.05);
+        }
+
+        .mega-menu-featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 1.5rem 1rem 1rem;
+        }
+
+        .mega-menu-featured-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mega-menu-featured:hover .mega-menu-featured-title {
+            color: #F40009;
+        }
+
+        .mega-menu-featured-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .mega-menu-featured-link {
+            display: inline-flex;
+            align-items: center;
+            color: #F40009;
+            font-weight: bold;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .mega-menu-featured-link:hover {
+            color: white;
+        }
+
+        .mega-menu-featured-link i {
+            margin-right: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .mega-menu-featured-link:hover i {
+            transform: translateX(-5px);
+        }
+
+        .mega-menu-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background-color: #F40009;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .mega-menu-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(244, 0, 9, 0.3), transparent);
+            margin: 1rem 0;
+        }
+
+        .mega-menu-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .mega-menu-tag {
+            background-color: rgba(244, 0, 9, 0.1);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .mega-menu-tag:hover {
+            background-color: rgba(244, 0, 9, 0.3);
+            color: white;
+            border-color: rgba(244, 0, 9, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .mega-menu-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mega-menu-view-all {
+            display: inline-flex;
+            align-items: center;
+            color: #F40009;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .mega-menu-view-all:hover {
+            color: white;
+        }
+
+        .mega-menu-view-all i {
+            margin-right: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .mega-menu-view-all:hover i {
+            transform: translateX(-5px);
+        }
+
+        .blood-drop {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .mega-menu-column:nth-child(1) .blood-drop {
+            top: 0;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .mega-menu-column:nth-child(2) .blood-drop {
+            top: 0;
+            left: 60%;
+            animation-delay: 1.2s;
+        }
+
+        .mega-menu-column:nth-child(3) .blood-drop {
+            top: 0;
+            left: 40%;
+            animation-delay: 2s;
+        }
+
+        .mega-menu-column:nth-child(4) .blood-drop {
+            top: 0;
+            left: 80%;
+            animation-delay: 1.5s;
+        }
+
+        /* Fixed: Position the mobile menu overlay below the header */
+        #mobileMenuOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Modified: Make the mobile menu take full height from header to bottom */
+        #mobileMenu {
+            position: fixed;
+            top: 122px;
+            /* Match the header height */
+            right: 0;
+            height: calc(100% - 122px);
+            /* Subtract header height from total height */
+            width: 75%;
+            /* Keep the width as it was */
+            max-width: 24rem;
+            overflow-y: auto;
+            background-color: #121212;
+            border-left: 1px solid rgba(244, 0, 9, 0.2);
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+            z-index: 60;
+        }
+
+        /* Add these styles to fix the outline issue */
+        #closeProfileMenu:focus {
+            outline: none;
+            /* Remove the default outline */
+        }
+
+        /* Optional: Add a better visual feedback without the outline */
+        #closeProfileMenu:focus,
+        #closeProfileMenu:active {
+            transform: rotate(90deg) scale(1.1);
+            /* Enhance the existing rotation effect */
+            color: #F40009;
+            /* Change to accent color when focused/clicked */
+            text-shadow: 0 0 8px rgba(244, 0, 9, 0.5);
+            /* Add a subtle glow effect */
+        }
+
+        /* Apply the same fix to all close buttons for consistency */
+        #closeMobileMenu:focus,
+        #closeSearch:focus {
+            outline: none;
+        }
+
+        /* Remove outline from all interactive elements in menus */
+        .profile-menu button:focus,
+        .search-bar button:focus,
+        .menu-mobile button:focus,
+        .icon-wrapper:focus {
+            outline: none;
+        }
+
+        /* Fix for search input outline */
+        #searchInput:focus {
+            outline: none;
+            /* Remove the default outline */
+            /* The border color change is already handled by your existing CSS:
+               border-color: rgba(244, 0, 9, 0.8);
+               box-shadow: 0 0 15px rgba(244, 0, 9, 0.3); */
+        }
+
+        /* Hamburger Menu Animation */
+        .hamburger-icon {
+            width: 30px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: #fff;
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+
+        .hamburger-icon span:nth-child(1) {
+            top: 0px;
+        }
+
+        .hamburger-icon span:nth-child(2),
+        .hamburger-icon span:nth-child(3) {
+            top: 10px;
+        }
+
+        .hamburger-icon span:nth-child(4) {
+            top: 20px;
+        }
+
+        /* X icon animation */
+        .hamburger-icon.open span:nth-child(1) {
+            top: 10px;
+            width: 0%;
+            left: 50%;
+            opacity: 0;
+        }
+
+        .hamburger-icon.open span:nth-child(2) {
+            transform: rotate(45deg);
+        }
+
+        .hamburger-icon.open span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        .hamburger-icon.open span:nth-child(4) {
+            top: 10px;
+            width: 0%;
+            left: 50%;
+            opacity: 0;
+        }
+
+        /* Add hover effect */
+        .hamburger-icon:hover span {
+            background: #F40009;
+        }
+
+        /* Main content blur overlay - NEW */
+        .content-blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .content-blur-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Ensure menus appear above the blur overlay */
+        .mega-menu,
+        .community-menu,
+        .search-bar,
+        .profile-menu {
+            z-index: 50;
+        }
+
+        /* Ensure header stays above everything */
+        .fixed-header {
+            z-index: 60;
+        }
+
+        /* Updated Premium Button Styles for Mobile Menu */
+        .mobile-premium-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F40009, #8B0000);
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(244, 0, 9, 0.3);
+        }
+
+        .mobile-premium-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .mobile-premium-button:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(10%, 10%);
+        }
+
+        .mobile-premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
+        }
+
+        .mobile-premium-button:active {
+            transform: translateY(1px);
+        }
+
+        .mobile-premium-button .relative {
+            position: relative;
+        }
+
+        .mobile-premium-button i {
+            margin-left: 12px;
+            color: #FFD700;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .mobile-premium-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 223, 0, 0.7), transparent);
+        }
+
+        /* FIXED: Add styles for search results container to ensure full visibility */
+        #resultsContainer {
+            max-height: none;
+            overflow: visible;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Content Blur Overlay - NEW -->
+    <div class="content-blur-overlay" id="contentBlurOverlay"></div>
+
+    <header class="fixed-header bg-dark">
+        <div class="w-full h-[130px] px-4">
+            <div class="flex justify-between items-center h-full">
+                <div class="flex items-center h-full">
+                    <!-- Replace the hamburger icon with our animated version -->
+                    <div class="mr-4 text-white focus:outline-none block" id="mobileMenuToggle">
+                        <div class="hamburger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="logo-container mr-16">
+                        <a href="#" class="block relative">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL_E_2025-03-21_00.14.04_-_A_horror-themed_logo_with_the_text__Z_HORROR_._The_text_should_have_a_creepy__dripping_effect_similar_to_classic_horror_fonts.__Z__should_be_in_blood--removebg-preview-3yqnnNAoI4xSsYLF2UtRXuizVJd9Nf.png"
+                                alt="Z Horror Logo" class="logo-image">
+                        </a>
+                    </div>
+                    <nav class="hidden lg:flex items-center h-full">
+                        <div class="nav-item">
+                            <button
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 flex items-center text-2xl"
+                                id="browseToggle">
+                                تصفح
+                                <i class="fas fa-caret-down mr-2 text-sm transition-transform duration-300"></i>
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <button
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 flex items-center text-2xl"
+                                id="communityToggle">
+                                مجتمع
+                                <i class="fas fa-caret-down mr-2 text-sm transition-transform duration-300"></i>
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#"
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 text-2xl">
+                                مشهور
+                            </a>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#"
+                                class="px-7 py-4 text-white hover:text-accent transition-colors duration-300 text-2xl">
+                                جديد
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+                <div class="flex items-center h-full">
+                    <div class="flex items-center h-full">
+                        <div class="icon-wrapper cursor-pointer" id="searchToggle">
+                            <i class="fas fa-search text-white text-2xl"></i>
+                        </div>
+                        <div class="icon-wrapper cursor-pointer" id="profileToggle">
+                            <i class="fa-solid fa-user text-white text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modified Search Bar with Better Button Placement -->
+        <div class="search-bar" id="searchBar">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="search-container relative">
+                    <div class="flex items-center gap-4">
+                        <!-- Search Input with Buttons Outside -->
+                        <div class="flex-1 relative">
+                            <input type="text" id="searchInput" placeholder="ابحث عن قصص، ألعاب، أخبار..."
+                                class="search-input w-full bg-dark/50 border-2 border-gray-700 rounded-lg py-4 px-5 text-white text-lg focus:outline-none transition-all duration-300">
+                        </div>
+
+                        <!-- Search Button -->
+                        <button id="searchButton"
+                            class="search-btn bg-accent hover:bg-accent-hover text-white px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+                            <i class="fas fa-search text-lg"></i>
+                            <span>بحث</span>
+                        </button>
+
+                        <!-- Close Button -->
+                        <button
+                            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition-colors duration-300 flex items-center gap-2 whitespace-nowrap"
+                            id="closeSearch">
+                            <i class="fas fa-times text-lg"></i>
+                            <span>اغلاق</span>
+                        </button>
+                    </div>
+
+                    <!-- Search Filters -->
+                    <div class="mt-4 flex flex-wrap gap-2 items-center">
+                        <span class="text-base text-gray-400">تصفية:</span>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="all">الكل</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="stories">قصص</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="games">ألعاب</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="news">أخبار</button>
+                        <button
+                            class="search-filter text-base bg-dark/50 px-4 py-2 rounded-full text-white transition-all duration-300"
+                            data-filter="characters">شخصيات</button>
+                    </div>
+
+                    <!-- Search Suggestions -->
+                    <div class="search-suggestions mt-4" id="searchSuggestions">
+                        <!-- Search History -->
+                        <div class="mb-4">
+                            <h3 class="text-accent font-bold text-lg mb-2 search-category">البحث الأخير</h3>
+                            <div class="grid grid-cols-1 gap-2" id="searchHistory">
+                                <div
+                                    class="search-history-item flex items-center justify-between bg-dark/30 px-4 py-3 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-history text-gray-500 ml-3"></i>
+                                        <span class="text-white">قصص رعب قصيرة</span>
+                                    </div>
+                                    <button class="search-history-remove text-gray-500 hover:text-accent">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div
+                                    class="search-history-item flex items-center justify-between bg-dark/30 px-4 py-3 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-history text-gray-500 ml-3"></i>
+                                        <span class="text-white">أفضل ألعاب الرعب 2025</span>
+                                    </div>
+                                    <button class="search-history-remove text-gray-500 hover:text-accent">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Popular Searches -->
+                        <div class="mb-4">
+                            <h3 class="text-accent font-bold text-lg mb-2 search-category">بحث شائع</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">مصاصو
+                                    الدماء</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">قصص
+                                    رعب</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">جن</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">أشباح</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">قاتل
+                                    متسلسل</a>
+                                <a href="#"
+                                    class="search-tag text-base bg-dark/50 hover:bg-accent/20 px-4 py-2 rounded-full text-white hover:text-accent transition-all duration-300">ألعاب
+                                    رعب</a>
+                            </div>
+                        </div>
+
+                        <!-- Live Suggestions -->
+                        <div id="liveSuggestions" class="mb-4 hidden">
+                            <h3 class="text-accent font-bold text-lg mb-2 search-category">اقتراحات</h3>
+                            <div class="grid grid-cols-1 gap-2">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Search Results -->
+                        <div id="searchResults" class="mt-6 hidden">
+                            <h3 class="text-accent font-bold text-xl mb-4 search-category">نتائج البحث</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="resultsContainer">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="searchLoading" class="hidden mt-6">
+                            <div class="flex flex-col gap-4">
+                                <div class="search-loading h-20 bg-dark/30 rounded-lg"></div>
+                                <div class="search-loading h-20 bg-dark/30 rounded-lg"></div>
+                                <div class="search-loading h-20 bg-dark/30 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Browse Mega Menu -->
+        <div class="mega-menu" id="browseMegaMenu">
+            <div class="w-full px-4">
+                <div class="mega-menu-container">
+                    <div class="mega-menu-grid">
+                        <!-- Categories Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">الأقسام الرئيسية</h3>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-fire"></i>
+                                <span>قصص رعب مشهورة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-star"></i>
+                                <span>أحدث القصص</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-trophy"></i>
+                                <span>قصص مميزة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-users"></i>
+                                <span>مجتمع Z Horror</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>أحداث قادمة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-headphones"></i>
+                                <span>قصص صوتية</span>
+                            </a>
+                        </div>
+
+                        <!-- Horror Types Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">أنواع الرعب</h3>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-ghost"></i>
+                                <span>أشباح وأرواح</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-skull"></i>
+                                <span>رعب نفسي</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-book-dead"></i>
+                                <span>رعب خارق للطبيعة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-biohazard"></i>
+                                <span>زومبي وأوبئة</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-moon"></i>
+                                <span>مصاصو الدماء</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-mask"></i>
+                                <span>قتلة متسلسلون</span>
+                            </a>
+                        </div>
+
+                        <!-- Collections Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">مجموعات مميزة</h3>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-globe-asia"></i>
+                                <span>قصص رعب عربية</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-globe"></i>
+                                <span>قصص رعب عالمية</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-history"></i>
+                                <span>قصص تاريخية</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-mountain"></i>
+                                <span>أساطير وخرافات</span>
+                            </a>
+                            <a href="#" class="mega-menu-link">
+                                <i class="fas fa-video"></i>
+                                <span>قصص مقتبسة من أفلام</span>
+                            </a>
+
+                            <div class="mega-menu-divider"></div>
+                            <div class="mega-menu-tag-container">
+                                <a href="#" class="mega-menu-tag">جن</a>
+                                <a href="#" class="mega-menu-tag">شياطين</a>
+                                <a href="#" class="mega-menu-tag">أشباح</a>
+                                <a href="#" class="mega-menu-tag">مستذئبون</a>
+                                <a href="#" class="mega-menu-tag">سحر</a>
+                                <a href="#" class="mega-menu-tag">طقوس</a>
+                            </div>
+                        </div>
+
+                        <!-- Featured Content Column -->
+                        <div class="mega-menu-column">
+                            <div class="blood-drop"></div>
+                            <h3 class="mega-menu-title">محتوى مميز</h3>
+                            <div class="mega-menu-featured">
+                                <div class="mega-menu-badge">جديد</div>
+                                <img src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg"
+                                    alt="محتوى مميز" class="mega-menu-featured-img">
+                                <div class="mega-menu-featured-overlay">
+                                    <h4 class="mega-menu-featured-title">المملكة المفقودة: رحلة إلى عالم الظلام</h4>
+                                    <p class="mega-menu-featured-desc">في أعماق الغابة المظلمة، اكتشف "سامر" بوابة غامضة
+                                        تقوده إلى عالم مواز...</p>
+                                    <a href="#" class="mega-menu-featured-link">
+                                        <span>قراءة المزيد</span>
+                                        <i class="fas fa-arrow-left"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mega-menu-footer">
+                                <a href="#" class="mega-menu-view-all">
+                                    <span>عرض كل المحتوى</span>
+                                    <i class="fas fa-arrow-left"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Menu - New dropdown menu replacing News -->
+        <div class="community-menu" id="communityMenu">
+            <div class="community-menu-header">
+                <h3 class="community-menu-title">
+                    <i class="fas fa-users"></i>
+                    <span>مجتمع Z Horror</span>
+                </h3>
+            </div>
+            <div class="py-2">
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-comments"></i>
+                    <span>منتديات المجتمع</span>
+                </a>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-pen-fancy"></i>
+                    <span>مشاركة قصتك</span>
+                    <span class="community-badge">جديد</span>
+                </a>
+                <div class="community-menu-divider"></div>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-user-friends"></i>
+                    <span>مجموعات الكتابة</span>
+                </a>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>مسابقات الكتابة</span>
+                </a>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>فعاليات المجتمع</span>
+                </a>
+                <div class="community-menu-divider"></div>
+                <a href="#" class="community-menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>الدعم والمساعدة</span>
+                </a>
+            </div>
+            <div class="community-menu-footer">
+                <a href="#" class="community-menu-all">
+                    <span>استكشاف المجتمع</span>
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="content-padding">
+        <!-- Your page content goes here -->
+    </div>
+
+    <!-- Fixed: Mobile Menu Overlay positioned below the header -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden hidden" id="mobileMenuOverlay">
+        <!-- Modified: Mobile Menu with full height from header to bottom -->
+        <div class="menu-mobile h-full w-3/4 max-w-xs bg-dark border-r border-accent/20" id="mobileMenu">
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center">
+                <h3 class="text-white text-xl font-bold">القائمة</h3>
+                <button id="closeMobileMenu" class="text-white hover:text-accent transition-all duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto">
+                <a href="#"
+                    class="block px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg mb-1 transition-all duration-300 text-lg">مشهور</a>
+                <a href="#"
+                    class="block px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg mb-1 transition-all duration-300 text-lg">جديد</a>
+                <div class="mb-1">
+                    <button
+                        class="w-full flex justify-between items-center px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg transition-all duration-300 text-lg"
+                        data-submenu-id="animeTypes">
+                        <span>أنواع</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-300"
+                            id="animeTypesIcon"></i>
+                    </button>
+                    <div class="submenu bg-darker/50 rounded-lg mt-1 mr-4 overflow-hidden" id="animeTypes">
+                        <div class="p-2 grid grid-cols-2 gap-1">
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">أكشن</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مغامرات</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">كوميدي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">دراما</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">موسيقي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">رومانسي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">خيال
+                                علمي</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">سينين</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">شوجو</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">شونن</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">خارق
+                                للطبيعة</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">إثارة</a>
+                            <a href="#"
+                                class="text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">خيال</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-1">
+                    <button
+                        class="w-full flex justify-between items-center px-4 py-3 text-white hover:bg-accent/10 hover:text-accent rounded-lg transition-all duration-300 text-lg"
+                        data-submenu-id="communityMenuMobile">
+                        <span>مجتمع</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-300"
+                            id="communityMenuIcon"></i>
+                    </button>
+                    <div class="submenu bg-darker/50 rounded-lg mt-1 mr-4 overflow-hidden" id="communityMenuMobile">
+                        <div class="p-2">
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">منتديات</a>
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مشاركة
+                                قصتك</a>
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مجموعات
+                                الكتابة</a>
+                            <a href="#"
+                                class="block text-white hover:text-accent hover:bg-dark/50 px-3 py-2 text-base rounded transition-all duration-300">مسابقات</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-800 mt-4">
+                <!-- Updated Premium Button to match the user menu style -->
+                <div class="relative overflow-hidden rounded-xl mb-4">
+                    <div class="absolute inset-0 bg-gradient-radial from-accent/30 to-transparent opacity-50"></div>
+                    <button
+                        class="premium-button w-full py-5 px-5 rounded-xl relative overflow-hidden group text-xl font-bold shadow-lg shadow-accent/20">
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="relative">
+                                <i class="fas fa-crown text-yellow-300 text-3xl animate-float"></i>
+                            </div>
+                            <span>تجربة النسخة المدفوعة</span>
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-300/70 to-transparent">
+                        </div>
+                    </button>
+                </div>
+                <div class="flex justify-center gap-4 mt-4">
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-twitter text-2xl"></i></a>
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-facebook text-2xl"></i></a>
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-instagram text-2xl"></i></a>
+                    <a href="#" class="text-white hover:text-accent transition-colors duration-300"><i
+                            class="fab fa-discord text-2xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-menu fixed hidden" id="profileMenu">
+        <div class="profile-menu-header p-5 border-b border-gray-800/50 flex justify-between items-center relative">
+            <div class="blood-drip"></div>
+            <div class="blood-drip"></div>
+            <div class="blood-drip"></div>
+            <h3 class="text-white font-bold text-2xl flex items-center">
+                <i class="fas fa-user-circle text-accent mr-3 text-3xl"></i>
+                <span class="animate-glow">الحساب الشخصي</span>
+            </h3>
+            <button id="closeProfileMenu"
+                class="text-white hover:text-accent transition-all duration-300 transform hover:rotate-90 hover:scale-110 focus:outline-none">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <div class="p-5 space-y-6">
+            <div class="noise-bg"></div>
+            <div class="profile-section" data-delay="100">
+                <div
+                    class="menu-item bg-gradient-to-r from-dark to-darker hover:from-dark/80 hover:to-darker/80 text-white text-right p-5 rounded-xl mb-3 transition-all duration-300 border border-gray-800/50 hover:border-accent/30 shadow-lg hover:shadow-accent/10 group">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <div class="font-bold text-xl mb-1 group-hover:text-accent transition-colors duration-300">
+                                إنشاء حساب</div>
+                            <p class="text-gray-400 text-base">انضم مجانًا إلينا واستمتع بتجربة كاملة</p>
+                        </div>
+                        <div
+                            class="ml-4 bg-accent/10 p-3 rounded-full text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                            <i class="fas fa-user-plus text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="menu-item bg-gradient-to-r from-dark to-darker hover:from-dark/80 hover:to-darker/80 text-white text-right p-5 rounded-xl mb-3 transition-all duration-300 border border-gray-800/50 hover:border-accent/30 shadow-lg hover:shadow-accent/10 group">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <div class="font-bold text-xl mb-1 group-hover:text-accent transition-colors duration-300">
+                                تسجيل دخول</div>
+                            <p class="text-gray-400 text-base">منضم إلينا بالفعل، مرحبًا بك</p>
+                        </div>
+                        <div
+                            class="ml-4 bg-accent/10 p-3 rounded-full text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                            <i class="fas fa-sign-in-alt text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="menu-item bg-gradient-to-r from-dark to-darker hover:from-dark/80 hover:to-darker/80 text-white text-right p-5 rounded-xl mb-4 transition-all duration-300 border border-gray-800/50 hover:border-accent/30 shadow-lg hover:shadow-accent/10 group">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <div class="font-bold text-xl mb-1 group-hover:text-accent transition-colors duration-300">
+                                بطاقة الهدية</div>
+                            <p class="text-gray-400 text-base">اصرف بطاقة هديتك الآن</p>
+                        </div>
+                        <div
+                            class="ml-4 bg-accent/10 p-3 rounded-full text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                            <i class="fas fa-gift text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="200">
+                <div class="relative overflow-hidden rounded-xl mb-6">
+                    <div class="absolute inset-0 bg-gradient-radial from-accent/30 to-transparent opacity-50"></div>
+                    <button
+                        class="premium-button w-full py-5 px-5 rounded-xl relative overflow-hidden group text-xl font-bold shadow-lg shadow-accent/20">
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="relative">
+                                <i class="fas fa-crown text-yellow-300 text-3xl animate-float"></i>
+                            </div>
+                            <span>تجربة النسخة المدفوعة</span>
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-300/70 to-transparent">
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="400">
+                <div class="mb-2 flex items-center">
+                    <h4 class="text-accent font-bold text-xl">روابط سريعة</h4>
+                    <div class="flex-1 h-px bg-gradient-to-l from-accent/30 to-transparent ml-3"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-heart text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">المفضلة</span>
+                    </a>
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-list text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">قائمة المشاهدة</span>
+                    </a>
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-history text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">التاريخ</span>
+                    </a>
+                    <a href="#"
+                        class="quick-link flex items-center bg-dark/30 hover:bg-dark/50 p-4 rounded-lg transition-all duration-300">
+                        <i class="fas fa-cog text-accent mr-3 text-xl"></i>
+                        <span class="text-white text-lg">الإعدادات</span>
+                    </a>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="500">
+                <div class="mb-2 flex items-center">
+                    <h4 class="text-accent font-bold text-xl">تابعنا</h4>
+                    <div class="flex-1 h-px bg-gradient-to-l from-accent/30 to-transparent ml-3"></div>
+                </div>
+                <div class="flex justify-center gap-6 mt-4">
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-facebook text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-accent transition-colors duration-300 p-3">
+                        <i class="fab fa-discord text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="profile-section" data-delay="600">
+                <div
+                    class="bg-gradient-to-r from-dark/80 to-darker/80 rounded-xl p-5 border border-gray-800/50 shadow-lg mb-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-white font-bold text-lg mb-1">تطبيق Z Horror</h4>
+                            <p class="text-gray-400 text-sm">حمل التطبيق للجوال</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="#" class="bg-dark/50 hover:bg-dark p-2 rounded-lg transition-all duration-300">
+                                <i class="fab fa-google-play text-white text-xl"></i>
+                            </a>
+                            <a href="#" class="bg-dark/50 hover:bg-dark p-2 rounded-lg transition-all duration-300">
+                                <i class="fab fa-apple text-white text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-section text-center text-gray-500 text-sm mt-8 pb-6" data-delay="700">
+                Zoldyck v2.5.0 © 2025
+            </div>
+        </div>
+    </div>
+    <script>
+        // Sample data for search functionality
+        const searchData = {
+            stories: [
+                { id: 1, title: "ليلة الأشباح", category: "قصص", type: "رعب", image: "https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg", description: "قصة مرعبة عن منزل مسكون بالأشباح في قرية مهجورة" },
+                { id: 2, title: "الغابة المسكونة", category: "قصص", type: "رعب نفسي", image: "https://i.pinimg.com/564x/a5/9f/8b/a59f8b72a3c6e01be8c0c0c0c0c0c0c0.jpg", description: "مجموعة من الأصدقاء يضيعون في غابة غامضة تخفي أسرارًا مظلمة" },
+                { id: 3, title: "صرخة في الظلام", category: "قصص", type: "رعب خارق للطبيعة", image: "https://i.pinimg.com/564x/b6/7f/8c/b67f8c7c7c7c7c7c7c7c7c7c7c7c7c7c.jpg", description: "شاب يكتشف قدرات غريبة بعد حادث مروع يغير حياته للأبد" },
+                { id: 4, title: "الوجه الآخر", category: "قصص", type: "رعب نفسي", image: "https://i.pinimg.com/564x/c7/8f/9d/c78f9d8d8d8d8d8d8d8d8d8d8d8d8d8d.jpg", description: "طبيب نفسي يكتشف أن مريضه يخفي شخصية مظلمة وخطيرة" }
+            ],
+            games: [
+                { id: 5, title: "أرض الموتى", category: "ألعاب", type: "رعب بقاء", image: "https://i.pinimg.com/564x/d8/9f/0e/d89f0e0e0e0e0e0e0e0e0e0e0e0e0e0e.jpg", description: "لعبة رعب بقاء في عالم مليء بالزومبي والمخلوقات المرعبة" },
+                { id: 6, title: "الممر المظلم", category: "ألعاب", type: "رعب نفسي", image: "https://i.pinimg.com/564x/e9/0f/1f/e90f1f1f1f1f1f1f1f1f1f1f1f1f1f1f.jpg", description: "استكشف مستشفى نفسي مهجور مليء بالأسرار والذكريات المرعبة" },
+                { id: 7, title: "صدى الخوف", category: "ألعاب", type: "رعب بقاء", image: "https://i.pinimg.com/564x/f0/1f/2g/f01f2g2g2g2g2g2g2g2g2g2g2g2g2g.jpg", description: "واجه مخاوفك في قرية معزولة تسكنها مخلوقات غريبة" }
+            ],
+            news: [
+                { id: 8, title: "إعلان عن فيلم رعب جديد", category: "أخبار", type: "سينما", image: "https://i.pinimg.com/564x/g1/2f/3h/g12f3h3h3h3h3h3h3h3h3h3h3h3h3h.jpg", description: "كشف النقاب عن فيلم رعب جديد من إخراج مخرج شهير" },
+                { id: 9, title: "مسلسل رعب قادم على نتفليكس", category: "أخبار", type: "تلفزيون", image: "https://i.pinimg.com/564x/h2/3f/4i/h23f4i4i4i4i4i4i4i4i4i4i4i4i4i.jpg", description: "نتفليكس تعلن عن مسلسل رعب جديد مقتبس من رواية شهيرة" }
+            ],
+            characters: [
+                { id: 10, title: "الساحرة الشريرة", category: "شخصيات", type: "خيالي", image: "https://i.pinimg.com/564x/i3/4f/5j/i34f5j5j5j5j5j5j5j5j5j5j5j5j5j.jpg", description: "شخصية ساحرة شريرة من قصص الرعب الكلاسيكية" },
+                { id: 11, title: "مصاص الدماء الخالد", category: "شخصيات", type: "خيالي", image: "https://i.pinimg.com/564x/j4/5f/6k/j45f6k6k6k6k6k6k6k6k6k6k6k6k.jpg", description: "شخصية مصاص دماء عمره مئات السنين ويبحث عن ضحايا جدد" }
+            ]
+        };
+
+        // Suggestions based on input
+        const suggestions = {
+            "ر": ["رعب", "رواية", "رعب نفسي", "رعب خارق للطبيعة"],
+            "رع": ["رعب", "رعب نفسي", "رعب خارق للطبيعة"],
+            "قص": ["قصص", "قصص رعب", "قصص قصيرة", "قصص مرعبة"],
+            "قصص": ["قصص رعب", "قصص قصيرة", "قصص مرعبة", "قصص خيالية"],
+            "لع": ["لعبة", "لعبة رعب", "لعبة بقاء", "لعبة مغامرات"],
+            "م": ["مصاص دماء", "مستذئب", "مخلوقات", "مسلسل رعب"],
+            "مص": ["مصاص دماء", "مصير مظلم", "مصيدة الأرواح"],
+            "ش": ["شبح", "شياطين", "شخصيات رعب", "شر مطلق"],
+            "ج": ["جن", "جثة", "جريمة", "جنون"],
+            "أ": ["أشباح", "أرواح", "أساطير", "أفلام رعب"],
+            "خ": ["خوف", "خيال", "خارق للطبيعة", "خطر"]
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const searchSuggestions = document.getElementById('searchSuggestions');
+            const liveSuggestions = document.getElementById('liveSuggestions');
+            const searchResults = document.getElementById('searchResults');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const searchLoading = document.getElementById('searchLoading');
+            const searchFilters = document.querySelectorAll('.search-filter');
+            const contentBlurOverlay = document.getElementById('contentBlurOverlay');
+
+            // Initialize search filters
+            searchFilters[0].classList.add('active');
+
+            // Toggle search suggestions visibility
+            searchInput.addEventListener('focus', function () {
+                searchSuggestions.classList.add('active');
+            });
+
+            // Handle input changes for live suggestions
+            searchInput.addEventListener('input', function () {
+                const query = this.value.trim();
+
+                if (query.length > 0) {
+                    searchLoading.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        searchLoading.classList.add('hidden');
+                        liveSuggestions.classList.remove('hidden');
+                        const suggestionsContainer = liveSuggestions.querySelector('.grid');
+                        suggestionsContainer.innerHTML = '';
+
+                        let matchedSuggestions = [];
+                        for (const prefix in suggestions) {
+                            if (query.startsWith(prefix)) {
+                                matchedSuggestions = suggestions[prefix];
+                                break;
+                            }
+                        }
+
+                        if (matchedSuggestions.length === 0) {
+                            for (const prefix in suggestions) {
+                                if (prefix.includes(query) || query.includes(prefix)) {
+                                    matchedSuggestions = suggestions[prefix];
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (matchedSuggestions.length > 0) {
+                            matchedSuggestions.forEach(suggestion => {
+                                const suggestionItem = document.createElement('div');
+                                suggestionItem.className = 'suggestion-item flex items-center bg-dark/30 px-4 py-3 rounded-lg cursor-pointer';
+                                suggestionItem.innerHTML = `
+                                    <i class="fas fa-search text-gray-500 ml-3"></i>
+                                    <span class="text-white">${suggestion}</span>
+                                `;
+                                suggestionItem.addEventListener('click', function () {
+                                    searchInput.value = suggestion;
+                                    performSearch(suggestion);
+                                });
+                                suggestionsContainer.appendChild(suggestionItem);
+                            });
+                        } else {
+                            const noSuggestions = document.createElement('div');
+                            noSuggestions.className = 'text-gray-400 px-4 py-3';
+                            noSuggestions.textContent = 'لا توجد اقتراحات متطابقة';
+                            suggestionsContainer.appendChild(noSuggestions);
+                        }
+                    }, 500);
+                } else {
+                    liveSuggestions.classList.add('hidden');
+                    searchResults.classList.add('hidden');
+                }
+            });
+
+            // Search button click
+            document.getElementById('searchButton').addEventListener('click', function () {
+                const query = searchInput.value.trim();
+                if (query.length > 0) {
+                    performSearch(query);
+                }
+            });
+
+            // Enter key press in search input
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query.length > 0) {
+                        performSearch(query);
+                    }
+                }
+            });
+
+            // Filter buttons
+            searchFilters.forEach(filter => {
+                filter.addEventListener('click', function () {
+                    searchFilters.forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filterType = this.getAttribute('data-filter');
+                    const query = searchInput.value.trim();
+
+                    if (query.length > 0) {
+                        performSearch(query, filterType);
+                    }
+                });
+            });
+
+            // Search history item removal
+            document.querySelectorAll('.search-history-remove').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.parentElement.remove();
+                });
+            });
+
+            // Search history item click
+            document.querySelectorAll('.search-history-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    const query = this.querySelector('span').textContent;
+                    searchInput.value = query;
+                    performSearch(query);
+                });
+            });
+
+            // Perform search function
+            function performSearch(query, filterType = 'all') {
+                searchLoading.classList.remove('hidden');
+                searchResults.classList.add('hidden');
+                liveSuggestions.classList.add('hidden');
+
+                setTimeout(() => {
+                    searchLoading.classList.add('hidden');
+                    searchResults.classList.remove('hidden');
+                    resultsContainer.innerHTML = '';
+
+                    let results = [];
+                    if (filterType === 'all') {
+                        Object.values(searchData).forEach(category => {
+                            results = results.concat(category.filter(item =>
+                                item.title.includes(query) ||
+                                item.description.includes(query) ||
+                                item.type.includes(query) ||
+                                item.category.includes(query)
+                            ));
+                        });
+                    } else {
+                        results = searchData[filterType]?.filter(item =>
+                            item.title.includes(query) ||
+                            item.description.includes(query) ||
+                            item.type.includes(query)
+                        ) || [];
+                    }
+
+                    if (results.length > 0) {
+                        results.forEach((result, index) => {
+                            const resultCard = document.createElement('div');
+                            resultCard.className = 'search-result bg-dark/50 rounded-lg overflow-hidden border border-gray-800/50 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 group';
+                            resultCard.style.setProperty('--delay', index);
+
+                            resultCard.innerHTML = `
+                                <div class="relative overflow-hidden">
+                                    <img src="${result.image}" alt="${result.title}" class="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-110">
+                                    <div class="absolute top-2 right-2 bg-accent/80 text-white text-xs px-2 py-1 rounded-full">${result.category}</div>
+                                    <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="text-white font-bold text-lg group-hover:text-accent transition-colors duration-300">${result.title}</h3>
+                                        <span class="text-xs bg-dark/70 text-gray-300 px-2 py-1 rounded">${result.type}</span>
+                                    </div>
+                                    <p class="text-gray-400 text-sm mb-3 line-clamp-2">${result.description}</p>
+                                    <a href="#" class="text-accent hover:text-white text-sm font-bold transition-colors duration-300 flex items-center">
+                                        <span>عرض المزيد</span>
+                                        <i class="fas fa-arrow-left mr-2"></i>
+                                    </a>
+                                </div>
+                            `;
+
+                            resultsContainer.appendChild(resultCard);
+                            setTimeout(() => {
+                                resultCard.classList.add('active');
+                            }, 50 * index);
+                        });
+                    } else {
+                        const noResults = document.createElement('div');
+                        noResults.className = 'col-span-full text-center py-8';
+                        noResults.innerHTML = `
+                            <div class="text-accent text-5xl mb-4"><i class="fas fa-search"></i></div>
+                            <h3 class="text-white text-xl font-bold mb-2">لا توجد نتائج لـ "${query}"</h3>
+                            <p class="text-gray-400">حاول استخدام كلمات مفتاحية مختلفة أو تصفح الفئات المقترحة</p>
+                        `;
+                        resultsContainer.appendChild(noResults);
+                    }
+
+                    const searchHistory = document.getElementById('searchHistory');
+                    const historyItems = searchHistory.querySelectorAll('.search-history-item span');
+                    let exists = false;
+
+                    historyItems.forEach(item => {
+                        if (item.textContent === query) {
+                            exists = true;
+                        }
+                    });
+
+                    if (!exists) {
+                        const historyItem = document.createElement('div');
+                        historyItem.className = 'search-history-item flex items-center justify-between bg-dark/30 px-4 py-3 rounded-lg';
+                        historyItem.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fas fa-history text-gray-500 ml-3"></i>
+                                <span class="text-white">${query}</span>
+                            </div>
+                            <button class="search-history-remove text-gray-500 hover:text-accent">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+
+                        historyItem.addEventListener('click', function () {
+                            searchInput.value = query;
+                            performSearch(query);
+                        });
+
+                        historyItem.querySelector('.search-history-remove').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.parentElement.remove();
+                        });
+
+                        searchHistory.prepend(historyItem);
+                        if (searchHistory.children.length > 5) {
+                            searchHistory.removeChild(searchHistory.lastChild);
+                        }
+                    }
+                }, 800);
+            }
+
+            // Function to toggle content blur and disable scrolling
+            function toggleContentBlur(show) {
+                if (show) {
+                    contentBlurOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    contentBlurOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            // Function to close mobile menu
+            function closeMobileMenu() {
+                const hamburgerIcon = document.querySelector('#mobileMenuToggle .hamburger-icon');
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+                if (mobileMenu.classList.contains('active')) {
+                    hamburgerIcon.classList.remove('open');
+                    mobileMenu.classList.remove('active');
+                    setTimeout(() => {
+                        mobileMenuOverlay.classList.add('hidden');
+                    }, 300);
+                }
+            }
+
+            // Browse menu toggle with mobile menu close
+            document.getElementById('browseToggle').addEventListener('click', function () {
+                const megaMenu = document.getElementById('browseMegaMenu');
+                const communityMenu = document.getElementById('communityMenu');
+
+                if (communityMenu.classList.contains('active')) {
+                    communityMenu.classList.remove('active');
+                }
+
+                const isActive = megaMenu.classList.toggle('active');
+                toggleContentBlur(isActive);
+
+                closeMobileMenu(); // Close mobile menu if open
+                if (document.getElementById('searchBar').classList.contains('active')) {
+                    document.getElementById('searchBar').classList.remove('active');
+                }
+                if (document.getElementById('profileMenu').classList.contains('active')) {
+                    document.getElementById('profileMenu').classList.remove('active');
+                    document.getElementById('profileMenu').classList.add('hidden');
+                }
+            });
+
+            // Community menu toggle with mobile menu close
+            document.getElementById('communityToggle').addEventListener('click', function (e) {
+                e.stopPropagation();
+                const communityMenu = document.getElementById('communityMenu');
+                const megaMenu = document.getElementById('browseMegaMenu');
+
+                const rect = this.getBoundingClientRect();
+                communityMenu.style.right = (window.innerWidth - rect.right) + 'px';
+                communityMenu.style.left = 'auto';
+
+                if (megaMenu.classList.contains('active')) {
+                    megaMenu.classList.remove('active');
+                }
+
+                const isActive = communityMenu.classList.toggle('active');
+                toggleContentBlur(isActive);
+
+                closeMobileMenu(); // Close mobile menu if open
+                if (document.getElementById('searchBar').classList.contains('active')) {
+                    document.getElementById('searchBar').classList.remove('active');
+                }
+                if (document.getElementById('profileMenu').classList.contains('active')) {
+                    document.getElementById('profileMenu').classList.remove('active');
+                    document.getElementById('profileMenu').classList.add('hidden');
+                }
+            });
+
+            // Search toggle with mobile menu close
+            document.getElementById('searchToggle').addEventListener('click', function () {
+                const searchBar = document.getElementById('searchBar');
+                const megaMenu = document.getElementById('browseMegaMenu');
+                const communityMenu = document.getElementById('communityMenu');
+
+                if (megaMenu.classList.contains('active')) {
+                    megaMenu.classList.remove('active');
+                }
+                if (communityMenu.classList.contains('active')) {
+                    communityMenu.classList.remove('active');
+                }
+
+                const isActive = searchBar.classList.toggle('active');
+                toggleContentBlur(isActive);
+
+                closeMobileMenu(); // Close mobile menu if open
+                if (document.getElementById('profileMenu').classList.contains('active')) {
+                    document.getElementById('profileMenu').classList.remove('active');
+                    document.getElementById('profileMenu').classList.add('hidden');
+                }
+
+                if (searchBar.classList.contains('active')) {
+                    searchBar.querySelector('input').focus();
+                }
+            });
+
+            // Close search with blur removal
+            document.getElementById('closeSearch').addEventListener('click', function () {
+                document.getElementById('searchBar').classList.remove('active');
+                toggleContentBlur(false);
+            });
+
+            // Mobile menu toggle with closing other menus
+            document.getElementById('mobileMenuToggle').addEventListener('click', function () {
+                const hamburgerIcon = this.querySelector('.hamburger-icon');
+                hamburgerIcon.classList.toggle('open');
+                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+                if (document.getElementById('mobileMenu').classList.contains('active')) {
+                    document.getElementById('mobileMenu').classList.remove('active');
+                    setTimeout(() => {
+                        mobileMenuOverlay.classList.add('hidden');
+                        toggleContentBlur(false);
+                    }, 300);
+                } else {
+                    mobileMenuOverlay.classList.remove('hidden');
+                    document.getElementById('mobileMenu').classList.add('active');
+                    toggleContentBlur(true);
+
+                    // Close other menus when mobile menu opens
+                    document.getElementById('browseMegaMenu').classList.remove('active');
+                    document.getElementById('communityMenu').classList.remove('active');
+                    document.getElementById('searchBar').classList.remove('active');
+                    const profileMenu = document.getElementById('profileMenu');
+                    if (profileMenu.classList.contains('active')) {
+                        profileMenu.classList.remove('active');
+                        profileMenu.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Close mobile menu button
+            document.getElementById('closeMobileMenu').addEventListener('click', function () {
+                const hamburgerIcon = document.querySelector('#mobileMenuToggle .hamburger-icon');
+                hamburgerIcon.classList.remove('open');
+                document.getElementById('mobileMenu').classList.remove('active');
+                setTimeout(() => {
+                    document.getElementById('mobileMenuOverlay').classList.add('hidden');
+                    toggleContentBlur(false);
+                }, 300);
+            });
+
+            // Mobile menu overlay click with blur removal
+            document.getElementById('mobileMenuOverlay').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    const hamburgerIcon = document.querySelector('#mobileMenuToggle .hamburger-icon');
+                    hamburgerIcon.classList.remove('open');
+                    document.getElementById('mobileMenu').classList.remove('active');
+                    setTimeout(() => {
+                        this.classList.add('hidden');
+                        toggleContentBlur(false);
+                    }, 300);
+                }
+            });
+
+            // Profile menu toggle with mobile menu close
+            document.getElementById('profileToggle').addEventListener('click', function () {
+                const profileMenu = document.getElementById('profileMenu');
+                const megaMenu = document.getElementById('browseMegaMenu');
+                const communityMenu = document.getElementById('communityMenu');
+                const searchBar = document.getElementById('searchBar');
+
+                if (megaMenu.classList.contains('active')) {
+                    megaMenu.classList.remove('active');
+                }
+                if (communityMenu.classList.contains('active')) {
+                    communityMenu.classList.remove('active');
+                }
+                if (searchBar.classList.contains('active')) {
+                    searchBar.classList.remove('active');
+                }
+
+                profileMenu.classList.toggle('hidden');
+                const isActive = profileMenu.classList.toggle('active');
+                toggleContentBlur(isActive);
+
+                closeMobileMenu(); // Close mobile menu if open
+
+                if (profileMenu.classList.contains('active')) {
+                    setTimeout(() => {
+                        const sections = document.querySelectorAll('.profile-section');
+                        sections.forEach((section) => {
+                            const delay = parseInt(section.dataset.delay) || 0;
+                            setTimeout(() => section.classList.add('active'), delay);
+                        });
+                    }, 300);
+                }
+            });
+
+            // Close profile menu with blur removal
+            document.getElementById('closeProfileMenu').addEventListener('click', function () {
+                const profileMenu = document.getElementById('profileMenu');
+                const sections = document.querySelectorAll('.profile-section');
+                sections.forEach(section => section.classList.remove('active'));
+                setTimeout(() => {
+                    profileMenu.classList.remove('active');
+                    setTimeout(() => {
+                        profileMenu.classList.add('hidden');
+                        toggleContentBlur(false);
+                    }, 300);
+                }, 0);
+            });
+
+            // Prevent profile menu clicks from closing
+            document.getElementById('profileMenu').addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            // Content blur overlay click handler to close all menus
+            contentBlurOverlay.addEventListener('click', function () {
+                const megaMenu = document.getElementById('browseMegaMenu');
+                const communityMenu = document.getElementById('communityMenu');
+                const searchBar = document.getElementById('searchBar');
+                const profileMenu = document.getElementById('profileMenu');
+                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+                if (megaMenu.classList.contains('active')) {
+                    megaMenu.classList.remove('active');
+                }
+
+                if (communityMenu.classList.contains('active')) {
+                    communityMenu.classList.remove('active');
+                }
+
+                if (searchBar.classList.contains('active')) {
+                    searchBar.classList.remove('active');
+                }
+
+                if (profileMenu.classList.contains('active')) {
+                    const sections = document.querySelectorAll('.profile-section');
+                    sections.forEach(section => section.classList.remove('active'));
+                    setTimeout(() => {
+                        profileMenu.classList.remove('active');
+                        setTimeout(() => {
+                            profileMenu.classList.add('hidden');
+                        }, 300);
+                    }, 100);
+                }
+
+                if (!mobileMenuOverlay.classList.contains('hidden')) {
+                    const hamburgerIcon = document.querySelector('#mobileMenuToggle .hamburger-icon');
+                    hamburgerIcon.classList.remove('open');
+                    document.getElementById('mobileMenu').classList.remove('active');
+                    setTimeout(() => {
+                        mobileMenuOverlay.classList.add('hidden');
+                    }, 300);
+                }
+
+                toggleContentBlur(false);
+            });
+
+            // Document click handler to close menus
+            document.addEventListener('click', function (e) {
+                const megaMenu = document.getElementById('browseMegaMenu');
+                const communityMenu = document.getElementById('communityMenu');
+                const searchBar = document.getElementById('searchBar');
+                const profileMenu = document.getElementById('profileMenu');
+                let menuOpen = false;
+
+                if (megaMenu.classList.contains('active') && !e.target.closest('#browseMegaMenu') && !e.target.closest('#browseToggle')) {
+                    megaMenu.classList.remove('active');
+                    menuOpen = false;
+                } else if (megaMenu.classList.contains('active')) {
+                    menuOpen = true;
+                }
+
+                if (communityMenu.classList.contains('active') && !e.target.closest('#communityMenu') && !e.target.closest('#communityToggle')) {
+                    communityMenu.classList.remove('active');
+                    menuOpen = false;
+                } else if (communityMenu.classList.contains('active')) {
+                    menuOpen = true;
+                }
+
+                if (searchBar.classList.contains('active') && !e.target.closest('#searchBar') && !e.target.closest('#searchToggle')) {
+                    searchBar.classList.remove('active');
+                    menuOpen = false;
+                } else if (searchBar.classList.contains('active')) {
+                    menuOpen = true;
+                }
+
+                if (profileMenu.classList.contains('active') && !e.target.closest('#profileMenu') && !e.target.closest('#profileToggle')) {
+                    const sections = document.querySelectorAll('.profile-section');
+                    sections.forEach(section => section.classList.remove('active'));
+                    setTimeout(() => {
+                        profileMenu.classList.remove('active');
+                        setTimeout(() => {
+                            profileMenu.classList.add('hidden');
+                        }, 300);
+                    }, 100);
+                    menuOpen = false;
+                } else if (profileMenu.classList.contains('active')) {
+                    menuOpen = true;
+                }
+
+                toggleContentBlur(menuOpen);
+            });
+
+            // Submenu toggle functionality for mobile menu
+            document.querySelectorAll('[data-submenu-id]').forEach(button => {
+                button.addEventListener('click', function () {
+                    const submenuId = this.getAttribute('data-submenu-id');
+                    const submenu = document.getElementById(submenuId);
+                    const icon = this.querySelector('i');
+
+                    submenu.classList.toggle('active');
+                    icon.style.transform = submenu.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
+            });
+
+            // Initialize the hamburger menu visibility based on screen size
+            function initializeMenuVisibility() {
+                const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+                if (window.innerWidth <= 1024) {
+                    mobileMenuToggle.classList.remove('hidden');
+                } else {
+                    mobileMenuToggle.classList.add('hidden');
+                }
+            }
+
+            initializeMenuVisibility();
+            window.addEventListener('resize', initializeMenuVisibility);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل الملف الشخصي | Z Horror</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                        'accent-hover': '#d10007',
+                        'dark': '#121212',
+                        'darker': '#0a0a0a',
+                        'card': 'rgba(30, 30, 30, 0.6)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'blood-drip': 'bloodDrip 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(244, 0, 9, 0.5)' },
+                            '100%': { textShadow: '0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5)' },
+                        },
+                        bloodDrip: {
+                            '0%': { height: '0', opacity: 0 },
+                            '30%': { height: '30px', opacity: 1 },
+                            '60%': { height: '10px', opacity: 0.7 },
+                            '100%': { height: '0', opacity: 0 }
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #1e1f24;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F40009;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3333;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .section-title {
+            position: relative;
+            font-weight: 700;
+            color: #fff;
+            padding-right: 35px;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            background-color: #F40009;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -5px;
+            width: 70px;
+            height: 3px;
+            background-color: #F40009;
+        }
+
+        .red-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #F40009, transparent);
+            margin: 1.5rem 0;
+            border: none;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 0, 9, 0.3);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            position: relative;
+        }
+
+        .banner-container {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .banner-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .profile-pic-container {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            left: 50%;
+            top: 240px;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border: 4px solid #1e1f24;
+            overflow: visible;
+            transition: all 0.3s ease;
+        }
+
+        .profile-pic-container:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 0, 9, 0.4);
+            border-color: #F40009;
+        }
+
+        .profile-pic-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .profile-pic-container:hover img {
+            transform: scale(1.1);
+        }
+
+        .edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid #F40009;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .edit-icon:hover {
+            background-color: #F40009;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 15px rgba(244, 0, 9, 0.4);
+        }
+
+        .edit-icon i {
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .edit-icon:hover i {
+            transform: scale(1.1);
+            color: white;
+        }
+
+        .banner-edit-icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid #F40009;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-edit-icon:hover {
+            background-color: #F40009;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 15px rgba(244, 0, 9, 0.4);
+        }
+
+        .banner-edit-icon i {
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .banner-edit-icon:hover i {
+            transform: scale(1.1);
+            color: white;
+        }
+
+        .form-container {
+            background-color: rgba(20, 20, 20, 0.8);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-container label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #F40009;
+            font-size: 1.1rem;
+        }
+
+        .input-container input,
+        .input-container textarea {
+            width: 100%;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-container input:focus,
+        .input-container textarea:focus {
+            outline: none;
+            border-color: #F40009;
+            box-shadow: 0 0 15px rgba(244, 0, 9, 0.3);
+        }
+
+        .input-container textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .text-helper {
+            text-align: right;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F40009, #8B0000);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(244, 0, 9, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(10%, 10%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(244, 0, 9, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #F40009;
+            color: #F40009;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(244, 0, 9, 0.2);
+        }
+
+        .btn-outline:active {
+            transform: translateY(1px);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid rgba(244, 0, 9, 0.5);
+            color: white;
+            font-size: 1.25rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-button:hover {
+            background-color: #F40009;
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(244, 0, 9, 0.4);
+        }
+
+        .page-title-container {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 10px rgba(244, 0, 9, 0.5);
+            position: relative;
+            display: inline-block;
+            margin: 0;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #F40009, transparent);
+        }
+
+        .blood-drip {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background-color: #F40009;
+            border-radius: 0 0 2px 2px;
+            animation: bloodDrip 3s ease-in-out infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .blood-drip:nth-child(1) {
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .blood-drip:nth-child(2) {
+            left: 40%;
+            animation-delay: 1.2s;
+        }
+
+        .blood-drip:nth-child(3) {
+            left: 60%;
+            animation-delay: 2s;
+        }
+
+        .blood-drip:nth-child(4) {
+            left: 80%;
+            animation-delay: 1.5s;
+        }
+
+        .noise-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            width: 90%;
+            max-width: 800px;
+            background: linear-gradient(to bottom, #1a1a1a, #0a0a0a);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin: 2rem auto;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(244, 0, 9, 0.3);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+
+        .modal.active .modal-card {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 1.5rem;
+            border-bottom: 3px solid #F40009;
+            background: linear-gradient(to right, rgba(244, 0, 9, 0.2), transparent);
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            color: #F40009;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(244, 0, 9, 0.2);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            background: linear-gradient(to right, transparent, rgba(244, 0, 9, 0.1));
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-item {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .avatar-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(244, 0, 9, 0.3);
+        }
+
+        .avatar-item.selected {
+            border-color: #F40009;
+            box-shadow: 0 0 0 3px rgba(244, 0, 9, 0.3), 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .avatar-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-category {
+            margin-bottom: 2rem;
+        }
+
+        .avatar-category-title {
+            color: #F40009;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-right: 1.5rem;
+        }
+
+        .avatar-category-title::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: #F40009;
+            border-radius: 50%;
+        }
+
+        .banner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .banner-item {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(244, 0, 9, 0.3);
+        }
+
+        .banner-item.selected {
+            border-color: #F40009;
+            box-shadow: 0 0 0 3px rgba(244, 0, 9, 0.3), 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-category {
+            margin-bottom: 2rem;
+        }
+
+        .banner-category-title {
+            color: #F40009;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-right: 1.5rem;
+        }
+
+        .banner-category-title::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: #F40009;
+            border-radius: 50%;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #F40009, #8B0000);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(244, 0, 9, 0.3);
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(244, 0, 9, 0.4);
+        }
+
+        .modal-btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .modal-btn-secondary {
+            background: transparent;
+            border: 2px solid #ccc;
+            color: #ccc;
+        }
+
+        .modal-btn-secondary:hover {
+            background-color: rgba(204, 204, 204, 0.1);
+            color: white;
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .modal-btn-secondary:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 1rem;
+                border-radius: 0.75rem;
+            }
+
+            .banner-container {
+                height: 180px;
+            }
+
+            .profile-pic-container {
+                width: 120px;
+                height: 120px;
+                top: 180px;
+            }
+
+            .form-container {
+                padding: 3.5rem 1.5rem 1.5rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .avatar-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .banner-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                margin: 0.5rem;
+                border-radius: 0.5rem;
+            }
+
+            .banner-container {
+                height: 150px;
+            }
+
+            .profile-pic-container {
+                width: 100px;
+                height: 100px;
+                top: 150px;
+            }
+
+            .form-container {
+                padding: 3rem 1rem 1rem;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .edit-icon,
+            .banner-edit-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .edit-icon i,
+            .banner-edit-icon i {
+                font-size: 1rem;
+            }
+
+            .avatar-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .banner-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        @keyframes bloodDrip {
+            0% {
+                height: 0;
+                opacity: 0;
+            }
+
+            30% {
+                height: 30px;
+                opacity: 1;
+            }
+
+            60% {
+                height: 10px;
+                opacity: 0.7;
+            }
+
+            100% {
+                height: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Title -->
+    <div class="page-title-container">
+        <div class="blood-drip"></div>
+        <div class="blood-drip"></div>
+        <div class="blood-drip"></div>
+        <div class="blood-drip"></div>
+        <h1 class="page-title">تعديل الملف الشخصي</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-container">
+        <div class="noise-bg"></div>
+
+        <button class="back-button">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <div class="banner-container">
+            <img id="banner-img" src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg"
+                alt="صورة الغلاف">
+            <div class="banner-edit-icon" id="open-banner-modal">
+                <i class="fas fa-pen"></i>
+            </div>
+        </div>
+
+        <!-- Profile Picture -->
+        <div class="profile-pic-container">
+            <div class="profile-pic-inner">
+                <img id="profile-pic" src="https://i.pinimg.com/736x/9d/e5/d2/9de5d2ab40011b354914c778341e3bff.jpg"
+                    alt="الصورة الشخصية">
+            </div>
+            <div class="edit-icon" id="open-profile-modal">
+                <i class="fas fa-pen"></i>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-container">
+            <div class="input-container">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" placeholder="أدخل اسم المستخدم">
+                <div class="text-helper">أنشئ اسم مستخدم لمشاركته مع الآخرين. اختر اسمًا تحبه!</div>
+            </div>
+
+            <div class="red-line"></div>
+
+            <div class="input-container">
+                <label for="bio">السيرة الذاتية</label>
+                <textarea id="bio" placeholder="أخبر الآخرين عن نفسك!"></textarea>
+                <div class="text-helper">يمكنك كتابة نبذة عن نفسك، اهتماماتك، وأنواع القصص المفضلة لديك</div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-4 mt-8">
+                <button class="btn btn-primary">حفظ التغييرات</button>
+                <button class="btn btn-outline">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Picture Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">اختيار الصورة الشخصية</h3>
+                <button class="modal-close" id="close-profile-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-category">
+                    <h4 class="avatar-category-title">الدماء الحمراء</h4>
+                    <div class="avatar-grid">
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/8f/dc/4c/8fdc4c0e08c4d48eec77c295ea1fd2f4.jpg">
+                            <img src="https://i.pinimg.com/736x/8f/dc/4c/8fdc4c0e08c4d48eec77c295ea1fd2f4.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/12/f1/e1/12f1e1c8c59180272024813f4c8a99c5.jpg">
+                            <img src="https://i.pinimg.com/736x/12/f1/e1/12f1e1c8c59180272024813f4c8a99c5.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/e2/9f/d3/e29fd3eca3bdb9b1642811fa797851db.jpg">
+                            <img src="https://i.pinimg.com/736x/e2/9f/d3/e29fd3eca3bdb9b1642811fa797851db.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/42/3e/53/423e53bf5b622e99e1e7969bcb2ca917.jpg">
+                            <img src="https://i.pinimg.com/736x/42/3e/53/423e53bf5b622e99e1e7969bcb2ca917.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/4b/51/80/4b5180f5b481015c4212114ff75d7f6d.jpg">
+                            <img src="https://i.pinimg.com/736x/4b/51/80/4b5180f5b481015c4212114ff75d7f6d.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/85/5a/35/855a35027722fd5f4ae97fe281d1a49b.jpg">
+                            <img src="https://i.pinimg.com/736x/85/5a/35/855a35027722fd5f4ae97fe281d1a49b.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="avatar-category">
+                    <h4 class="avatar-category-title">الرعب الكلاسيكي</h4>
+                    <div class="avatar-grid">
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/82/a4/38/82a43831e35854f2297bc3ea6d2d9410.jpg">
+                            <img src="https://i.pinimg.com/736x/82/a4/38/82a43831e35854f2297bc3ea6d2d9410.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/94/b2/1a/94b21aa2617c9bce57847aa6f89a0434.jpg">
+                            <img src="https://i.pinimg.com/736x/94/b2/1a/94b21aa2617c9bce57847aa6f89a0434.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/f2/13/d4/f213d4835a9addd802c39dac964db4eb.jpg">
+                            <img src="https://i.pinimg.com/736x/f2/13/d4/f213d4835a9addd802c39dac964db4eb.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/84/71/23/847123ef7da3c74c510454ade301b08b.jpg">
+                            <img src="https://i.pinimg.com/736x/84/71/23/847123ef7da3c74c510454ade301b08b.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/6d/41/7d/6d417d97f4edb4351b5a755ea2dc3f79.jpg">
+                            <img src="https://i.pinimg.com/736x/6d/41/7d/6d417d97f4edb4351b5a755ea2dc3f79.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                        <div class="avatar-item"
+                            data-src="https://i.pinimg.com/736x/4b/b6/ef/4bb6ef982ebb6f7ac2321eed722daeea.jpg">
+                            <img src="https://i.pinimg.com/736x/4b/b6/ef/4bb6ef982ebb6f7ac2321eed722daeea.jpg"
+                                alt="صورة شخصية">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary" id="save-profile-pic">حفظ</button>
+                <button class="modal-btn modal-btn-secondary" id="cancel-profile-pic">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Modal -->
+    <div id="banner-modal" class="modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">اختيار صورة الغلاف</h3>
+                <button class="modal-close" id="close-banner-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="banner-category">
+                    <h4 class="banner-category-title">الدماء الحمراء</h4>
+                    <div class="banner-grid">
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/53/d4/5c/53d45c4ae5e46760c208777e3645d3e7.jpg">
+                            <img src="https://i.pinimg.com/736x/53/d4/5c/53d45c4ae5e46760c208777e3645d3e7.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/9c/ee/dd/9ceedd54e62659883574d1b03de71618.jpg">
+                            <img src="https://i.pinimg.com/736x/9c/ee/dd/9ceedd54e62659883574d1b03de71618.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/08/0a/c8/080ac813337c642942832db5f539edd9.jpg">
+                            <img src="https://i.pinimg.com/736x/08/0a/c8/080ac813337c642942832db5f539edd9.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/df/8b/a4/df8ba4c50dfd21a4007b2e9c2cbce512.jpg">
+                            <img src="https://i.pinimg.com/736x/df/8b/a4/df8ba4c50dfd21a4007b2e9c2cbce512.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="banner-category">
+                    <h4 class="banner-category-title">بانرات أخرى</h4>
+                    <div class="banner-grid">
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/66/48/4b/66484ba3f67d1e587a3a341ce11bf38b.jpg">
+                            <img src="https://i.pinimg.com/736x/66/48/4b/66484ba3f67d1e587a3a341ce11bf38b.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/b6/d2/2f/b6d22f0b7d98c548f78b357e3bc2d077.jpg">
+                            <img src="https://i.pinimg.com/736x/b6/d2/2f/b6d22f0b7d98c548f78b357e3bc2d077.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/e8/ad/d3/e8add3f512728a34d4f260a09504cd7f.jpg">
+                            <img src="https://i.pinimg.com/736x/e8/ad/d3/e8add3f512728a34d4f260a09504cd7f.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                        <div class="banner-item"
+                            data-src="https://i.pinimg.com/736x/90/d8/e4/90d8e496e7c152201fdfbe6b8ba64882.jpg">
+                            <img src="https://i.pinimg.com/736x/90/d8/e4/90d8e496e7c152201fdfbe6b8ba64882.jpg"
+                                alt="صورة غلاف">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary" id="save-banner">حفظ</button>
+                <button class="modal-btn modal-btn-secondary" id="cancel-banner">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables to store selected images
+        let selectedProfilePic = document.getElementById('profile-pic').src;
+        let selectedBanner = document.getElementById('banner-img').src;
+        let tempSelectedProfilePic = null;
+        let tempSelectedBanner = null;
+
+        // Function to disable scrolling
+        function disableScroll() {
+            document.body.classList.add('modal-open');
+        }
+
+        // Function to enable scrolling
+        function enableScroll() {
+            document.body.classList.remove('modal-open');
+        }
+
+        // Profile Picture Modal Functions
+        document.getElementById('open-profile-modal').addEventListener('click', function () {
+            const modal = document.getElementById('profile-modal');
+            modal.style.display = 'block';
+            disableScroll();
+
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+
+            tempSelectedProfilePic = selectedProfilePic;
+
+            document.querySelectorAll('.avatar-item').forEach(avatar => {
+                if (avatar.getAttribute('data-src') === selectedProfilePic) {
+                    avatar.classList.add('selected');
+                } else {
+                    avatar.classList.remove('selected');
+                }
+            });
+        });
+
+        document.getElementById('close-profile-modal').addEventListener('click', closeProfileModal);
+        document.getElementById('cancel-profile-pic').addEventListener('click', closeProfileModal);
+
+        function closeProfileModal() {
+            const modal = document.getElementById('profile-modal');
+            modal.classList.remove('active');
+            enableScroll();
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        document.getElementById('save-profile-pic').addEventListener('click', function () {
+            selectedProfilePic = tempSelectedProfilePic;
+            document.getElementById('profile-pic').src = selectedProfilePic;
+            closeProfileModal();
+        });
+
+        // Banner Modal Functions
+        document.getElementById('open-banner-modal').addEventListener('click', function () {
+            const modal = document.getElementById('banner-modal');
+            modal.style.display = 'block';
+            disableScroll();
+
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+
+            tempSelectedBanner = selectedBanner;
+
+            document.querySelectorAll('.banner-item').forEach(banner => {
+                if (banner.getAttribute('data-src') === selectedBanner) {
+                    banner.classList.add('selected');
+                } else {
+                    banner.classList.remove('selected');
+                }
+            });
+        });
+
+        document.getElementById('close-banner-modal').addEventListener('click', closeBannerModal);
+        document.getElementById('cancel-banner').addEventListener('click', closeBannerModal);
+
+        function closeBannerModal() {
+            const modal = document.getElementById('banner-modal');
+            modal.classList.remove('active');
+            enableScroll();
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        document.getElementById('save-banner').addEventListener('click', function () {
+            selectedBanner = tempSelectedBanner;
+            document.getElementById('banner-img').src = selectedBanner;
+            closeBannerModal();
+        });
+
+        // Avatar Selection
+        document.querySelectorAll('.avatar-item').forEach(avatar => {
+            avatar.addEventListener('click', function () {
+                document.querySelectorAll('.avatar-item').forEach(a => a.classList.remove('selected'));
+                this.classList.add('selected');
+                tempSelectedProfilePic = this.getAttribute('data-src');
+            });
+        });
+
+        // Banner Selection
+        document.querySelectorAll('.banner-item').forEach(banner => {
+            banner.addEventListener('click', function () {
+                document.querySelectorAll('.banner-item').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                tempSelectedBanner = this.getAttribute('data-src');
+            });
+        });
+
+        // Form Functions
+        document.querySelector('.btn-primary').addEventListener('click', function () {
+            const username = document.getElementById('username').value;
+            const bio = document.getElementById('bio').value;
+
+            if (!username) {
+                alert('الرجاء إدخال اسم المستخدم');
+                return;
+            }
+
+            alert('تم حفظ الملف الشخصي بنجاح!');
+        });
+
+        document.querySelector('.btn-outline').addEventListener('click', function () {
+            if (confirm('هل أنت متأكد أنك تريد الإلغاء؟ سيتم فقدان أي تغييرات غير محفوظة.')) {
+                document.getElementById('username').value = '';
+                document.getElementById('bio').value = '';
+            }
+        });
+
+        // Back Button
+        document.querySelector('.back-button').addEventListener('click', function () {
+            window.history.back();
+        });
+
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function (e) {
+                if (e.target === this) {
+                    if (this.id === 'profile-modal') {
+                        closeProfileModal();
+                    } else if (this.id === 'banner-modal') {
+                        closeBannerModal();
+                    }
+                }
+            });
+        });
+
+        // Handle escape key to close modals
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const profileModal = document.getElementById('profile-modal');
+                const bannerModal = document.getElementById('banner-modal');
+
+                if (profileModal.classList.contains('active')) {
+                    closeProfileModal();
+                } else if (bannerModal.classList.contains('active')) {
+                    closeBannerModal();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

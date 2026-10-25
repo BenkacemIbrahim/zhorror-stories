@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات الحساب</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 1.5rem 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .settings-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 0;
+            overflow: visible;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .banner-container {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-pic-container {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            left: 50%;
+            top: 180px;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .red-line {
+            width: 90%;
+            height: 2px;
+            background-color: #F40009;
+            margin: 20px auto;
+        }
+
+        .section-title {
+            color: #F40009;
+            font-weight: bold;
+            font-family: 'Cairo', sans-serif;
+            text-align: right;
+            margin: 20px;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .input-container input {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #444;
+            padding: 10px 0;
+            color: white;
+            font-size: 18px;
+            text-align: right;
+        }
+
+        .input-container input:focus {
+            outline: none;
+            border-bottom: 1px solid #F40009;
+        }
+
+        .input-container input:disabled {
+            opacity: 1;
+            /* Override default opacity reduction */
+            color: #666;
+            /* Dark grey color for disabled inputs */
+            background-color: transparent;
+            /* No background */
+            border-bottom: 1px solid #444;
+            /* Keep original border color */
+            cursor: not-allowed;
+        }
+
+        .text-helper {
+            text-align: right;
+            color: #ccc;
+            font-size: 14px;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: #F40009;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff3333;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #F40009;
+            color: #F40009;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+        }
+
+        .forgot-password {
+            color: #F40009;
+            text-align: right;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
+            transition: color 0.2s;
+        }
+
+        .forgot-password:hover {
+            color: #ff3333;
+            text-decoration: underline;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+
+        .toggle-label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #F40009;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .badge-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #F40009;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .privacy-policy {
+            padding: 0 20px 20px;
+            text-align: right;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 14px;
+            color: #ccc;
+            border-bottom: 1px solid #444;
+            margin-bottom: 20px;
+        }
+
+        .privacy-policy p {
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 20;
+        }
+
+        .back-button:hover {
+            color: #F40009;
+        }
+
+        #profile-pic {
+            border: 3px solid #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 55px;
+        }
+
+        .verification-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #F40009;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 2px solid white;
+            z-index: 20;
+        }
+
+        .police-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #0047AB;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 2px solid white;
+            z-index: 20;
+        }
+
+        /* Custom Dropdown Styling */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+            text-align: right;
+            cursor: pointer;
+        }
+
+        .custom-dropdown-selected {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #444;
+            transition: all 0.3s ease;
+        }
+
+        .custom-dropdown-selected:hover {
+            border-color: #F40009;
+        }
+
+        .custom-dropdown-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background-color: #222;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .custom-dropdown.active .custom-dropdown-options {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        .custom-dropdown-option {
+            padding: 12px 15px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-dropdown-option:hover {
+            background-color: #333;
+        }
+
+        .custom-dropdown-option.selected {
+            background-color: rgba(244, 0, 9, 0.1);
+            color: #F40009;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .custom-dropdown.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Badge Preview in Dropdown */
+        .badge-preview {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-left: 10px;
+            color: white;
+        }
+
+        .badge-preview.verified {
+            background-color: #F40009;
+        }
+
+        .badge-preview.police {
+            background-color: #0047AB;
+        }
+
+        .badge-preview.vip {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        /* Language Flag Icons */
+        .flag-icon {
+            width: 24px;
+            height: 16px;
+            margin-left: 10px;
+            border-radius: 2px;
+            object-fit: cover;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Fix for language option display */
+        .language-option {
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .banner-container {
+                height: 150px;
+            }
+
+            .profile-pic-container {
+                width: 100px;
+                height: 100px;
+                top: 150px;
+            }
+
+            .form-container {
+                padding-top: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-container {
+                width: 100%;
+            }
+
+            .banner-container {
+                height: 140px;
+            }
+
+            .profile-pic-container {
+                width: 90px;
+                height: 90px;
+                top: 140px;
+            }
+
+            .form-container {
+                padding-top: 45px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Title in the background -->
+    <h1 class="page-title">إعدادات الحساب</h1>
+
+    <!-- Main Content -->
+    <div class="settings-container">
+        <button class="back-button">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <!-- Banner Image -->
+        <div class="banner-container">
+            <img id="banner-img" src="https://i.pinimg.com/736x/73/56/47/735647015e3a1bdc9bf8877250e4e70d.jpg"
+                alt="صورة الغلاف" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Profile Picture with Verification Badge -->
+        <div class="profile-pic-container">
+            <img id="profile-pic" src="https://i.pinimg.com/736x/9d/e5/d2/9de5d2ab40011b354914c778341e3bff.jpg"
+                alt="الصورة الشخصية" class="w-full h-full rounded-full object-cover border-4 border-gray-900">
+            <div class="verification-badge" id="verification-badge">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-container">
+            <div class="px-8 py-6">
+                <!-- Account Section -->
+                <div class="section-title">معلومات الحساب</div>
+
+                <!-- Email -->
+                <div class="mb-6">
+                    <div class="input-container">
+                        <input type="email" value="toji.fushiguro@gmail.com" disabled>
+                    </div>
+                    <div class="text-helper">البريد الإلكتروني (لا يمكن تغييره)</div>
+                    <div class="forgot-password px-5">نسيت كلمة المرور؟</div>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="mb-6">
+                    <div class="input-container">
+                        <input type="tel" value="+212 64952 4561" disabled>
+                    </div>
+                    <div class="text-helper">رقم الهاتف (لا يمكن تغييره)</div>
+                </div>
+
+                <div class="red-line"></div>
+
+                <!-- Badge Section -->
+                <div class="section-title">شارة التحقق</div>
+
+                <!-- Badge Type Selection - Enhanced Dropdown -->
+                <div class="mb-6">
+                    <div class="input-container">
+                        <!-- Hidden original select for form submission -->
+                        <select id="badge-type" class="hidden">
+                            <option value="verified" selected>شارة التحقق</option>
+                            <option value="police">شارة الشرطة</option>
+                            <option value="vip">شارة VIP</option>
+                            <option value="none">بدون شارة</option>
+                        </select>
+
+                        <!-- Custom dropdown -->
+                        <div class="custom-dropdown" id="badge-dropdown">
+                            <div class="custom-dropdown-selected">
+                                <span>
+                                    <span class="badge-preview verified">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    شارة التحقق
+                                </span>
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </div>
+                            <div class="custom-dropdown-options">
+                                <div class="custom-dropdown-option selected" data-value="verified">
+                                    <span>
+                                        <span class="badge-preview verified">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        شارة التحقق
+                                    </span>
+                                    <i class="fas fa-check text-accent check-icon"></i>
+                                </div>
+                                <div class="custom-dropdown-option" data-value="police">
+                                    <span>
+                                        <span class="badge-preview police">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </span>
+                                        شارة الشرطة
+                                    </span>
+                                </div>
+                                <div class="custom-dropdown-option" data-value="vip">
+                                    <span>
+                                        <span class="badge-preview vip">
+                                            <i class="fas fa-crown"></i>
+                                        </span>
+                                        شارة VIP
+                                    </span>
+                                </div>
+                                <div class="custom-dropdown-option" data-value="none">
+                                    <span>بدون شارة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-helper">اختر نوع الشارة التي تريد عرضها على ملفك الشخصي</div>
+                </div>
+
+                <!-- Badge Toggle -->
+                <div class="toggle-container">
+                    <div class="flex items-center">
+                        <span class="badge-icon"><i class="fas fa-certificate"></i></span>
+                        <span class="toggle-label">إظهار الشارة</span>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="badge-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="red-line"></div>
+
+                <!-- Notifications Section -->
+                <div class="section-title">الإشعارات</div>
+
+                <!-- Email Notifications Toggle -->
+                <div class="toggle-container">
+                    <span class="toggle-label">إشعارات البريد الإلكتروني</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="email-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Push Notifications Toggle -->
+                <div class="toggle-container">
+                    <span class="toggle-label">إشعارات الدفع</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="push-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="red-line"></div>
+
+                <!-- Privacy Section -->
+                <div class="section-title">الخصوصية والأمان</div>
+
+                <!-- Account Privacy Toggle -->
+                <div class="toggle-container">
+                    <span class="toggle-label">حساب خاص</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="private-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Two-Factor Authentication Toggle -->
+                <div class="toggle-container">
+                    <span class="toggle-label">المصادقة الثنائية</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="2fa-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Location Services Toggle -->
+                <div class="toggle-container">
+                    <span class="toggle-label">خدمات الموقع</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="location-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="red-line"></div>
+
+                <!-- Privacy Policy -->
+                <div class="section-title">سياسة الخصوصية</div>
+                <div class="privacy-policy">
+                    <p>مرحبًا بك في سياسة الخصوصية الخاصة بنا. نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية.</p>
+                    <p>نقوم بجمع المعلومات التي تقدمها لنا عند إنشاء حساب، مثل اسمك وبريدك الإلكتروني ورقم هاتفك.</p>
+                    <p>نستخدم هذه المعلومات لتوفير خدماتنا وتحسينها، والتواصل معك، وضمان أمان حسابك.</p>
+                    <p>لن نشارك معلوماتك الشخصية مع أطراف ثالثة دون موافقتك، إلا في الحالات التي يتطلبها القانون.</p>
+                    <p>يمكنك دائمًا الوصول إلى معلوماتك وتحديثها أو طلب حذفها من خلال إعدادات حسابك.</p>
+                    <p>نستخدم تدابير أمنية مناسبة لحماية معلوماتك من الوصول غير المصرح به أو التغيير أو الإفصاح أو
+                        الإتلاف.</p>
+                </div>
+
+                <!-- Theme Toggle -->
+                <div class="toggle-container">
+                    <span class="toggle-label">الوضع المظلم</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="dark-mode-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Language Selection - Enhanced Dropdown -->
+                <div class="mb-6">
+                    <div class="input-container">
+                        <!-- Hidden original select for form submission -->
+                        <select id="language-select" class="hidden">
+                            <option value="ar" selected>العربية</option>
+                            <option value="en">English</option>
+                            <option value="fr">Français</option>
+                        </select>
+
+                        <!-- Custom dropdown -->
+                        <div class="custom-dropdown" id="language-dropdown">
+                            <div class="custom-dropdown-selected">
+                                <span class="language-option">
+                                    <img src="https://flagcdn.com/w40/sa.png" alt="العربية" class="flag-icon">
+                                    العربية
+                                </span>
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </div>
+                            <div class="custom-dropdown-options">
+                                <div class="custom-dropdown-option selected" data-value="ar">
+                                    <span class="language-option">
+                                        <img src="https://flagcdn.com/w40/sa.png" alt="العربية" class="flag-icon">
+                                        العربية
+                                    </span>
+                                    <i class="fas fa-check text-accent check-icon"></i>
+                                </div>
+                                <div class="custom-dropdown-option" data-value="en">
+                                    <span class="language-option">
+                                        <img src="https://flagcdn.com/w40/gb.png" alt="English" class="flag-icon">
+                                        English
+                                    </span>
+                                </div>
+                                <div class="custom-dropdown-option" data-value="fr">
+                                    <span class="language-option">
+                                        <img src="https://flagcdn.com/w40/fr.png" alt="Français" class="flag-icon">
+                                        Français
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-helper">اللغة المفضلة</div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="px-8 pb-8 space-y-4">
+                <button class="btn btn-primary">حفظ التغييرات</button>
+                <button class="btn btn-outline">تسجيل الخروج</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Forgot Password Functionality
+        document.querySelector('.forgot-password').addEventListener('click', function () {
+            alert('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+        });
+
+        // Badge Toggle Functionality
+        document.getElementById('badge-toggle').addEventListener('change', function () {
+            const verificationBadge = document.getElementById('verification-badge');
+            if (this.checked) {
+                verificationBadge.style.display = 'flex';
+            } else {
+                verificationBadge.style.display = 'none';
+            }
+        });
+
+        // Custom Dropdown for Badge Type and Language
+        function setupCustomDropdown(dropdownId, selectId, badgeUpdate = null) {
+            const dropdown = document.getElementById(dropdownId);
+            const select = document.getElementById(selectId);
+            const selected = dropdown.querySelector('.custom-dropdown-selected');
+            const options = dropdown.querySelectorAll('.custom-dropdown-option');
+
+            // Toggle dropdown
+            selected.addEventListener('click', function () {
+                dropdown.classList.toggle('active');
+                // Close other dropdowns
+                document.querySelectorAll('.custom-dropdown').forEach(el => {
+                    if (el.id !== dropdownId && el.classList.contains('active')) {
+                        el.classList.remove('active');
+                    }
+                });
+            });
+
+            // Select option
+            options.forEach(option => {
+                option.addEventListener('click', function () {
+                    const value = this.dataset.value;
+
+                    // Update selected text and HTML content
+                    if (this.querySelector('span').classList.contains('language-option')) {
+                        // For language options
+                        selected.querySelector('span').innerHTML = this.querySelector('span').innerHTML;
+                    } else if (value === 'none') {
+                        // For "بدون شارة" option
+                        selected.querySelector('span').innerHTML = '<span>بدون شارة</span>';
+                    } else {
+                        // For badge options
+                        selected.querySelector('span').innerHTML = this.querySelector('span').innerHTML;
+                    }
+
+                    // Update hidden select
+                    select.value = value;
+
+                    // Remove selected class and check icons from all options
+                    options.forEach(opt => {
+                        opt.classList.remove('selected');
+                        const existingCheck = opt.querySelector('.check-icon');
+                        if (existingCheck) existingCheck.remove();
+                    });
+
+                    // Add selected class and check icon to the clicked option
+                    this.classList.add('selected');
+                    const checkIcon = document.createElement('i');
+                    checkIcon.className = 'fas fa-check text-accent check-icon';
+                    this.appendChild(checkIcon);
+
+                    // Close dropdown
+                    dropdown.classList.remove('active');
+
+                    // Trigger change event on select
+                    const event = new Event('change');
+                    select.dispatchEvent(event);
+
+                    // Call badge update function if provided
+                    if (badgeUpdate && typeof badgeUpdate === 'function') {
+                        badgeUpdate(value);
+                    }
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
+
+            // Initialize - ensure the selected option has a checkmark
+            const initialSelectedOption = dropdown.querySelector('.custom-dropdown-option.selected');
+            if (initialSelectedOption) {
+                // Remove any existing check icons to avoid duplicates
+                const existingCheck = initialSelectedOption.querySelector('.check-icon');
+                if (existingCheck) existingCheck.remove();
+                // Add a fresh check icon
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check text-accent check-icon';
+                initialSelectedOption.appendChild(checkIcon);
+            }
+        }
+
+        // Badge Type Selection (Updated Function)
+        function updateBadge(badgeType) {
+            const verificationBadge = document.getElementById('verification-badge');
+            const badgeToggle = document.getElementById('badge-toggle');
+
+            // Reset badge styles first
+            verificationBadge.className = '';
+            verificationBadge.style.backgroundColor = '';
+            verificationBadge.style.color = '';
+
+            // Update badge based on selection
+            if (badgeType === 'verified') {
+                verificationBadge.className = 'verification-badge';
+                verificationBadge.innerHTML = '<i class="fas fa-check"></i>';
+                verificationBadge.style.display = 'flex'; // Always show when selected
+                badgeToggle.checked = true; // Sync toggle state
+            } else if (badgeType === 'police') {
+                verificationBadge.className = 'police-badge';
+                verificationBadge.innerHTML = '<i class="fas fa-shield-alt"></i>';
+                verificationBadge.style.display = 'flex'; // Always show when selected
+                badgeToggle.checked = true; // Sync toggle state
+            } else if (badgeType === 'vip') {
+                verificationBadge.className = 'verification-badge';
+                verificationBadge.style.backgroundColor = '#FFD700';
+                verificationBadge.style.color = '#000';
+                verificationBadge.innerHTML = '<i class="fas fa-crown"></i>';
+                verificationBadge.style.display = 'flex'; // Always show when selected
+                badgeToggle.checked = true; // Sync toggle state
+            } else if (badgeType === 'none') {
+                verificationBadge.style.display = 'none';
+                badgeToggle.checked = false; // Disable toggle when no badge is selected
+            }
+        }
+
+        // Initialize custom dropdowns
+        document.addEventListener('DOMContentLoaded', function () {
+            setupCustomDropdown('badge-dropdown', 'badge-type', updateBadge);
+            setupCustomDropdown('language-dropdown', 'language-select');
+
+            // Add animation to dropdowns on hover
+            document.querySelectorAll('.custom-dropdown-selected').forEach(el => {
+                el.addEventListener('mouseenter', function () {
+                    this.style.borderColor = '#F40009';
+                });
+
+                el.addEventListener('mouseleave', function () {
+                    if (!this.parentElement.classList.contains('active')) {
+                        this.style.borderColor = '#444';
+                    }
+                });
+            });
+        });
+
+        // Save Changes Button
+        document.querySelector('.btn-primary').addEventListener('click', function () {
+            // Collect all toggle states
+            const settings = {
+                badgeEnabled: document.getElementById('badge-toggle').checked,
+                badgeType: document.getElementById('badge-type').value,
+                language: document.getElementById('language-select').value,
+                emailNotifications: document.getElementById('email-toggle').checked,
+                pushNotifications: document.getElementById('push-toggle').checked,
+                privateAccount: document.getElementById('private-toggle').checked,
+                twoFactorAuth: document.getElementById('2fa-toggle').checked,
+                locationServices: document.getElementById('location-toggle').checked,
+                darkMode: document.getElementById('dark-mode-toggle').checked
+            };
+
+            console.log('Settings saved:', settings);
+            alert('تم حفظ الإعدادات بنجاح!');
+        });
+
+        // Logout Button
+        document.querySelector('.btn-outline').addEventListener('click', function () {
+            if (confirm('هل أنت متأكد أنك تريد تسجيل الخروج؟')) {
+                alert('تم تسجيل الخروج بنجاح');
+                // Redirect to login page in a real application
+                // window.location.href = 'login.html';
+            }
+        });
+
+        // Back Button
+        document.querySelector('.back-button').addEventListener('click', function () {
+            // In a real application, this would navigate back
+            // window.history.back();
+            alert('العودة إلى الصفحة السابقة');
+        });
+
+        // Dark Mode Toggle
+        document.getElementById('dark-mode-toggle').addEventListener('change', function () {
+            // This is just a visual indicator since the page is already dark
+            if (this.checked) {
+                document.body.style.backgroundColor = '#111';
+            } else {
+                document.body.style.backgroundColor = '#333';
+            }
+        });
+
+        // Add ripple effect to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                const x = e.clientX - e.target.getBoundingClientRect().left;
+                const y = e.clientY - e.target.getBoundingClientRect().top;
+
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.width = '1px';
+                ripple.style.height = '1px';
+                ripple.style.borderRadius = '50%';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.animation = 'ripple 0.6s linear';
+
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add keyframe animation for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(100);
+            opacity: 0;
+        }
+    }
+`;
+        document.head.appendChild(style);
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'922854783d1ced80',t:'MTc0MjMzODY1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
