@@ -4,7 +4,7 @@
 
 **An Arabic-language horror storytelling platform — dark, cinematic front end.**
 
-Static, multi-page, no build step. `lang="ar" dir="rtl"`.
+Static, multi-page, no framework. `lang="ar" dir="rtl"`.
 
 [Pages](#pages) · [Project structure](#project-structure) · [Getting started](#getting-started) · [Licence](#licence)
 
@@ -25,7 +25,13 @@ The site is a set of self-contained HTML documents: every page is a complete
 screen you can open directly in a browser. Styling and behaviour live in
 `assets/css` and `assets/js`, mirroring the page tree one file at a time.
 
+The header and footer are shared, so they are authored once in `components/` and
+copied into each page by `scripts/build.mjs`. The result is committed, which is
+why the pages still work as plain files.
+
 ## Screenshots
+
+Full-page captures, taken with the clock, animations and random seed frozen.
 
 | | |
 |---|---|
@@ -48,7 +54,7 @@ screen you can open directly in a browser. Styling and behaviour live in
 ```text
 zhorror-stories/
 ├── index.html                     # home page
-├── components/                    # reusable page fragments
+├── components/                    # shared fragments, embedded by scripts/build.mjs
 │   ├── header.html
 │   ├── header-authenticated.html
 │   ├── footer.html
@@ -76,13 +82,15 @@ zhorror-stories/
 │   │   ├── components/
 │   │   └── config/                # tailwind.config for each theme variant
 │   └── images/
+├── scripts/
+│   └── build.mjs                  # copies the components into the pages
 └── docs/
     └── screenshots/
 ```
 
-Each HTML file carries the document structure only. It references exactly three
-local assets: one stylesheet, one Tailwind theme config and one behaviour
-script — for example [pages/auth.html](pages/auth.html):
+Each HTML file carries the document structure only. A page references its own
+stylesheet, Tailwind theme config and behaviour script — for example
+[pages/auth.html](pages/auth.html):
 
 ```html
 <script src="https://cdn.tailwindcss.com"></script>
@@ -91,6 +99,14 @@ script — for example [pages/auth.html](pages/auth.html):
 ...
 <script src="../assets/js/pages/auth.js"></script>
 ```
+
+Pages that embed the shared header or footer pull in the matching component
+stylesheet and script too. That is the part `scripts/build.mjs` writes:
+a component exports its markup between `<!-- @partial:start -->` and
+`<!-- @partial:end -->`, and a page names the slot it wants with
+`<!-- @include header -->` / `<!-- @include footer -->`. Re-running the script
+regenerates those regions in place; the auth screens have neither and keep their
+own minimal copyright bar.
 
 The Tailwind theme is not identical everywhere: pages were designed in small
 groups, and the design tokens genuinely differ between groups (`fadeIn` is 0.8s
@@ -120,7 +136,7 @@ and are shared only by the pages that actually share them.
 
 ## Getting started
 
-No build step and no dependencies. Either open a page directly:
+No dependencies. Either open a page directly:
 
 ```bash
 start index.html
@@ -136,6 +152,12 @@ python -m http.server 8000
 ```
 
 Then browse to <http://localhost:8000>.
+
+### Shared components
+
+`node scripts/build.mjs` copies the header and footer out of `components/` into
+the pages listed in the script, between their `@include` markers. Run it after
+editing a component; run it twice and the second pass changes nothing.
 
 The pages run against no back end: forms, authentication and story data are
 front-end only, and the pages are not yet linked to each other — navigate

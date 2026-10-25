@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - README with screenshots, contributing guide and changelog.
 - MIT licence, `.gitignore`, `.gitattributes` and `.editorconfig`.
+- `scripts/build.mjs`, which embeds the shared header and footer components into
+  the pages.
+- The shared header and footer, now embedded in the nine pages that need site
+  chrome.
 
 ### Changed
 
@@ -21,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extracted each page's inline `<script>` blocks and duplicated Tailwind theme
   into `assets/js/` and `assets/js/config/`.
 - Served the previously remote-hosted images from `assets/images/`.
+- README screenshots are now full-page captures.
 
 ### Removed
 
@@ -30,3 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Stripped Cloudflare email-protection and challenge artefacts that had been
   saved into the original pages.
+- Component styles no longer leak into the pages that embed them.
+- The story reader's writer card and chapter menu no longer sit under the fixed
+  header.
