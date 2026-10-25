@@ -1,0 +1,57 @@
+// Tailwind CDN theme configuration.
+// Shared by: auth, forgot-password, reset-password
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#F40009',
+                        'accent-hover': '#d10007',
+                        'dark': '#121212',
+                        'darker': '#0a0a0a',
+                        'card': 'rgba(30, 30, 30, 0.6)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'blood-drip': 'bloodDrip 3s ease-in-out infinite',
+                        'slide-down': 'slideDown 0.3s ease-out forwards',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { textShadow: '0 0 5px rgba(244, 0, 9, 0.5)' },
+                            '100%': { textShadow: '0 0 15px rgba(244, 0, 9, 0.8), 0 0 20px rgba(244, 0, 9, 0.5)' },
+                        },
+                        bloodDrip: {
+                            '0%': { height: '0', opacity: 0 },
+                            '30%': { height: '30px', opacity: 1 },
+                            '60%': { height: '10px', opacity: 0.7 },
+                            '100%': { height: '0', opacity: 0 }
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    
