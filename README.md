@@ -10,8 +10,6 @@ Static, multi-page, no framework. `lang="ar" dir="rtl"`.
 
 </div>
 
-![Z Horror home page](docs/screenshots/home.jpg)
-
 ---
 
 ## Overview
@@ -33,10 +31,10 @@ why the pages still work as plain files.
 
 Full-page captures, taken with the clock, animations and random seed frozen.
 
-| | |
-|---|---|
-| **Welcome** — onboarding for new readers<br/>![Welcome page](docs/screenshots/welcome.jpg) | **Sign in** — login and registration<br/>![Sign in page](docs/screenshots/auth.jpg) |
-| **Story reader** — distraction-free reading view<br/>![Story reader page](docs/screenshots/story-reader.jpg) | **Profile** — reader dashboard and published stories<br/>![Profile page](docs/screenshots/profile.jpg) |
+| | | |
+|---|---|---|
+| **Home** — story feed and categories<br/>![Home page](docs/screenshots/home.jpg) | **Welcome** — onboarding for new readers<br/>![Welcome page](docs/screenshots/welcome.jpg) | **Sign in** — login and registration<br/>![Sign in page](docs/screenshots/auth.jpg) |
+| **Story reader** — distraction-free reading view<br/>![Story reader page](docs/screenshots/story-reader.jpg) | **Profile** — reader dashboard and published stories<br/>![Profile page](docs/screenshots/profile.jpg) | |
 
 ## Tech stack
 
