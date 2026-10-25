@@ -8,6 +8,16 @@ Static, multi-page, no framework. `lang="ar" dir="rtl"`.
 
 [Pages](#pages) · [Project structure](#project-structure) · [Getting started](#getting-started) · [Licence](#licence)
 
+<br/>
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Font Awesome](https://img.shields.io/badge/Font_Awesome-528DD7?style=flat-square&logo=fontawesome&logoColor=white)
+![Google Fonts](https://img.shields.io/badge/Google_Fonts-4285F4?style=flat-square&logo=googlefonts&logoColor=white)
+![Licence](https://img.shields.io/badge/Licence-MIT-3DA639?style=flat-square)
+
 </div>
 
 ---
