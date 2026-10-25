@@ -525,43 +525,6 @@ html {
     box-shadow: 0 10px 20px rgba(244, 0, 9, 0.3);
 }
 
-/* Back to Top Button */
-.back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(244, 0, 9, 0.8);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0;
-    visibility: hidden;
-    z-index: 100;
-    box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
-}
-
-.back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.back-to-top:hover {
-    background: #F40009;
-    transform: translate(-50%, -5px);
-    box-shadow: 0 10px 20px rgba(244, 0, 9, 0.5);
-}
-
-.back-to-top i {
-    font-size: 1.25rem;
-}
-
 /* Writer Profile Styles */
 .writer-profile {
     position: fixed;
