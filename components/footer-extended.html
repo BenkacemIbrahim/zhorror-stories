@@ -406,6 +406,107 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             animation: pulse 2s infinite;
         }
+
+        /* User account menu styles - UPDATED */
+        .user-account-menu {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(244, 0, 9, 0.2);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-account-link {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .user-account-link:hover {
+            background-color: rgba(244, 0, 9, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .user-account-link i {
+            margin-left: 0.5rem;
+            color: #F40009;
+            transition: all 0.3s ease;
+        }
+
+        .user-account-link:hover i {
+            transform: scale(1.2);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(244, 0, 9, 0.2);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #F40009;
+            margin-left: 0.75rem;
+        }
+
+        .logout-link {
+            background-color: rgba(244, 0, 9, 0.1);
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            color: #F40009;
+            font-weight: bold;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(244, 0, 9, 0.2);
+        }
+
+        /* Premium card styles - UPDATED */
+        .premium-card {
+            background: linear-gradient(to bottom, rgba(30, 30, 30, 0.8), rgba(20, 20, 20, 0.9));
+            border: 1px solid rgba(244, 0, 9, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(244, 0, 9, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #F40009, transparent);
+        }
+
+        .premium-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .premium-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .premium-title i {
+            margin-left: 0.5rem;
+            color: #FFD700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
     </style>
 </head>
 
@@ -433,7 +534,7 @@
                 <!-- Column 1: About -->
                 <div>
                     <a href="#" class="block mb-6 footer-logo">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL_E_2025-03-21_00.14.04_-_A_horror-themed_logo_with_the_text__Z_HORROR_._The_text_should_have_a_creepy__dripping_effect_similar_to_classic_horror_fonts.__Z__should_be_in_blood--removebg-preview-3yqnnNAoI4xSsYLF2UtRXuizVJd9Nf.png"
+                        <img src="../assets/images/logo-z-horror.png"
                             alt="Z Horror Logo" class="h-16 w-auto">
                     </a>
                     <p class="text-gray-400 mb-4 text-sm leading-relaxed">
@@ -488,45 +589,85 @@
                     </ul>
                 </div>
 
-                <!-- Column 4: Account & Premium -->
+                <!-- Column 4: Account & Premium - MODIFIED FOR LOGGED IN USER -->
                 <div>
-                    <!-- Account Section -->
-                    <h3 class="text-white text-xl font-bold mb-6 footer-title">الحساب</h3>
-                    <ul class="space-y-1 mb-6">
-                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">إنشاء حساب</a></li>
-                        <li><a href="#" class="footer-link text-gray-300 hover:text-accent">تسجيل الدّخول</a></li>
-                    </ul>
+                    <!-- Account Section - MODIFIED -->
+                    <h3 class="text-white text-xl font-bold mb-4 footer-title">الحساب</h3>
 
-                    <!-- Premium Subscription -->
-                    <div class="bg-darker/50 rounded-xl p-4 border border-accent/20 shadow-lg shadow-accent/5">
-                        <h4 class="text-white font-bold text-lg mb-3 flex items-center">
-                            <i class="fas fa-crown text-yellow-400 ml-2"></i>
-                            <span>اشترك في النسخة المميزة</span>
-                        </h4>
-                        <p class="text-gray-400 text-sm mb-4">
+                    <!-- User Account Menu - UPDATED: Made smaller -->
+                    <div class="user-account-menu mb-4">
+                        <!-- User Profile - UPDATED: Made smaller -->
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmpJTI2xnrxbGNcRWejkbciQcNvuHZPeINjw&s"
+                                    alt="صورة المستخدم" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-sm">toji foshugiro</h4>
+                                <p class="text-gray-400 text-xs">مستخدم منذ 2024</p>
+                            </div>
+                        </div>
+
+                        <!-- Account Links - UPDATED: Made more compact -->
+                        <div class="grid grid-cols-2 gap-1">
+                            <a href="#" class="user-account-link text-gray-300 hover:text-accent">
+                                <i class="fas fa-heart"></i>
+                                <span>المفضلة</span>
+                            </a>
+                            <a href="#" class="user-account-link text-gray-300 hover:text-accent">
+                                <i class="fas fa-user-edit"></i>
+                                <span>الملف الشخصي</span>
+                            </a>
+                            <a href="#" class="user-account-link text-gray-300 hover:text-accent">
+                                <i class="fas fa-bookmark"></i>
+                                <span>المشاهدة</span>
+                            </a>
+                            <a href="#" class="user-account-link text-gray-300 hover:text-accent">
+                                <i class="fas fa-history"></i>
+                                <span>السجل</span>
+                            </a>
+                        </div>
+
+                        <!-- Logout Link - Kept separate for emphasis -->
+                        <a href="#" class="user-account-link logout-link text-accent mt-2 text-center">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>تسجيل الخروج</span>
+                        </a>
+                    </div>
+
+                    <!-- Premium Subscription - UPDATED: Better placement and styling -->
+                    <div class="premium-card">
+                        <div class="premium-title">
+                            <i class="fas fa-crown text-xl"></i>
+                            <h4 class="text-white font-bold">اشترك في النسخة المميزة</h4>
+                        </div>
+
+                        <p class="text-gray-400 text-xs mb-3">
                             احصل على مزايا حصرية وقصص إضافية مع اشتراك Z Horror المميز
                         </p>
-                        <div class="grid grid-cols-2 gap-3 mb-4">
-                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center">
-                                <i class="fas fa-ad text-xl mb-2"></i>
+
+                        <div class="premium-features mb-3">
+                            <div class="premium-feature bg-dark/50 p-2 rounded-lg text-center">
+                                <i class="fas fa-ad text-lg mb-1"></i>
                                 <p class="text-white text-xs">بدون إعلانات</p>
                             </div>
-                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center">
-                                <i class="fas fa-book text-xl mb-2"></i>
+                            <div class="premium-feature bg-dark/50 p-2 rounded-lg text-center">
+                                <i class="fas fa-book text-lg mb-1"></i>
                                 <p class="text-white text-xs">محتوى حصري</p>
                             </div>
-                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center">
-                                <i class="fas fa-download text-xl mb-2"></i>
+                            <div class="premium-feature bg-dark/50 p-2 rounded-lg text-center">
+                                <i class="fas fa-download text-lg mb-1"></i>
                                 <p class="text-white text-xs">تحميل القصص</p>
                             </div>
-                            <div class="premium-feature bg-dark/50 p-3 rounded-lg text-center relative">
+                            <div class="premium-feature bg-dark/50 p-2 rounded-lg text-center relative">
                                 <span class="premium-badge">جديد</span>
-                                <i class="fas fa-headphones text-xl mb-2"></i>
+                                <i class="fas fa-headphones text-lg mb-1"></i>
                                 <p class="text-white text-xs">قصص صوتية</p>
                             </div>
                         </div>
+
                         <button
-                            class="premium-btn w-full py-3 px-4 rounded-lg text-white font-bold flex items-center justify-center">
+                            class="premium-btn w-full py-2 px-4 rounded-lg text-white font-bold flex items-center justify-center text-sm">
                             <i class="fas fa-crown text-yellow-400 ml-2 animate-float"></i>
                             <span>اشترك الآن</span>
                         </button>
@@ -597,6 +738,17 @@
             });
 
             feature.addEventListener('mouseleave', function () {
+                this.querySelector('i').classList.remove('animate-pulse');
+            });
+        });
+
+        // User account links hover effects
+        document.querySelectorAll('.user-account-link').forEach(link => {
+            link.addEventListener('mouseenter', function () {
+                this.querySelector('i').classList.add('animate-pulse');
+            });
+
+            link.addEventListener('mouseleave', function () {
                 this.querySelector('i').classList.remove('animate-pulse');
             });
         });
