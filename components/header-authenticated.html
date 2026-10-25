@@ -13,6 +13,7 @@
 </head>
 
 <body class="component-preview">
+    <!-- @partial:start -->
     <!-- Content Blur Overlay - NEW -->
     <div class="content-blur-overlay" id="contentBlurOverlay"></div>
 
@@ -32,8 +33,7 @@
                     <!-- MODIFIED: Added mobile-logo-container class for mobile adjustment -->
                     <div class="logo-container mr-16 mobile-logo-container">
                         <a href="#" class="block relative">
-                            <img src="../assets/images/logo-z-horror.png"
-                                alt="Z Horror Logo" class="logo-image">
+                            <img src="../assets/images/logo-z-horror.png" alt="Z Horror Logo" class="logo-image">
                         </a>
                     </div>
                     <nav class="hidden lg:flex items-center h-full">
@@ -427,10 +427,6 @@
         </div>
     </header>
 
-    <div class="content-padding">
-        <!-- Your page content goes here -->
-    </div>
-
     <!-- Fixed: Mobile Menu Overlay positioned below the header -->
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden hidden" id="mobileMenuOverlay">
         <!-- Modified: Mobile Menu with full height from header to bottom -->
@@ -644,6 +640,13 @@
                 Zoldyck v2.5.0 © 2025
             </div>
         </div>
+    </div>
+
+    <!-- @partial:end -->
+
+    <!-- Standalone preview only: the pages supply their own content here. -->
+    <div class="content-padding">
+        <!-- Your page content goes here -->
     </div>
 
     <script src="../assets/js/components/header-authenticated.js"></script>
