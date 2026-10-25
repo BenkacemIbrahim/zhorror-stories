@@ -528,8 +528,8 @@ html {
 /* Writer Profile Styles */
 .writer-profile {
     position: fixed;
-    top: 50px;
-    /* Reduced from 120px to move it higher */
+    top: 140px;
+    /* Clears the 130px fixed header */
     right: 30px;
     width: 280px;
     background: rgba(18, 18, 18, 0.9);
@@ -792,8 +792,8 @@ html {
 /* Chapter Menu Styles */
 .chapter-menu-container {
     position: sticky;
-    top: 4px;
-    /* Space for the progress bar */
+    top: 134px;
+    /* Space for the fixed header and the progress bar */
     z-index: 999;
     width: 100%;
     display: flex;
@@ -1366,4 +1366,3 @@ html {
         opacity: 0;
     }
 }
-    
