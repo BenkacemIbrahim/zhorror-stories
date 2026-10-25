@@ -1,611 +1,611 @@
 /* Z Horror - styles for index.html
-   Extracted verbatim from the page's original inline <style> block. */
-    body {
-      background-color: #121212;
-      color: #fff;
-      font-family: 'Cairo', sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+      Extracted verbatim from the page's original inline <style> block. */
+body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #F40009;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff3333;
+}
+
+/* Section Title Styles */
+.section-title {
+    position: relative;
+    font-weight: 700;
+    color: #fff;
+    padding-right: 35px;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    background-color: #F40009;
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.8;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    width: 70px;
+    height: 3px;
+    background-color: #F40009;
+}
+
+/* Red Line */
+.red-line {
+    width: 70%;
+    height: 2px;
+    margin-right: 30px;
+    background-color: #F40009;
+    margin-bottom: 15px;
+    border: none;
+}
+
+/* Card Hover Effects */
+.story-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.story-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+    z-index: 1;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(244, 0, 9, 0.3);
+}
+
+.story-card:hover::before {
+    opacity: 0.9;
+}
+
+.story-card:hover .card-content {
+    transform: translateY(-10px);
+}
+
+.story-card:hover .read-more {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.read-more {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+/* Slider Styles */
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 1.5rem 0;
+    direction: rtl;
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+}
+
+.slider {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem 0;
+    scroll-behavior: smooth;
+}
+
+.slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* Featured Section */
+.featured-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.featured-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    padding: 2rem;
+    z-index: 2;
+}
+
+.featured-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #F40009, #ff5757);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    z-index: 3;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: rotate(-5deg);
+}
+
+/* Category Pills */
+.category-pill {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    background: linear-gradient(135deg, #F40009, #ff5757);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.category-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(244, 0, 9, 0.4);
+}
+
+/* Animated Background */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.1;
+    background: radial-gradient(circle at 50% 50%, rgba(244, 0, 9, 0.3) 0%, transparent 80%);
+}
+
+/* Genre Label */
+.genre-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: linear-gradient(135deg, #8B0000, #DC143C, #FF6347);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+/* Card Styles from Original */
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 500px;
+    height: 100%;
+    background-color: transparent;
+    overflow: hidden;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(244, 0, 9, 0.2);
+}
+
+.card img {
+    width: 150px;
+    min-width: 150px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+    background-color: #333;
+    transition: all 0.3s ease;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
+}
+
+.card .image-container {
+    position: relative;
+    width: 150px;
+    height: 230px;
+    flex-shrink: 0;
+}
+
+.card-contentss {
+    margin-top: 0;
+    width: 100%;
+    padding: 1rem;
+    padding-top: 0px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-contentss {
+    transform: translateY(-5px);
+}
+
+.card-titlee {
+    font-size: 18px;
+    color: #F40009;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: right;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding: 0 0.5rem;
+}
+
+/* MODIFIED: Added more space between icon and text in card details */
+.card-details {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    /* Increased from 0.5rem to 0.75rem */
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    padding-right: 0.5rem;
+}
+
+.card-details i {
+    color: #F40009;
+    min-width: 16px;
+    /* Added min-width to ensure consistent spacing */
+}
+
+.card-summary {
+    font-size: 0.85rem;
+    color: #ccc;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    padding: 0 0.5rem;
+    font-family: 'Cairo', sans-serif;
+}
+
+/* Recent Stories Section */
+.recent-stories {
+    margin-bottom: 2rem;
+}
+
+/* Last Uploaded Section */
+.last-uploaded {
+    margin-bottom: 2rem;
+}
+
+/* Your Favorites Section */
+.your-favorites {
+    margin-bottom: 2rem;
+}
+
+/* MODIFIED: Added more space between icons and text in all sections */
+.flex.items-center.gap-1 {
+    gap: 0.5rem !important;
+    /* Increased from 0.25rem to 0.5rem */
+}
+
+.flex.items-center.gap-2 {
+    gap: 0.75rem !important;
+    /* Increased from 0.5rem to 0.75rem */
+}
+
+.flex.items-center.gap-3 {
+    gap: 1rem !important;
+    /* Increased from 0.75rem to 1rem */
+}
+
+.flex.items-center.gap-4 {
+    gap: 1.25rem !important;
+    /* Increased from 1rem to 1.25rem */
+}
+
+/* MODIFIED: Added specific spacing for icons in story cards */
+.story-card .flex.items-center {
+    gap: 0.75rem !important;
+}
+
+.story-card i {
+    min-width: 16px;
+    /* Added min-width to ensure consistent spacing */
+}
+
+/* NEW: Enhanced Scroll Buttons for Sliders */
+.scroll-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 10;
+    transform: translateY(-50%);
+}
+
+.scroll-buttons button {
+    position: relative;
+    border: none;
+    cursor: pointer;
+    pointer-events: all;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.scroll-buttons button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='none' stroke='%23ff0000' stroke-width='3' d='M20,50 L80,50 M80,50 L60,30 M80,50 L60,70'/%3E%3C/svg%3E") no-repeat center;
+    background-size: 0;
+    transform: rotate(180deg);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.scroll-buttons button.scroll-left::before {
+    transform: rotate(0);
+}
+
+.scroll-buttons button i {
+    position: relative;
+    z-index: 2;
+    color: #ff0000;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.scroll-buttons button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 0, 0, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.scroll-buttons button:hover::after {
+    width: 150%;
+    height: 150%;
+}
+
+.scroll-buttons button:hover i {
+    color: #ffffff;
+    transform: scale(1.2);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.scroll-buttons button:hover::before {
+    background-size: 100%;
+    opacity: 1;
+}
+
+.scroll-buttons button:active i {
+    transform: scale(0.9);
+}
+
+.scroll-buttons button.scroll-right {
+    animation: floatRight 3s ease-in-out infinite;
+}
+
+.scroll-buttons button.scroll-left {
+    animation: floatLeft 3s ease-in-out infinite;
+}
+
+@keyframes floatRight {
+
+    0%,
+    100% {
+        transform: translateX(0);
     }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    50% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes floatLeft {
+
+    0%,
+    100% {
+        transform: translateX(0);
     }
 
-    ::-webkit-scrollbar-track {
-      background: #1e1e1e;
+    50% {
+        transform: translateX(-5px);
     }
+}
 
-    ::-webkit-scrollbar-thumb {
-      background: #F40009;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #ff3333;
-    }
-
-    /* Section Title Styles */
+/* Responsive Adjustments */
+@media (max-width: 768px) {
     .section-title {
-      position: relative;
-      font-weight: 700;
-      color: #fff;
-      padding-right: 35px;
-      margin-bottom: 0.5rem;
-      display: inline-block;
+        font-size: 1.25rem;
+        padding-right: 30px;
     }
 
     .section-title::before {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 25px;
-      height: 25px;
-      background-color: #F40009;
-      border-radius: 50%;
-      z-index: -1;
-      opacity: 0.8;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      bottom: -5px;
-      width: 70px;
-      height: 3px;
-      background-color: #F40009;
-    }
-
-    /* Red Line */
-    .red-line {
-      width: 70%;
-      height: 2px;
-      margin-right: 30px;
-      background-color: #F40009;
-      margin-bottom: 15px;
-      border: none;
-    }
-
-    /* Card Hover Effects */
-    .story-card {
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .story-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
-      z-index: 1;
-      opacity: 0.7;
-      transition: opacity 0.3s ease;
-    }
-
-    .story-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(244, 0, 9, 0.3);
-    }
-
-    .story-card:hover::before {
-      opacity: 0.9;
-    }
-
-    .story-card:hover .card-content {
-      transform: translateY(-10px);
-    }
-
-    .story-card:hover .read-more {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .card-content {
-      position: relative;
-      z-index: 2;
-      transition: transform 0.3s ease;
-    }
-
-    .read-more {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-    }
-
-    /* Slider Styles */
-    .slider-container {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      padding: 1.5rem 0;
-      direction: rtl;
-      background-color: rgba(0, 0, 0, 0.4);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      margin-bottom: 2rem;
-      border-radius: 0.5rem;
-    }
-
-    .slider {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 1rem 0;
-      scroll-behavior: smooth;
-    }
-
-    .slider::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Featured Section */
-    .featured-container {
-      position: relative;
-      overflow: hidden;
-      border-radius: 0.5rem;
-      margin-bottom: 2rem;
+        width: 20px;
+        height: 20px;
     }
 
     .featured-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-      padding: 2rem;
-      z-index: 2;
+        padding: 1rem;
     }
 
-    .featured-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: linear-gradient(135deg, #F40009, #ff5757);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      font-weight: bold;
-      z-index: 3;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      transform: rotate(-5deg);
-    }
-
-    /* Category Pills */
-    .category-pill {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-      margin-right: 0.5rem;
-      background: linear-gradient(135deg, #F40009, #ff5757);
-      color: white;
-      transition: all 0.3s ease;
-    }
-
-    .category-pill:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(244, 0, 9, 0.4);
-    }
-
-    /* Animated Background */
-    .animated-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.1;
-      background: radial-gradient(circle at 50% 50%, rgba(244, 0, 9, 0.3) 0%, transparent 80%);
-    }
-
-    /* Genre Label */
-    .genre-label {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: linear-gradient(135deg, #8B0000, #DC143C, #FF6347);
-      color: white;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 5px;
-      border-radius: 4px;
-      z-index: 2;
-    }
-
-    /* Card Styles from Original */
     .card {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 1rem;
-      width: 500px;
-      height: 100%;
-      background-color: transparent;
-      overflow: hidden;
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      padding: 1rem;
-      transition: transform 0.3s ease;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(244, 0, 9, 0.2);
+        width: 450px;
     }
 
     .card img {
-      width: 150px;
-      min-width: 150px;
-      height: 230px;
-      object-fit: cover;
-      border-radius: 8px;
-      position: relative;
-      z-index: 1;
-      background-color: #333;
-      transition: all 0.3s ease;
-    }
-
-    .card:hover img {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(244, 0, 9, 0.3);
-    }
-
-    .card .image-container {
-      position: relative;
-      width: 150px;
-      height: 230px;
-      flex-shrink: 0;
-    }
-
-    .card-contentss {
-      margin-top: 0;
-      width: 100%;
-      padding: 1rem;
-      padding-top: 0px;
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover .card-contentss {
-      transform: translateY(-5px);
-    }
-
-    .card-titlee {
-      font-size: 18px;
-      color: #F40009;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      text-align: right;
-      overflow-wrap: break-word;
-      word-break: break-word;
-      padding: 0 0.5rem;
-    }
-
-    /* MODIFIED: Added more space between icon and text in card details */
-    .card-details {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      /* Increased from 0.5rem to 0.75rem */
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-      padding-right: 0.5rem;
-    }
-
-    .card-details i {
-      color: #F40009;
-      min-width: 16px;
-      /* Added min-width to ensure consistent spacing */
-    }
-
-    .card-summary {
-      font-size: 0.85rem;
-      color: #ccc;
-      line-height: 1.2;
-      margin-bottom: 0.5rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      line-clamp: 5;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: right;
-      padding: 0 0.5rem;
-      font-family: 'Cairo', sans-serif;
-    }
-
-    /* Recent Stories Section */
-    .recent-stories {
-      margin-bottom: 2rem;
-    }
-
-    /* Last Uploaded Section */
-    .last-uploaded {
-      margin-bottom: 2rem;
-    }
-
-    /* Your Favorites Section */
-    .your-favorites {
-      margin-bottom: 2rem;
-    }
-
-    /* MODIFIED: Added more space between icons and text in all sections */
-    .flex.items-center.gap-1 {
-      gap: 0.5rem !important;
-      /* Increased from 0.25rem to 0.5rem */
-    }
-
-    .flex.items-center.gap-2 {
-      gap: 0.75rem !important;
-      /* Increased from 0.5rem to 0.75rem */
-    }
-
-    .flex.items-center.gap-3 {
-      gap: 1rem !important;
-      /* Increased from 0.75rem to 1rem */
-    }
-
-    .flex.items-center.gap-4 {
-      gap: 1.25rem !important;
-      /* Increased from 1rem to 1.25rem */
-    }
-
-    /* MODIFIED: Added specific spacing for icons in story cards */
-    .story-card .flex.items-center {
-      gap: 0.75rem !important;
-    }
-
-    .story-card i {
-      min-width: 16px;
-      /* Added min-width to ensure consistent spacing */
-    }
-
-    /* NEW: Enhanced Scroll Buttons for Sliders */
-    .scroll-buttons {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      pointer-events: none;
-      z-index: 10;
-      transform: translateY(-50%);
-    }
-
-    .scroll-buttons button {
-      position: relative;
-      border: none;
-      cursor: pointer;
-      pointer-events: all;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      transition: all 0.3s ease;
-      overflow: hidden;
-    }
-
-    .scroll-buttons button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='none' stroke='%23ff0000' stroke-width='3' d='M20,50 L80,50 M80,50 L60,30 M80,50 L60,70'/%3E%3C/svg%3E") no-repeat center;
-      background-size: 0;
-      transform: rotate(180deg);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-
-    .scroll-buttons button.scroll-left::before {
-      transform: rotate(0);
-    }
-
-    .scroll-buttons button i {
-      position: relative;
-      z-index: 2;
-      color: #ff0000;
-      font-size: 20px;
-      transition: all 0.3s ease;
-      text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-    }
-
-    .scroll-buttons button::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: rgba(255, 0, 0, 0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .scroll-buttons button:hover::after {
-      width: 150%;
-      height: 150%;
-    }
-
-    .scroll-buttons button:hover i {
-      color: #ffffff;
-      transform: scale(1.2);
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-    }
-
-    .scroll-buttons button:hover::before {
-      background-size: 100%;
-      opacity: 1;
-    }
-
-    .scroll-buttons button:active i {
-      transform: scale(0.9);
-    }
-
-    .scroll-buttons button.scroll-right {
-      animation: floatRight 3s ease-in-out infinite;
-    }
-
-    .scroll-buttons button.scroll-left {
-      animation: floatLeft 3s ease-in-out infinite;
-    }
-
-    @keyframes floatRight {
-
-      0%,
-      100% {
-        transform: translateX(0);
-      }
-
-      50% {
-        transform: translateX(5px);
-      }
-    }
-
-    @keyframes floatLeft {
-
-      0%,
-      100% {
-        transform: translateX(0);
-      }
-
-      50% {
-        transform: translateX(-5px);
-      }
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .section-title {
-        font-size: 1.25rem;
-        padding-right: 30px;
-      }
-
-      .section-title::before {
-        width: 20px;
-        height: 20px;
-      }
-
-      .featured-overlay {
-        padding: 1rem;
-      }
-
-      .card {
-        width: 450px;
-      }
-
-      .card img {
         width: 150px;
         min-width: 130px;
         height: 200px;
-      }
+    }
 
-      .card-details {
+    .card-details {
         font-size: 0.8rem;
-      }
+    }
 
-      .card-titlee {
+    .card-titlee {
         font-size: 1rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 90%;
-      }
+    }
 
-      .card-summary {
+    .card-summary {
         font-size: 0.8rem;
         color: #aaa;
         line-height: 1.2;
         margin-bottom: 20px;
         padding: 0 0.5rem;
-      }
-
-      .scroll-buttons button {
-        width: 40px;
-        height: 40px;
-      }
-
-      .scroll-buttons button i {
-        font-size: 16px;
-      }
     }
 
-    @media (max-width: 640px) {
-      .section-title {
+    .scroll-buttons button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .scroll-buttons button i {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .section-title {
         font-size: 1.1rem;
         padding-right: 25px;
-      }
+    }
 
-      .section-title::before {
+    .section-title::before {
         width: 18px;
         height: 18px;
-      }
+    }
 
-      .featured-badge {
+    .featured-badge {
         font-size: 0.75rem;
         padding: 0.25rem 0.5rem;
-      }
+    }
 
-      .card {
+    .card {
         flex-direction: row-reverse;
         align-items: flex-start;
         text-align: center;
         width: 450px;
-      }
+    }
 
-      .card-titlee {
+    .card-titlee {
         font-size: 1rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 90%;
-      }
+    }
 
-      .card img {
+    .card img {
         width: 150px;
         height: 200px;
         min-width: 130px;
-      }
+    }
 
-      .card-summary {
+    .card-summary {
         font-size: 0.75rem;
-      }
+    }
 
-      .card-details {
+    .card-details {
         font-size: 0.8rem;
-      }
+    }
 
-      .card-contentss {
+    .card-contentss {
         text-align: right;
         width: 80%;
-      }
+    }
 
-      .scroll-buttons button {
+    .scroll-buttons button {
         width: 36px;
         height: 36px;
-      }
-
-      .scroll-buttons button i {
-        font-size: 14px;
-      }
     }
-  
+
+    .scroll-buttons button i {
+        font-size: 14px;
+    }
+}
+    
