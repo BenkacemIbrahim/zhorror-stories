@@ -1,7 +1,8 @@
 /* Z Horror - styles for components/header-authenticated.html
    Extracted verbatim from the page's original inline <style> block. */
-body,
-html {
+/* Preview-only reset. Once the header is embedded in a page the page owns
+   html/body, so this must never leak into an embedding document. */
+body.component-preview {
     margin: 0;
     padding: 0;
     font-family: 'Cairo', sans-serif;
@@ -1029,12 +1030,15 @@ html {
     }
 
     /* Hide desktop navigation on tablet */
-    .lg\:flex {
+    .fixed-header .lg\:flex {
         display: none !important;
     }
 }
 
-.content-padding {
+/* Reserves room for the fixed header: `.content-padding` in the standalone
+   preview document, `body.has-fixed-header` in the pages that embed it. */
+.content-padding,
+body.has-fixed-header {
     padding-top: 122px;
 }
 
@@ -1532,9 +1536,9 @@ html {
     margin-right: 15px;
     /* Increased from 2px to 15px to move it more to the left */
 }
+
 @media (max-width: 768px) {
     #writeToggle {
         display: none !important;
     }
 }
-    

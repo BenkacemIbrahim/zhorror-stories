@@ -1,7 +1,8 @@
 /* Z Horror - styles for components/footer.html
    Extracted verbatim from the page's original inline <style> block. */
-body,
-html {
+/* Preview-only reset. Once the footer is embedded in a page the page owns
+   html/body, so this must never leak into an embedding document. */
+body.component-preview {
     margin: 0;
     padding: 0;
     font-family: 'Cairo', sans-serif;
